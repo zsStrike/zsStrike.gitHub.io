@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Redis设计与实现笔记 - zsStrike</title>
+  
+    <meta name="keywords" content="Redis">
+  
+
+  
+    <meta name="description" content="本文章是对《Redis设计与实现》书籍的一个整理笔记，记录了其中个人认为比较重要的部分。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Redis设计与实现笔记
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年10月18日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：10.7k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：37分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="Redis设计与实现笔记" data-path="/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本文章是对《Redis设计与实现》书籍的一个整理笔记，记录了其中个人认为比较重要的部分。</p>
+<a id="more"></a>
+
+<h2 id="第二章-简单动态字符串"><a href="#第二章-简单动态字符串" class="headerlink" title="第二章 简单动态字符串"></a>第二章 简单动态字符串</h2><ul>
+<li>SDS 定义：</li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012191209564.png" class="lazyload" data-srcset="image-20201012191209564.png" srcset="data:image/png;base64,666" alt="image-20201012191209564"/></div><span class="image-caption">image-20201012191209564</span></div>
+<ul>
+<li>SDS 与 C 字符串的区别：<ul>
+<li>常数复杂度获取字符串的长度</li>
+<li>杜绝缓冲区溢出</li>
+<li>减少修改字符串时带来的内存分配的次数，包括空间预分配和惰性空间释放</li>
+<li>二进制安全</li>
+<li>兼容部分 C 字符串函数</li>
+</ul>
+</li>
+</ul>
+<h2 id="第二章-链表"><a href="#第二章-链表" class="headerlink" title="第二章 链表"></a>第二章 链表</h2><ul>
+<li><p>Redis 的链表实现的特性可以总结如下：</p>
+<ul>
+<li>双端</li>
+<li>无环</li>
+<li>带表头指针和表尾指针</li>
+<li>带链表长度计数器</li>
+<li>多态：链表节点使用void*指针来保存节点值, 并且可以通过 list 结构的dup, free, match三个属性为节点值设置类型特定函数,所以链表可以用于保存各种不同类型的值 </li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012192406288.png" class="lazyload" data-srcset="image-20201012192406288.png" srcset="data:image/png;base64,666" alt="image-20201012192406288"/></div><span class="image-caption">image-20201012192406288</span></div>
+</li>
+</ul>
+<h2 id="第三章-字典"><a href="#第三章-字典" class="headerlink" title="第三章 字典"></a>第三章 字典</h2><ul>
+<li><p>Redis 普通状态下的字典：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012194731429.png" class="lazyload" data-srcset="image-20201012194731429.png" srcset="data:image/png;base64,666" alt="image-20201012194731429"/></div><span class="image-caption">image-20201012194731429</span></div>
+</li>
+<li><p>哈希算法：首先计算哈希值，然后计算出索引值</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012194922912.png" class="lazyload" data-srcset="image-20201012194922912.png" srcset="data:image/png;base64,666" alt="image-20201012194922912"/></div><span class="image-caption">image-20201012194922912</span></div>
+<blockquote>
+<p>Redis 使用的 MurmurHash 算法计算建的哈希值，该算法的优点在于即使输入的键时有规律的，算法仍然能给出一个很好的随机分布性。</p>
+</blockquote>
+</li>
+<li><p>解决键冲突：使用链地址法解决键冲突，使用头插法进行插入。</p>
+</li>
+<li><p>rehash：当负载因子过大的时候，就会开始进行相应的扩展或者收缩。使用<code>ht[1]</code>协助扩展。</p>
+</li>
+<li><p>渐进式 rehash：扩展或收缩哈希表需要将<code>ht[0]</code>里面的所有键值对 rehash到<code>ht[1]</code> 里面, 但是, 这个 rehash动作并不是一次性、集中式地完成的,而是分多次、渐进式地完成。在渐进期间，字典会同时使用两个哈希表，但是插入的时候只会插入到<code>ht[1]</code>。</p>
+</li>
+</ul>
+<h2 id="第五章-跳跃表"><a href="#第五章-跳跃表" class="headerlink" title="第五章 跳跃表"></a>第五章 跳跃表</h2><ul>
+<li><p>跳跃表：有序的数据结构，通过在节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。支持 平均O(logn)，最坏O(N)复杂度的节点查找。</p>
+</li>
+<li><p>跳跃表结构示意图：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013191437427.png" class="lazyload" data-srcset="image-20201013191437427.png" srcset="data:image/png;base64,666" alt="image-20201013191437427"/></div><span class="image-caption">image-20201013191437427</span></div>
+<p>header和tail分别表示表头节点和表尾节点，level表示的层数，length时跳跃表的长度。BW表示的是回退指针，指向上一个跳跃表节点。箭头线上面的数字是跨度，表示跨过了几个节点。</p>
+</li>
+<li><p>在Redis中，每个节点的层高是1到32之间的随机数，在同一个跳跃表中，多个节点可以包含相同的分值，但是每个节点的额成员对象必须唯一，另外，跳跃表中的节点按照分值大小排序，如果分值大小相同，则按照成员对象的大小排序。</p>
+</li>
+</ul>
+<h2 id="第六章-整数集合"><a href="#第六章-整数集合" class="headerlink" title="第六章 整数集合"></a>第六章 整数集合</h2><ul>
+<li><p>整数集合实现：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013192842489.png" class="lazyload" data-srcset="image-20201013192842489.png" srcset="data:image/png;base64,666" alt="image-20201013192842489"/></div><span class="image-caption">image-20201013192842489</span></div>
+<p>虽然contents是int8_t类型的数组，但实际上数组并不保存任何int8_t类型的值，该数组的真正类型取决于encoding属性的值。</p>
+</li>
+<li><p>升级：每当我们要将一个新元素添加到整数集合里面，并且新元素的类型比整数集合现有所有元素的类型都要长时,整数集合需要先进行升级(upgrade)，然后才能将新元素添加到整数集合里面。首先根据新元素的类型，扩展整数集合底层数组的空间大小，并且为新元素分配相应的空间；将底层数组现有的所有元素都转换成与新元素相同的类型，并且将其放到正确的位置上，保持有序性不变；将新元素添加到底层数组里面（新元素要么在最后位置，要么在首位置）。</p>
+</li>
+<li><p>升级的好处：提升灵活性，节约内存。</p>
+</li>
+<li><p>降级：整数集合不支持降级操作，一旦对数据进行了升级，编码就会一直保持升级之后的状态。</p>
+</li>
+</ul>
+<h2 id="第七章-压缩列表"><a href="#第七章-压缩列表" class="headerlink" title="第七章 压缩列表"></a>第七章 压缩列表</h2><ul>
+<li><p>压缩列表的构成：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013194653014.png" class="lazyload" data-srcset="image-20201013194653014.png" srcset="data:image/png;base64,666" alt="image-20201013194653014"/></div><span class="image-caption">image-20201013194653014</span></div>
+<p>zlbytes记录整个压缩列表占用的内存字节数，zltail记录列表表位距离压缩列表的起始地址有多少字节，zllen记录节点个数，zlend特殊值0xFF，标记为压缩列表的末端。</p>
+</li>
+<li><p>压缩列表节点的构成：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013195122854.png" class="lazyload" data-srcset="image-20201013195122854.png" srcset="data:image/png;base64,666" alt="image-20201013195122854"/></div><span class="image-caption">image-20201013195122854</span></div>
+<p>根据previous_entry_length可以计算出上一个节点的地址，根据encoding可以知道存放的数据类型和长度，content则是一个字节数组或者整数。</p>
+</li>
+<li><p>连锁更新：当压缩列表的原来的节点的数值在250-254之间的时候，此时如果新增或者（删除）一个节点，会导致原来的首节点previous_entry_length大小从1字节转换为五个字节，从而引发连锁更新：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013200603337.png" class="lazyload" data-srcset="image-20201013200603337.png" srcset="data:image/png;base64,666" alt="image-20201013200603337"/></div><span class="image-caption">image-20201013200603337</span></div>
+<p>尽管连锁更新的复杂度较高，但是真正造成性能问题的几率还是很低的。</p>
+</li>
+</ul>
+<h2 id="第八章-对象"><a href="#第八章-对象" class="headerlink" title="第八章 对象"></a>第八章 对象</h2><ul>
+<li><p>对象的类型和编码：Redis中的对象的结构如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201146386.png" class="lazyload" data-srcset="image-20201013201146386.png" srcset="data:image/png;base64,666" alt="image-20201013201146386"/></div><span class="image-caption">image-20201013201146386</span></div>
+<p>其中，type表示对象的类型：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201321101.png" class="lazyload" data-srcset="image-20201013201321101.png" srcset="data:image/png;base64,666" alt="image-20201013201321101"/></div><span class="image-caption">image-20201013201321101</span></div>
+<p>对象的ptr指向对象的底层实现数据结构，而这些数据结构有对象的encoding属性决定：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201519317.png" class="lazyload" data-srcset="image-20201013201519317.png" srcset="data:image/png;base64,666" alt="image-20201013201519317"/></div><span class="image-caption">image-20201013201519317</span></div>
+<p>每种类型的对象至少使用了两种不同的编码：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201632078.png" class="lazyload" data-srcset="image-20201013201632078.png" srcset="data:image/png;base64,666" alt="image-20201013201632078"/></div><span class="image-caption">image-20201013201632078</span></div>
+<p>通过encoding来设定对象的编码，极大提高了Redis的灵活性和效率。</p>
+</li>
+<li><p>字符串对象：编码可以是int，raw或者embstr。</p>
+</li>
+<li><p>列表对象：编码可以是ziplist或者linkedlist。</p>
+</li>
+<li><p>哈希对象：编码可以是ziplist或者hashtable。</p>
+</li>
+<li><p>集合对象：编码可以是intset或者hashtable。</p>
+</li>
+<li><p>有序集合对象：编码可以是ziplist或者skiplist。有序集合同时使用跳跃表可字典来实现的原因是能够让有序集合的查找和范围型的操作都尽可能快的执行，减少时间复杂度。</p>
+</li>
+<li><p>类型检查和命令多态：类型检查的实现是通过键中的类型来进行的，命令的多态则是根据值对象的编码方式进行的。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013203249016.png" class="lazyload" data-srcset="image-20201013203249016.png" srcset="data:image/png;base64,666" alt="image-20201013203249016"/></div><span class="image-caption">image-20201013203249016</span></div>
+</li>
+<li><p>内存回收：采用引用计数的方式实现垃圾回收。</p>
+</li>
+<li><p>对象共享：对象的引用计数属性还有对象共享的作用。目前来说, Redis会在初始化服务器时, 创建一万个字符串对象, 这些对象包含了从0 到9999的所有整数值, 当服务器需要用到值为0到9999的字符串对象时, 服务器就会使用这些共享对象, 而不是新创建对象。</p>
+</li>
+<li><p>对象的空转时间：redisObject结构还包含了一个属性lru，用于记录对象最后一次被命令程序访问的时间。</p>
+</li>
+</ul>
+<h2 id="第九章-数据库"><a href="#第九章-数据库" class="headerlink" title="第九章 数据库"></a>第九章 数据库</h2><ul>
+<li><p>服务器中的数据库：Redis服务器将所有的数据库保存在服务器状态中的redis.h/redisServer结构db数组中，每个redis.h/redisDb结构代表着一个数据库，另外程序会根据dbnum来决定应该创建多少个数据库：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">	<span class="comment">// 数据库</span></span><br><span class="line">	redisDb *db;</span><br><span class="line">	<span class="comment">// 数据库的数量</span></span><br><span class="line">	<span class="keyword">int</span> dbnum;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>切换数据库：通过SELECT命令实现，实际上是通过修改客户端的db指针来实现的</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018131936321.png" class="lazyload" data-srcset="image-20201018131936321.png" srcset="data:image/png;base64,666" alt="image-20201018131936321"/></div><span class="image-caption">image-20201018131936321</span></div>
+</li>
+<li><p>数据库键空间：每个数据库由RedisDb保存，其中RedisDb.dict保存了数据库中的所有键值对。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018132511374.png" class="lazyload" data-srcset="image-20201018132511374.png" srcset="data:image/png;base64,666" alt="image-20201018132511374"/></div><span class="image-caption">image-20201018132511374</span></div>
+<p>增删查改都是在dict结构上进行的，另外，在读写键空间的时候，还会执行一些其他的额外操作，比如更新LRU时间，提前判断键是否过期，标记键为dirty等等维护数据库一致性的操作。</p>
+</li>
+<li><p>设置键的生存时间或过期时间：在Redis中有四个不同的命令来设置键的生存时间或者过期时间，分别是EXPIRE, PEXPIRE, EXPIREAT, PEXPIREAT命令，前三个命令都是转换为PEXPIREAT命令执行，转换图如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018133226586.png" class="lazyload" data-srcset="image-20201018133226586.png" srcset="data:image/png;base64,666" alt="image-20201018133226586"/></div><span class="image-caption">image-20201018133226586</span></div>
+<p>RedisDb结构中的expires字典保存着数据库中所有过期键的过期时间，称该字典是过期字典，其中键是一个指针，指向某个键空间的某个键对象，过期字典的值保存着long long类型的整数，保存着过期时间。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018133620122.png" class="lazyload" data-srcset="image-20201018133620122.png" srcset="data:image/png;base64,666" alt="image-20201018133620122"/></div><span class="image-caption">image-20201018133620122</span></div>
+<p>由此，查看某个键对应的值之前需要先判断一下是否在过期字典中，同时检测其是否过期。</p>
+</li>
+<li><p>过期键删除策略：定时删除，惰性删除，定期删除。定时删除策略对内存是最友好的:通过使用定时器,定时除策略可以保证过期键会尽 可能快地被删除,并释放过期键所占用的内存。惰性删除策略对CPU时间来说是最友好的:程序只会在取出键时才对键进行过期检查，这可以保证删除过期键的操作只会在非做不可的情况下进行,并且删除的目标仅限于当前处理的键,这个策略不会在删除其他无关的过期键上花费任何CPU时间。定期删除策略每隔一段时间执行一次删除过期键操作,并通过限制删除操作执行的时长和频率来减少删除操作对CPU时间的影响 。</p>
+</li>
+<li><p>Redis的过期键的删除策略：使用惰性删除和定期删除两种策略。惰性删除策略通过db.c/expireIfNeeded函数实现，定期删除则是通过redis.c/activeExpireCycle函数实现（分多次遍历服务器中的各个数据库，从过期字典中随机抽查一部分键的过期时间，并且删除其中的过期键，其中current_db全部变量保存着当前指向到那个数据库中了，下次便利的时候就可以接着从上次数据库的下一个接着检查）。</p>
+</li>
+<li><p>AOF，RDB和复制功能对过期键的处理：</p>
+<ul>
+<li>RDB：在执行SAWE命令或者BGSAVE命令创建一个新的RDB文件时,程序会对数据库中的 键进行检查,已过期的键不会被保存到新创建的RDB文件中。 载入RDB文件的时候，如果服务器以主服务器模式运行，那么在载入RDB文件的时候，程序会剔除过期的键，如果是以从服务器模式运行的话，那么就会保存所有的键。</li>
+<li>AOF：AOF文件重写的时候，会对数据库中的键进行检查，已经过期的键不会保存到AOF文件中。</li>
+<li>复制：当服务器运行在复制模式下面的时候，从服务器的过期键的删除动作由主服务控制，从服务器不会主动删除过期的键，除非主服务器发送DEL命令来显式删除某个键。</li>
+</ul>
+</li>
+<li><p>数据库通知：通过发布订阅模式实现。</p>
+</li>
+</ul>
+<h2 id="第十章-RDB持久化"><a href="#第十章-RDB持久化" class="headerlink" title="第十章 RDB持久化"></a>第十章 RDB持久化</h2><ul>
+<li><p>RDB文件的创建和载入：有两个命令可以用于生成RDB文件，一个是SAVE，另外一个是BGSAVE，后者是非阻塞的。另外由于AOF文件的更新频率比RDB文件的更新频率高一些，会首选AOF文件来恢复数据库状态。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018141926970.png" class="lazyload" data-srcset="image-20201018141926970.png" srcset="data:image/png;base64,666" alt="image-20201018141926970"/></div><span class="image-caption">image-20201018141926970</span></div>
+<p>虽然BGSAVE执行的时候仍然可以继续处理客户端的请求，但是SAVE，BGSAVE和BGREWRITEAOF命令却不能再次执行。在服务器载入RDB文件的时候，会一直处于阻塞状态，直到载入工作完成为止。</p>
+</li>
+<li><p>自动间隔性保存：当服务器满足一定的条件的时候，就会自动执行相应BGSAVE命令，来及时保存数据库的状态。默认保存条件如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60  10000</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的含义是900秒之内，至少修改了一次数据库，或者300秒之内，修改了至少10次数据库，或者60秒内，至少修改了10000次数据库，这些配置文件会被保存在saveparams属性中。除了saveparams数组之外，还有一个dirty计数器，以及一个lastsave属性，通过上述三个属性我们就可以判断是否存在必要来执行自动保存功能了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">saveparam</span> *<span class="title">saveparams</span>;</span></span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> dirty;</span><br><span class="line">	<span class="keyword">time_t</span> lastsave;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RDB文件结构如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143358528.png" class="lazyload" data-srcset="image-20201018143358528.png" srcset="data:image/png;base64,666" alt="image-20201018143358528"/></div><span class="image-caption">image-20201018143358528</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143504979.png" class="lazyload" data-srcset="image-20201018143504979.png" srcset="data:image/png;base64,666" alt="image-20201018143504979"/></div><span class="image-caption">image-20201018143504979</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143600755.png" class="lazyload" data-srcset="image-20201018143600755.png" srcset="data:image/png;base64,666" alt="image-20201018143600755"/></div><span class="image-caption">image-20201018143600755</span></div>
+</li>
+</ul>
+<h2 id="第十一章-AOF持久化"><a href="#第十一章-AOF持久化" class="headerlink" title="第十一章 AOF持久化"></a>第十一章 AOF持久化</h2><ul>
+<li><p>AOF持久化的实现：当AOF的功能打开的时候，服务器在完成一个命令的之后，会将其保存在redisServer的aof_buf缓冲区的末尾。Redis的服务器就是一个时间循环，这个循环中负责接受客户端的命令请求，以及向客户端发送命令回复，而时间事件则负责执行serverCron这样需要定时运行的函数。每次结束一个事件循环的时候，需要考虑是否需要将缓冲区的内容写入到AOF文件中。</p>
+</li>
+<li><p>由于AOF文件包含了重建数据库的所有写命令，所以数据库只需要读入并执行一遍AOF里面的命令就可以恢复数据库关闭前的状态。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018150745174.png" class="lazyload" data-srcset="image-20201018150745174.png" srcset="data:image/png;base64,666" alt="image-20201018150745174"/></div><span class="image-caption">image-20201018150745174</span></div>
+</li>
+<li><p>AOF重写：随着时间的流逝，AOF文件的内容会越来越多，不加以控制的话，会很容易超过体积最大限制造成影响。为了解决这个问题，Redis提供了AOF文件重写的功能。重写功能是通过读取当前数据库的状态来实现的。另外为了提高服务器的可用性，一般执行AOF重写的时候采用的是后台重写，以此防止阻塞的问题。但是使用子进程进行AOF文件的重写的时候，服务器会接受客户端的命令，而新的命令可能会造成数据库状态的修改，从而使得当前数据库状态和重写后的AOF文件保存的数据库状态不一致。为了解决这种数据不一致问题, Redis服务器设置了一个AOF重写缓冲区,这个缓冲区在服务器创建子进程之后开始使用,当 Redis服务器执行完一个写命令之后,它会同时将这个写命令发送给AOF缓冲区和AOF重写缓冲区,如图11-4所示。 </p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018151801586.png" class="lazyload" data-srcset="image-20201018151801586.png" srcset="data:image/png;base64,666" alt="image-20201018151801586"/></div><span class="image-caption">image-20201018151801586</span></div>
+<p>当子进程完成重写操作的时候，会向父进程发送信号，父进程此时会将AOF重写缓冲区的内容写入到新的AOF文件中，最后执行改名覆盖现有的AOF文件，实现新旧两个AOF文件的替换。</p>
+</li>
+</ul>
+<h2 id="第十二章-事件"><a href="#第十二章-事件" class="headerlink" title="第十二章 事件"></a>第十二章 事件</h2><ul>
+<li><p>Redis服务器是一个事件驱动程序，服务器需要处理两类事件：文件事件，时间事件。文件事件是服务器对套接字的抽象，时间事件则是定时操作的抽象。</p>
+</li>
+<li><p>文件事件：Redis基于<code>Reactor</code>模式开发出了自己的网络事件处理器，这个处理器被称作为文件事件处理器，组成如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018153202366.png" class="lazyload" data-srcset="image-20201018153202366.png" srcset="data:image/png;base64,666" alt="image-20201018153202366"/></div><span class="image-caption">image-20201018153202366</span></div>
+<p>IO多路复用程序的实现，通过包装常见的select，epoll，evport和kqueue来实现的。</p>
+</li>
+<li><p>时间事件：分为定时事件和周期性事件。目前Redis中只是用了周期性事件，没有使用定时事件。服务器将所有时间事件都放在一个无序链表中,每当时间事件执行器运行时,它就<strong>遍历</strong>整个链表,査找所有已到达的时间事件,并调用相应的事件处理器。 持续运行的Redis服务器需要对自身的资源和状态进行检查和调整，从而可以确保服务器可以长期稳定的运行，这些定期操作被封装到redis.c/serverCron函数中执行。</p>
+</li>
+<li><p>事件的调度与执行：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018154101415.png" class="lazyload" data-srcset="image-20201018154101415.png" srcset="data:image/png;base64,666" alt="image-20201018154101415"/></div><span class="image-caption">image-20201018154101415</span></div>
+<p>由于时间事件在文件事件之后执行，并且事件之间不会出现抢占，所以时间事件的实际处理时间，通常会比时间事件设定的到达事件稍晚一些。</p>
+</li>
+</ul>
+<h2 id="第十三章-客户端"><a href="#第十三章-客户端" class="headerlink" title="第十三章 客户端"></a>第十三章 客户端</h2><ul>
+<li><p>Redis服务器会为每个客户端创建一个redis.h/redisClient结构，用于保存客户端的信息，Redis服务器中还会保存着一个clients的链表，用于保存所有和服务器相连接的客户端。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018162408381.png" class="lazyload" data-srcset="image-20201018162408381.png" srcset="data:image/png;base64,666" alt="image-20201018162408381"/></div><span class="image-caption">image-20201018162408381</span></div>
+</li>
+<li><p>客户端属性：通用属性和特定属性。有以下几种属性：</p>
+<ul>
+<li>套接字描述符：fd，为客户端为-1，否则为大于-1的整数。</li>
+<li>名字：name</li>
+<li>标志：flags，记录了客户端的角色</li>
+<li>输入缓冲区：querybuf，保存客户端发送的命令请求</li>
+<li>命令和命令参数：argc和argv，服务器对querybuf解析后将参数的个数和参数存入这两个变量</li>
+<li>命令的实现函数：cmd，当服务器解析出来命令之后，就可以查找对应的命令的实现函数，然后将其指针值复制到client中</li>
+<li>输出缓冲区：buf[MAX_BYTES]，命令回复会保存在这里面</li>
+<li>身份验证：authenticated，记录客户端是否通过了身份验证</li>
+<li>时间：包含客户端创建的时间，最后一次和服务器互动的时间</li>
+</ul>
+</li>
+<li><p>客户端的创建和关闭：如果是普通的客户端，那么就会在clients链表后面追加上一个redisClient结构。服务器使用两种模式来限制客户端缓冲区的大小：硬性限制，软性限制。另外，处理Lua脚本的为客户端在服务器初始化时创建，知道服务器关闭，而AOF文件载入的时候的伪客户端则在载入结束之后关闭。</p>
+</li>
+</ul>
+<h2 id="第十四章-服务器"><a href="#第十四章-服务器" class="headerlink" title="第十四章 服务器"></a>第十四章 服务器</h2><ul>
+<li>命令请求的执行过程：客户端发送命令请求，服务器端读取命令请求，接下来分析命令，查找命令表获取命令实现函数，调用获取到的命令实现函数，命令实现函数执行完后执行后续的工作，最后将命令回复发送给客户端，客户端接受并且打印命令回复。</li>
+<li>ServerCron函数每隔100毫秒执行一次，这个函数负责管理服务器的资源，并且保持服务器自身的良好运转。它具有以下功能：<ul>
+<li>更新服务器事件缓存</li>
+<li>更新LRU时钟</li>
+<li>更新服务器每秒执行命令次数</li>
+<li>更新服务器内存峰值记录</li>
+<li>处理SIGTERM信号</li>
+<li>管理客户端的资源</li>
+<li>管理数据库的资源</li>
+<li>执行被延迟的BGREWRITEAOF</li>
+<li>检查持久化操作的运行状态</li>
+<li>将AOF缓冲区的内容写入AOF文件</li>
+<li>关闭异步客户端</li>
+<li>增加cronloops计数器的值</li>
+</ul>
+</li>
+<li>初始化服务器：<ul>
+<li>初始化服务器的状态结构</li>
+<li>载入配置选项</li>
+<li>初始化服务器数据结构</li>
+<li>还原数据库状态</li>
+<li>执行事件循环</li>
+</ul>
+</li>
+</ul>
+<h2 id="第十五章-复制"><a href="#第十五章-复制" class="headerlink" title="第十五章 复制"></a>第十五章 复制</h2><ul>
+<li><p>在Redis中，用户通过命令SLAVEOF让一个服务器去复制另外一个服务器，被复制的服务器成为主服务器，对主服务器进行复制的服务器称为从服务器。</p>
+</li>
+<li><p>旧版复制功能的实现：</p>
+<ul>
+<li><p>同步：将从服务器的数据库状态更新至主服务器当前所处的数据库状态。通过SYNC命令完成：</p>
+<ul>
+<li>从服务器向主服务器发送SYNC命令</li>
+<li>主服务器执行BGSAVE命令，后台生成RDB文件，同时用一个缓冲区记录从现在开始执行后的所有写命令</li>
+<li>RDB生成后，将其发送给从服务器，从服务器加载RDB文件</li>
+<li>从服务器加载完成后，主服务器将缓冲区里面的所有写命令发送给从服务器，保持一致性</li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023194004571.png" class="lazyload" data-srcset="image-20201023194004571.png" srcset="data:image/png;base64,666" alt="image-20201023194004571"/></div><span class="image-caption">image-20201023194004571</span></div>
+</li>
+<li><p>命令传播：当主服务的数据库状态被修改的时候，此时造成数据库状态的不一致性，通过命令传播让主从服务器状态重新回到一致状态。</p>
+</li>
+</ul>
+</li>
+<li><p>旧版复制功能的缺陷：复制可以分为初次复制和断线后重复制，旧版复制功能并没有很好解决断线后重复制时间长的问题：只需要将断线后的命令发送给从服务器就行，不需要全部复制一遍。</p>
+</li>
+<li><p>新版复制功能的实现：新版复制功能使用PSYNC命令代替SYNC命令来执行同步操作。PSYNC命令有完整重同步和部分重同步两种模式，前者用于处理初次复制的情况，后者用于处理断线后重复制情况。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023194735822.png" class="lazyload" data-srcset="image-20201023194735822.png" srcset="data:image/png;base64,666" alt="image-20201023194735822"/></div><span class="image-caption">image-20201023194735822</span></div>
+</li>
+<li><p>部分重同步的实现：</p>
+<ul>
+<li>主从服务器的复制偏移量：主服务器每次向从服务器传播N个字节的数据时，就将自己的复制偏移量加上N，从服务器每次收到主服务器传播过来的N个字节的数据时，就将自己的复制偏移量加上N，通过对比主从服务器的复制偏移量，可以很容易知道主从服务器是否处于一致状态</li>
+<li>服务器的复制积压缓冲区：由主服务器维护的一个固定长度的先进先出的队列，默认1MB。当主服务器进行命令传播的时候，不仅将写命令发送到从服务器，还将写命令入队到复制积压缓冲区里面。当从服务器重新连接到主服务器的时候，根据offset偏移量之后的数据在缓冲区里面，执行部分重同步，否则执行完整重同步</li>
+<li>服务器的运行ID：每个Redis服务器都有自己的运行ID。初次复制的时候，主服务器向从服务器发送自己的ID，从服务器重新连接的时候，通过ID和重连服务器的ID比对来判断是否重连到相同的主服务器</li>
+</ul>
+</li>
+<li><p>PSYNC命令的实现：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023201400872.png" class="lazyload" data-srcset="image-20201023201400872.png" srcset="data:image/png;base64,666" alt="image-20201023201400872"/></div><span class="image-caption">image-20201023201400872</span></div>
+</li>
+<li><p>复制的实现：</p>
+<ul>
+<li>设置主服务器的地址和端口</li>
+<li>建立套接字连接</li>
+<li>发送PING命令，检测网络是否通畅，不通畅的话断开并且重连</li>
+<li>身份验证</li>
+<li>发送端口信息</li>
+<li>同步</li>
+<li>命令传播</li>
+</ul>
+</li>
+<li><p>心跳检测：在命令传播阶段，从服务器默认会每秒一次的频率，向主服务器发送<code>REPLCONF ACK &lt;replication_offset&gt;</code>，其作用有：</p>
+<ul>
+<li><p>检测主从服务器的网络连接状态</p>
+</li>
+<li><p>辅助实现min-slaves选项：可以防止主服务器在不安全的情况下执行写命令，如配置min-slaves-to-write为3，那么在从服务器的数量小于3时，拒接执行写命令</p>
+</li>
+<li><p>检测命令丢失：如果丢包的话，通过offset实现一致性</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023202834446.png" class="lazyload" data-srcset="image-20201023202834446.png" srcset="data:image/png;base64,666" alt="image-20201023202834446"/></div><span class="image-caption">image-20201023202834446</span></div>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="第十六章-Sentinel"><a href="#第十六章-Sentinel" class="headerlink" title="第十六章 Sentinel"></a>第十六章 Sentinel</h2><ul>
+<li><p>Sentinel是Redis的高可用性解决方案：由一个或多个Sentinel实例组成的Sentinel系统可以监视任意多个主服务器，以及这些主服务器属下的所有从服务器，当被监视的主服务器进入下线的状态时，自动将下线服务器的某个从服务器升级为新的主服务器，然后由新的主服务器代替已经下线的主服务器处理命令请求，当原来的主服务器又重新上线的时候，将其设置为新的主服务器的一个从服务器。</p>
+</li>
+<li><p>启动并初始化Sentinel：</p>
+<ul>
+<li><p>初始化服务器：Sentinel本质上是一个运行在特殊模式下的Redis服务器，但是初始化的时候不载入数据</p>
+</li>
+<li><p>使用Sentinel专用代码</p>
+</li>
+<li><p>初始化Sentinel状态：服务器会初始化一个sentinelState结构</p>
+</li>
+<li><p>初始化Sentinel的masters属性：键是被监视主服务器的名字，值是被监视主服务器对应的sentinelRedisInstance结构，每个这样的结构代表一个被Sentinel监视的实例，可以是主服务器，从服务器，或者另外一个Sentinel</p>
+</li>
+<li><p>创建连向主服务器的网络连接：会创建两个连接，一个是命令链接，另外一个是订阅连接</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023205141243.png" class="lazyload" data-srcset="image-20201023205141243.png" srcset="data:image/png;base64,666" alt="image-20201023205141243"/></div><span class="image-caption">image-20201023205141243</span></div>
+</li>
+</ul>
+</li>
+<li><p>获取主服务器信息：Sentinel没十秒一次的频率，向被监视的主服务器发送INFO命令，获取当前信息。当Sentinel分析INFo命令中包含的从服务器的信息的时候，会检查从服务器对应的实例是否存在于其主服务器实例slaves字典中，存在的话更新相关信息，否则的话创建新的实例</p>
+</li>
+<li><p>获取从服务器信息：Sentinel没十秒一次的频率，向被监视的从服务器发送INFO命令，获取当前信息。会对从服务器实例进行更新</p>
+</li>
+<li><p>向主服务器和从服务器发送信息：默认情况下，PUBLISH信息到主从服务器：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210209159.png" class="lazyload" data-srcset="image-20201023210209159.png" srcset="data:image/png;base64,666" alt="image-20201023210209159"/></div><span class="image-caption">image-20201023210209159</span></div>
+</li>
+<li><p>接收来自主从服务器的频道信息：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210251707.png" class="lazyload" data-srcset="image-20201023210251707.png" srcset="data:image/png;base64,666" alt="image-20201023210251707"/></div><span class="image-caption">image-20201023210251707</span></div>
+<ul>
+<li>更新sentinels字典</li>
+<li>创建连接其他Sentinel的命令连接</li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210330916.png" class="lazyload" data-srcset="image-20201023210330916.png" srcset="data:image/png;base64,666" alt="image-20201023210330916"/></div><span class="image-caption">image-20201023210330916</span></div>
+</li>
+<li><p>检测主观下线行为：默认情况下，Sentinel每秒向其创建了命令连接的实例发送PING命令，通过PONG回复检测是否在线。如果一个实例在down-after-millseconds毫秒内，连续向Sentinel返回无效回复，那么Sentinel会修改这个实例的结构，将flags属性中的SRI_S_DOWN标示，表示其主观下线。</p>
+</li>
+<li><p>检查客观下线状态：当Sentinel讲一个服务器判断为主观下线之后，为了确保是否真的下线了，需要向其他监视了这个服务器的Sentinel进行询问，看他们是否也认为主服务器也已经进入了下线状态。当接收到足够的下线判断之后，Sentinel就会将从服务器判定为客观下线，并对主服务器执行故障转移操作。</p>
+</li>
+<li><p>选举领头Sentinel：当一个主服务器被判断为客观下线时，监视这个下线服务器的各个Sentinel会进行协商，选举出一个领头Snetinel，由领头Sentinel对下线服务器执行故障转移操作。</p>
+<blockquote>
+<p>Raft算法的领头选举方法的实现。</p>
+</blockquote>
+</li>
+<li><p>故障转移：</p>
+<ul>
+<li>选出新的主服务器</li>
+<li>修改从服务器的复制目标</li>
+<li>将旧的主服务器变为从服务器</li>
+</ul>
+</li>
+</ul>
+<h2 id="第十七章-集群"><a href="#第十七章-集群" class="headerlink" title="第十七章 集群"></a>第十七章 集群</h2><ul>
+<li><p>Redis 集群是 Redis 提供的分布式数据库方案, 集群通过分片(sharding)来进行数据共享, 并提供复制和故障转移功能。</p>
+</li>
+<li><p>节点：一个 Redis 集群通常由多个节点(node)组成，在刚开始的时候，每个节点都是相互独立的，它们都处于一个只包含自已的集群当中，要组建一个真正可工作的集群，我们必须将各个独立的节点连接起来，构成一个包含多个节点的集群。</p>
+<ul>
+<li><p>启动节点：节点实际上就是一个运行在集群模式下的 Redis 服务器，通过 cluster-enabled 选项进行配置。</p>
+</li>
+<li><p>集群数据结构：clusterNode 结构保存了一个节点的当前状态，CLusterState 结构记录了在当前节点的视角下，集群目前所处的状态</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025134655648.png" class="lazyload" data-srcset="image-20201025134655648.png" srcset="data:image/png;base64,666" alt="image-20201025134655648"/></div><span class="image-caption">image-20201025134655648</span></div>
+</li>
+<li><p>CLUSTER MEET命令实现：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025134751665.png" class="lazyload" data-srcset="image-20201025134751665.png" srcset="data:image/png;base64,666" alt="image-20201025134751665"/></div><span class="image-caption">image-20201025134751665</span></div>
+</li>
+</ul>
+</li>
+<li><p>槽指派：Redis 集群通过分片的方式来保存数据库中的键值对：集群的整个数据库被分为16384个槽(slot)，数据库中的每个键都属于这16384个槽的其中一个，集群中的每个节点可以处理0个或最多16384个槽。当数据库中的16384个槽都有节点在处理时，集群处于上线状态(ok)；相反地，如果数据库中有任何一个槽没有得到处理，那么集群处于下线状态(fail)。</p>
+<ul>
+<li><p>记录节点的槽指派信息：clusterNode 结构中的slots属性记录了节点当前负责处理那些槽：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135100354.png" class="lazyload" data-srcset="image-20201025135100354.png" srcset="data:image/png;base64,666" alt="image-20201025135100354"/></div><span class="image-caption">image-20201025135100354</span></div>
+<p>slots数组是一个二进制数组，为 1 则该节点负责该槽，否则不负责该槽。</p>
+</li>
+<li><p>传播节点的槽指派信息：当节点 A 通过消息从节点 B 那里接收到节点 B 的 s1ots 数组时,节点 A 会在自已的 clusterState.nodes字典中査找节点 B 对应的 clusterNode 结构,并对结构中的 slots 数组进行保存或者更新</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135431790.png" class="lazyload" data-srcset="image-20201025135431790.png" srcset="data:image/png;base64,666" alt="image-20201025135431790"/></div><span class="image-caption">image-20201025135431790</span></div>
+</li>
+<li><p>记录集群所有槽的指派信息：clusterState 结构中的 slots 数组记录了集群中所有的 16384 个槽的指派信息</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135633822.png" class="lazyload" data-srcset="image-20201025135633822.png" srcset="data:image/png;base64,666" alt="image-20201025135633822"/></div><span class="image-caption">image-20201025135633822</span></div>
+</li>
+<li><p>CLUSTER ADDSLOTS命令的实现：首先改动 clusterState.slots 指针，将对应槽指向自己，然后修改clusterNode.slots 数组，将对应的 slots 置位。</p>
+</li>
+</ul>
+</li>
+<li><p>在集群中执行命令：当集群的16384个槽都指派后，集群就会进入上线状态，这时客户端就可以向集群中的节点发送命令了。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025140106534.png" class="lazyload" data-srcset="image-20201025140106534.png" srcset="data:image/png;base64,666" alt="image-20201025140106534"/></div><span class="image-caption">image-20201025140106534</span></div>
+<ul>
+<li>计算键输入哪个槽：<code>CRC16(key) &amp; 16383</code></li>
+<li>判断槽是否由当前节点负责处理：clusterState.slots[i] == clusterState.myself</li>
+<li>MOVED 错误：当节点发现键所在的槽不由自己处理的时候，返回<code>MOVED &lt;SLOT&gt; &lt;ip&gt;:&lt;addr&gt;</code>，客户端自动转向到对应的节点，再次发送命令</li>
+<li>节点数据库的实现：集群节点保存键值对的方式和单机 Redis 服务器保存方式完全相同。唯一区别是节点只能使用0号数据库。另外，节点会使用 clusterState.slots_of_keys 跳跃表保存槽和键之间的关系，命令<code>CLUSTER GETKEYSINSLOT &lt;slot&gt; &lt;count&gt;</code>就是建立在该结构上的。</li>
+</ul>
+</li>
+<li><p>重新分片：Redis 集群的重新分片操作可以将任意数量已经指派给某个节点(源节点)的槽改为指派给另一个节点(目标节点)，并且相关槽所属的键值对也会从源节点被移动到目标节点。重新分片操作可以在线(online)进行,在重新分片的过程中，集群不需要下线，并且源节点和目标节点都可以继续处理命令请求。以下是对单个槽slot流程：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025141051856.png" class="lazyload" data-srcset="image-20201025141051856.png" srcset="data:image/png;base64,666" alt="image-20201025141051856"/></div><span class="image-caption">image-20201025141051856</span></div>
+</li>
+<li><p>ASK错误：当执行分片期间，可能会存在这样一种情况：输入被迁移槽的一部分节点键值对保存在源节点里面，另外一部分保存在目标节点里面。此时响应客户端的命令如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025141341148.png" class="lazyload" data-srcset="image-20201025141341148.png" srcset="data:image/png;base64,666" alt="image-20201025141341148"/></div><span class="image-caption">image-20201025141341148</span></div>
+<ul>
+<li><p><code>CLSUTER SETSLOT IMPORTING</code>命令的实现：clusterState.importing_slots_from 记录了当前节点正在从其他节点导入的槽。</p>
+</li>
+<li><p><code>CLUSTER SETSLOT MIGRATING</code>命令的实现：clusterState.migrating_slots_to 数组记录当前节点正在迁移至其他节点的槽。</p>
+</li>
+<li><p>ASK错误：如果槽正在迁移，会发送<code>ASK &lt;SLOT&gt; &lt;ip&gt;:&lt;port&gt;</code></p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142210744.png" class="lazyload" data-srcset="image-20201025142210744.png" srcset="data:image/png;base64,666" alt="image-20201025142210744"/></div><span class="image-caption">image-20201025142210744</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142157014.png" class="lazyload" data-srcset="image-20201025142157014.png" srcset="data:image/png;base64,666" alt="image-20201025142157014"/></div><span class="image-caption">image-20201025142157014</span></div>
+</li>
+<li><p>ASKING命令：打开发送该命令的客户端的 REDIS_ASKING 标示，该标示是一个一次性标示，当成功执行完一次命令的时候，此时该标示就会被移除。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142144327.png" class="lazyload" data-srcset="image-20201025142144327.png" srcset="data:image/png;base64,666" alt="image-20201025142144327"/></div><span class="image-caption">image-20201025142144327</span></div>
+</li>
+<li><p>ASK错误和MOVED错误：前者发生在节点间迁移槽的时候，是一种临时措施，后者发生在槽的负责权已经从一个节点迁移到了另外一个节点。</p>
+</li>
+</ul>
+</li>
+<li><p>复制与故障转移：Redis 集群中的节点分为主节点和从节点，主节点用于处理槽，从节点用于复制。故障转移措施和第十五章类似。</p>
+<ul>
+<li>设置从节点：<code>CLUSTER REPLICATE &lt;node_id&gt;</code>让接受命令的节点成为 node_id 所指向节点的从节点。此时从节点中设置 clusterState.myself.slaveof 属性，主节点设置 clusterNode.slaves 属性。</li>
+<li>故障检测：集群中每个节点定期向其他节点发送 PING 消息，以此检测是否在线，如果超时，标记为 PFAIL（probable fail）。在集群中超过半数的节点都认为某个主节点 PFAIL，那么这个节点会被标记为下线（FAIL），同时广播这条消息。</li>
+<li>故障转移：从FAIl 的主节点的从节点里面选择一个作为主节点，然后将原来主节点的额槽指派给自己，新的主节点广播 PONG 信息，让其他的节点知道这个节点已经选为主节点，最后新的节点开始接收和负责处理自己的槽有关的命令请求，故障转移完成。</li>
+<li>选举新的节点：Raft 算法。</li>
+</ul>
+</li>
+<li><p>消息：节点发送的消息一般有五种：MEET 消息，PING 消息，PONG 消息，FAIL 消息，PUBLISH 消息。</p>
+</li>
+</ul>
+<h2 id="第十八章-发布与订阅"><a href="#第十八章-发布与订阅" class="headerlink" title="第十八章 发布与订阅"></a>第十八章 发布与订阅</h2><ul>
+<li><p>Redis 的发布与订阅的功能由 PUBLISH，SUBSCRIBE，PSUBSCRIB 等命令组成，每当有其他客户端向被订阅的频道发送消息时，频道的所有订阅者都会收到这个消息。</p>
+</li>
+<li><p>频道的订阅与退订：Redis 将所有订阅关系保存在RedisServer.pubsub_channels 字典里面，键是某个被订阅的频道，键值则是一个链表，保存着所有订阅这个频道的客户端。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201019225402536.png" class="lazyload" data-srcset="image-20201019225402536.png" srcset="data:image/png;base64,666" alt="image-20201019225402536"/></div><span class="image-caption">image-20201019225402536</span></div>
+<ul>
+<li>订阅频道：如果有频道已经在字典中，直接尾部插入订阅者，否则创建字典项，键为频道，键值为该客户端</li>
+<li>退订频道：根据被退订的频道名字，从订阅者链表中删去客户端，如果此时订阅者链表为空，则删除对应的字典项</li>
+</ul>
+</li>
+<li><p>模式的订阅与退订：Redis 将所有模式的订阅关系保存在RedisServer.pubsub_patterns 属性里面。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201019225859198.png" class="lazyload" data-srcset="image-20201019225859198.png" srcset="data:image/png;base64,666" alt="image-20201019225859198"/></div><span class="image-caption">image-20201019225859198</span></div>
+<ul>
+<li>订阅模式：新建一个pubsubPattern结构，设置好client和pattern属性，然后将其加入到pubsub_patterns 链表的表尾。</li>
+<li>退订模式：从pubsub_patterns中查找对应的被退订的pubsubPattern结构，然后将其删除。</li>
+</ul>
+</li>
+<li><p>发送消息：当执行<code>PUBLISH &lt;channel&gt; &lt;message&gt;</code>时候，服务器需要将消息message发送到对应的channel的所有订阅者，另外如果有模式匹配这个channel，那么需要将message发送给pattern模式的订阅者。</p>
+<ul>
+<li>将消息发送给频道订阅者：从pubsub_channels 字典里面找到订阅者链表，然后将消息发送给名单上的所有客户端</li>
+<li>将消息发送给模式订阅者：遍历pubsub_patterns链表，查找那些与channel频道匹配的模式，并且将消息发送到这些模式的客户端。</li>
+</ul>
+</li>
+<li><p>查看订阅消息：PUBSUB命令可以查看频道或者模式的相关信息</p>
+<ul>
+<li>PUBSUB CHANNELS [pattern]：返回与pattern匹配的频道</li>
+<li>PUBSUB NUMSUB [channel-1 channel-2]:返回频道对应订阅者的数量</li>
+<li>PUBSUB NUMPAT: 返回当前服务器被订阅模式的数量</li>
+</ul>
+</li>
+</ul>
+<h2 id="第十九章-事务"><a href="#第十九章-事务" class="headerlink" title="第十九章 事务"></a>第十九章 事务</h2><ul>
+<li><p>Redis通过MULTI，EXEC，WATCH等命令实现事务功能。在事务执行期间，服务器不会中断事务去执行其他客户端的请求，他会将事务中的命令执行完毕之后才去处理其他的客户端的请求。</p>
+</li>
+<li><p>事务的实现：包括三个部分，如下：</p>
+<ul>
+<li><p>事务开始：MULTI命令的执行标志者事务的开始，会将执行该命令的客户端从非事务状态转换为事务状态</p>
+</li>
+<li><p>命令入队：当客户端处于事务状态之后，如果客户端发送的指令是EXEC，DISCARD，WATCH，MULTI命令之一，那么立即执行，否则的话将其放入事务队列之中，然后返回QUEUED回复。每个Redis客户端都有自己的事务状态 mstate，里面包含一个事务队列：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201020233625705.png" class="lazyload" data-srcset="image-20201020233625705.png" srcset="data:image/png;base64,666" alt="image-20201020233625705"/></div><span class="image-caption">image-20201020233625705</span></div>
+</li>
+<li><p>执行事务：当发送EXEC命令的时候，此时就开始执行遍历这个客户端的事务队列，执行其中的所有命令，然后将得到的回复返回给客户端。</p>
+</li>
+</ul>
+</li>
+<li><p>WATCH命令的实现：WATCH命令是一个乐观锁，它可以在EXEC命令执行之前，监视任意数量的数据库键，并且在EXEC命令执行的时候，检查被监视的键中是否至少有一个已经被修改过了，如果是的话，服务器将拒绝执行事务，并向客户端返回执行失败的空回复。</p>
+<ul>
+<li><p>WATCH命令监视数据库键：每个Redis数据库都保存着一个watched_keys字典，字典的键是某个数据库键，而字典的值则是一个链表，记录所有的监视相应数据库键的客户端：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">	dict *watched_keys;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>监视机制的触发：所有对数据库进行修改的命令，在执行之后会调用touchWatchKey函数对监视字典进行检查，如果某个键被修改，会将对应的客户端REDIS_DIRTY_CAS标示打开，表示客户端的安全性已经被破坏。</p>
+</li>
+<li><p>判断事务是否安全：服务器根据客户端的REDIS_DIRTY_CAS标识来决定是否执行事务：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021120010867.png" class="lazyload" data-srcset="image-20201021120010867.png" srcset="data:image/png;base64,666" alt="image-20201021120010867"/></div><span class="image-caption">image-20201021120010867</span></div>
+</li>
+</ul>
+</li>
+<li><p>事务的ACID性质：在Redis中，事务总是具有原子性，一致性，隔离性，当Redis运行在某种持久化模式下，也具有持久性。</p>
+<ul>
+<li><p>原子性：数据库将事务中的多个操作当作一个整体来执行,服务器要么就执行事务中的所有操作,要么就一个操作也不执行。 Redis的事务和传统的关系型数据库事务的最大区别在于, Redis不支持事务回滚机制 (rollback),即使事务队列中的某个命令在执行期间出现了错误,整个事务也会继续执行下去,直到将事务队列中的所有命令都执行完毕为止。</p>
+<blockquote>
+<p>Redis的作者在事务功能的文档中解释说,不支持事务回滚是因为这种复杂的功能和 Redis追求简单高效的设计主旨不相符,并且他认为, Redis事务的执行时错误通常都是编 程错误产生的,这种错误通常只会出现在开发环境中,而很少会在实际的生产环境中出现 所以他认为没有必要为 Redis开发事务回滚功能。 </p>
+</blockquote>
+</li>
+<li><p>一致性：如果数据库在执行事务之前是一致的，那么在事务执行之后，不论事务是否执行成功，数据库也应该仍然是一致的。Redis事务可能出错的地方有入队错误，执行错误，服务器宕机。</p>
+</li>
+<li><p>隔离性：即使数据库中有多个事务并发地执行,各个事务之间也不会互相影响,并且在并发状态下执行的事务和串行执行的事务产生的结果完全相同。 因为 Redis使用单线程的方式来执行事务(以及事务队列中的命令),并且服务器保证在执行事务期间不会对事务进行中断,因此, Redis的事务总是以串行的方式运行的,并且事务也总是具有隔离性的。</p>
+</li>
+<li><p>持久性：当一个事务执行完毕时,执行这个事务所得的结果已经被保存到永久性存储介质(比如硬盘)里面了, 即使服务器在事务执行完毕之后停机, 执行事务所得的结果也不会丢失。只有当服务器运行在AOF持久化模式下，并且appendfsync选项的值为ALWAYS的时候，这种配置下的事务是具有持久性的。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="第二十一章-排序"><a href="#第二十一章-排序" class="headerlink" title="第二十一章 排序"></a>第二十一章 排序</h2><ul>
+<li><p><code>SORT &lt;key&gt;</code> 命令的实现：假设已经执行<code>RPUSH numbers 3 1 2</code>, 现在执行<code>SORT numbers</code>，</p>
+<ul>
+<li><p>首先创建一个和numbers列表长度相同的数组，数组的每一项是redis.h/redisSortObject结构</p>
+</li>
+<li><p>遍历数组，将数组项的obj指针指向对应的列表项，一一对应</p>
+</li>
+<li><p>遍历数组，将obj指针指向的列表项转换为一个double类型的浮点数，存到u.score中</p>
+</li>
+<li><p>根据u.score中的值，进行升序排序</p>
+</li>
+<li><p>遍历数组，将各个数组项的obj指针指向的列表项返回给客户端</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021165824509.png" class="lazyload" data-srcset="image-20201021165824509.png" srcset="data:image/png;base64,666" alt="image-20201021165824509"/></div><span class="image-caption">image-20201021165824509</span></div>
+<p>redisSortObject结构如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021165903649.png" class="lazyload" data-srcset="image-20201021165903649.png" srcset="data:image/png;base64,666" alt="image-20201021165903649"/></div><span class="image-caption">image-20201021165903649</span></div>
+</li>
+</ul>
+</li>
+<li><p>ALPHA选项实现：字典序排序</p>
+</li>
+<li><p>ASC选项和DESC选项的实现：默认是升序排序，升序和降序排序只不过是排序算法使用的对比函数不同而已。</p>
+</li>
+<li><p>BY选项实现：默认情况下，SORT命令使用被排序键包含的元素作为排序的权重，元素本身决定了排序所处的位置。可以使用BY选项来改变这种情况。</p>
+</li>
+<li><p>带有ALPHA选项的BY选项的实现：BY选项默认权重值保存的值是数字值，如果是字符串值的话，需要在使用By选项的同时，配合使用ALPHA选项。</p>
+</li>
+<li><p>LIMIT选项的实现：<code>LIMIT &lt;offset&gt; &lt;count&gt;</code>。</p>
+</li>
+<li><p>GET选项的实现：更具被排序结果中的元素，查找相关的信息。</p>
+</li>
+<li><p>STORE选项的实现：STORE选项可以保存排序结果在指定的键里面</p>
+</li>
+<li><p>多个选项的执行顺序：排序，限制长度，获取外部键，保存排序结果集。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021171157237.png" class="lazyload" data-srcset="image-20201021171157237.png" srcset="data:image/png;base64,666" alt="image-20201021171157237"/></div><span class="image-caption">image-20201021171157237</span></div>
+<p>除了GET选项外，改变选项的摆放顺序不会影响SORT命令执行这些选项的顺序。</p>
+</li>
+</ul>
+<h2 id="第二十三章-慢查询日志"><a href="#第二十三章-慢查询日志" class="headerlink" title="第二十三章 慢查询日志"></a>第二十三章 慢查询日志</h2><ul>
+<li><p>慢查询日志：记录执行时间超过指定时长的命令请求，用户可以通过该功能产生的日志来优化查询速度。服务器有两个和慢查询日志相关的选项：</p>
+<ul>
+<li>slowlog-log-slower-than: 指定执行时间上限，超过上限的会被记录到日志上</li>
+<li>slowlog-max-len: 记录慢查询日志最大条数</li>
+</ul>
+</li>
+<li><p>慢查询日志记录的保存：服务器状态中有几个和慢查询日志有关的属性：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021171836148.png" class="lazyload" data-srcset="image-20201021171836148.png" srcset="data:image/png;base64,666" alt="image-20201021171836148"/></div><span class="image-caption">image-20201021171836148</span></div>
+<p>其中slowlog链表保存所有的慢查询日志。每个节点是一个slowlogEntry：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021172036568.png" class="lazyload" data-srcset="image-20201021172036568.png" srcset="data:image/png;base64,666" alt="image-20201021172036568"/></div><span class="image-caption">image-20201021172036568</span></div>
+</li>
+<li><p>慢查询日志的阅览和删除：遍历查询和遍历删除</p>
+</li>
+<li><p>添加新日志：对慢查询日志进行头插法插入</p>
+</li>
+</ul>
+<h2 id="第二十四章-监视器"><a href="#第二十四章-监视器" class="headerlink" title="第二十四章 监视器"></a>第二十四章 监视器</h2><ul>
+<li><p>通过执行MONITOR命令，客户端可以将自己变为一个监视器，实时接收并打印服务器当前处理的命令请求。</p>
+</li>
+<li><p>成为监视器：执行MONITOR命令后。客户端的REDIS_MONITOR标志会被打开，并且这个客户端会被添加到monitors链表的表尾。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021172607447.png" class="lazyload" data-srcset="image-20201021172607447.png" srcset="data:image/png;base64,666" alt="image-20201021172607447"/></div><span class="image-caption">image-20201021172607447</span></div>
+</li>
+<li><p>向监视器发送命令信息：服务器每次执行命令之前，都会调用replicationFeedMonitor函数，由这个函数将命令请求信息发送给各个监视器。</p>
+</li>
+</ul>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/>http://blog.zsstrike.top/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/&title=Redis设计与实现笔记 - zsStrike&summary=本文章是对《Redis设计与实现》书籍的一个整理笔记，记录了其中个人认为比较重要的部分。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/&title=Redis设计与实现笔记 - zsStrike&summary=本文章是对《Redis设计与实现》书籍的一个整理笔记，记录了其中个人认为比较重要的部分。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/10/18/Redis%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/&title=Redis设计与实现笔记 - zsStrike&summary=本文章是对《Redis设计与实现》书籍的一个整理笔记，记录了其中个人认为比较重要的部分。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/10/21/hexo%E5%92%8Ctypora%E6%90%AD%E9%85%8D%E5%86%99%E5%8D%9A%E5%AE%A2/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>hexo和typora搭配写博客</p>
+          <p class='content'>本文介绍使用Typora写博客，使用Hexo发布文章的技巧。主要涉及图片的路径问题。
+
+
+解决Hexo图片路径问题在使用Typora的时候，首先进入到Typora的设置里面，将图片插入格式改为如...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/04/11/%E4%BD%BF%E7%94%A8-Travis-CI%E6%8C%81%E7%BB%AD%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/'>
+          <p class='title'>使用 Travis CI持续部署博客<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本文主要介绍使用 Travis 来自动将我们的博客内容 push 到 Github Page 上，也就是所谓的持续集成/持续部署。
+
+
+持续集成Travis CI 提供的是持续集成服务（Cont...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">第二章 简单动态字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E9%93%BE%E8%A1%A8"><span class="toc-text">第二章 链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AD%97%E5%85%B8"><span class="toc-text">第三章 字典</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%B7%B3%E8%B7%83%E8%A1%A8"><span class="toc-text">第五章 跳跃表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88"><span class="toc-text">第六章 整数集合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8E%8B%E7%BC%A9%E5%88%97%E8%A1%A8"><span class="toc-text">第七章 压缩列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%AF%B9%E8%B1%A1"><span class="toc-text">第八章 对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">第九章 数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-RDB%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-text">第十章 RDB持久化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-AOF%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-text">第十一章 AOF持久化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E4%BA%8B%E4%BB%B6"><span class="toc-text">第十二章 事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">第十三章 客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">第十四章 服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-%E5%A4%8D%E5%88%B6"><span class="toc-text">第十五章 复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Sentinel"><span class="toc-text">第十六章 Sentinel</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-%E9%9B%86%E7%BE%A4"><span class="toc-text">第十七章 集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-%E5%8F%91%E5%B8%83%E4%B8%8E%E8%AE%A2%E9%98%85"><span class="toc-text">第十八章 发布与订阅</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E4%BA%8B%E5%8A%A1"><span class="toc-text">第十九章 事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%8E%92%E5%BA%8F"><span class="toc-text">第二十一章 排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97"><span class="toc-text">第二十三章 慢查询日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%9B%9B%E7%AB%A0-%E7%9B%91%E8%A7%86%E5%99%A8"><span class="toc-text">第二十四章 监视器</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="Redis设计与实现笔记";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

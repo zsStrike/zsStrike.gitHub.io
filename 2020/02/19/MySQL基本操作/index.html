@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>MySQL基本操作 - zsStrike</title>
+  
+    <meta name="keywords" content="MySQL">
+  
+
+  
+    <meta name="description" content="本文介绍MySQL数据库的简单使用方法，包括数据库的启动和连接，以及数据的增删改查等。操作环境在CentOS 7中。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        MySQL基本操作
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月19日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：17分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="MySQL基本操作" data-path="/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本文介绍MySQL数据库的简单使用方法，包括数据库的启动和连接，以及数据的增删改查等。操作环境在CentOS 7中。</p>
+<a id="more"></a>
+
+<h2 id="数据库连接和断开连接"><a href="#数据库连接和断开连接" class="headerlink" title="数据库连接和断开连接"></a>数据库连接和断开连接</h2><p>在进行数据库的连接之前，我们需要先启动数据库服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; systemctl start mysqld.service</span><br></pre></td></tr></table></figure>
+
+<p>数据库连接命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql [-h host] -u root -p</span><br><span class="line">Enter password: *****</span><br></pre></td></tr></table></figure>
+
+<p>缺省host就表示连接本地的mysql数据库。</p>
+<p>数据库断开连接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; quit</span><br><span class="line">Bye</span><br></pre></td></tr></table></figure>
+
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p>连接到mysql后，可以查询版本信息，当前日期和时间和当前用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT VERSION(), CURRENT_DATE, NOW(), USER();</span><br><span class="line">+-----------+--------------+---------------------+----------------+</span><br><span class="line">| VERSION() | CURRENT_DATE | NOW()               | USER()         |</span><br><span class="line">+-----------+--------------+---------------------+----------------+</span><br><span class="line">| 8.0.19    | 2020-02-19   | 2020-02-19 18:03:54 | root@localhost |</span><br><span class="line">+-----------+--------------+---------------------+----------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建和使用数据库"><a href="#创建和使用数据库" class="headerlink" title="创建和使用数据库"></a>创建和使用数据库</h2><p>查询当前服务器中的数据库有哪些：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW DATABASES;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">| <span class="built_in">test</span>               |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.01 sec)</span><br></pre></td></tr></table></figure>
+
+<p>使用某个数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE <span class="built_in">test</span>;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+
+<p>在test数据库中创建的任何数据可能会被别人删除，可以让管理员执行以下命令使得只有你能使用某个数据库(menagerie)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT ALL ON menagerie.* TO <span class="string">&#x27;your_mysql_name&#x27;</span>@<span class="string">&#x27;your_client_host&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建和选择数据库"><a href="#创建和选择数据库" class="headerlink" title="创建和选择数据库"></a>创建和选择数据库</h3><p>创建新的数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE DATABASE menagerie;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>选择数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE menagerie;</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+
+<p>查询当前使用的数据库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT DATABASE();</span><br><span class="line">+------------+</span><br><span class="line">| DATABASE() |</span><br><span class="line">+------------+</span><br><span class="line">| menagerie  |</span><br><span class="line">+------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建表格"><a href="#创建表格" class="headerlink" title="创建表格"></a>创建表格</h3><p>展示当前数据库中有哪些表格：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW TABLES;</span><br><span class="line">Empty <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>创建新的表格：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE pet (</span><br><span class="line">    -&gt; name VARCHAR(20),</span><br><span class="line">    -&gt; owner VARCHAR(20),</span><br><span class="line">    -&gt; species VARCHAR(20),</span><br><span class="line">    -&gt; sex CHAR(1),</span><br><span class="line">    -&gt; birth DATE,</span><br><span class="line">    -&gt; death DATE);</span><br><span class="line">Query OK, 0 rows affected (0.06 sec)</span><br></pre></td></tr></table></figure>
+
+<p>查看表格的表头和描述：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DESCRIBE pet;</span><br><span class="line">+---------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field   | Type        | Null | Key | Default | Extra |</span><br><span class="line">+---------+-------------+------+-----+---------+-------+</span><br><span class="line">| name    | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| owner   | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| species | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| sex     | char(1)     | YES  |     | NULL    |       |</span><br><span class="line">| birth   | date        | YES  |     | NULL    |       |</span><br><span class="line">| death   | date        | YES  |     | NULL    |       |</span><br><span class="line">+---------+-------------+------+-----+---------+-------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="写入数据"><a href="#写入数据" class="headerlink" title="写入数据"></a>写入数据</h3><p>使用文件载入数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; LOAD DATA LOCAL INFILE <span class="string">&#x27;/usr/local/src/pet.txt&#x27;</span> INTO TABLE pet;</span><br><span class="line">Query OK, 8 rows affected, 1 warning (0.00 sec)</span><br><span class="line">Records: 8  Deleted: 0  Skipped: 0  Warnings: 1</span><br></pre></td></tr></table></figure>
+
+<p>pet.txt 的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Fluffy	Harold	cat	f	1993-02-04	\N</span><br><span class="line">Claws	Gwen	cat	m	1994-03-17	\N</span><br><span class="line">Buffy	Harold	dog	f	1989-05-13	\N</span><br><span class="line">Fang	Benny	dog	m	1990-08-27	\N</span><br><span class="line">Bowser	Diane	dog	m	1979-08-31	1995-07-29</span><br><span class="line">Chirpy	Gwen	bird	f	1998-09-11	\N</span><br><span class="line">Whistler	Gwen	bird	\N	1997-12-09	</span><br><span class="line">Slim	Benny	snake	m	1996-04-29	\N</span><br></pre></td></tr></table></figure>
+
+<p>其中每条记录之间使用TAB分割，每个行结束符是<code>\r</code>，<code>\N</code>表示的是NULL值。</p>
+<blockquote>
+<p>如果执行命令出错，可能需要先开启local_infile变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">set</span> global local_infile = <span class="string">&#x27;ON&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后通过下述命令进入mysql交互环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql --<span class="built_in">local</span>-infile=1 -u root -p</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>同样地，我们可以通过INSERT语句来插入数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; INSERT INTO pet</span><br><span class="line">    -&gt; VALUES (<span class="string">&#x27;Puffball&#x27;</span>, <span class="string">&#x27;Diane&#x27;</span>, <span class="string">&#x27;hamster&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;1999-3-30&#x27;</span>, NULL);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="从表格中获取信息"><a href="#从表格中获取信息" class="headerlink" title="从表格中获取信息"></a>从表格中获取信息</h3><p>从表格获取信息的方式一般形式是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT what_to_select</span><br><span class="line">FROM which_table</span><br><span class="line">WHERE conditions_to_satisfy;</span><br></pre></td></tr></table></figure>
+
+<p>选择全部数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet;</span><br><span class="line">+----------+--------+---------+------+------------+------------+</span><br><span class="line">| name     | owner  | species | sex  | birth      | death      |</span><br><span class="line">+----------+--------+---------+------+------------+------------+</span><br><span class="line">| Fluffy   | Harold | cat     | f    | 1993-02-04 | NULL       |</span><br><span class="line">| Claws    | Gwen   | cat     | m    | 1994-03-17 | NULL       |</span><br><span class="line">| Buffy    | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Fang     | Benny  | dog     | m    | 1990-08-27 | NULL       |</span><br><span class="line">| Bowser   | Diane  | dog     | m    | 1979-08-31 | 1995-07-29 |</span><br><span class="line">| Chirpy   | Gwen   | bird    | f    | 1998-09-11 | NULL       |</span><br><span class="line">| Whistler | Gwen   | bird    | NULL | 1997-12-09 | 0000-00-00 |</span><br><span class="line">| Slim     | Benny  | snake   | m    | 1996-04-29 | NULL       |</span><br><span class="line">| Puffball | Diane  | hamster | f    | 1999-03-30 | NULL       |</span><br><span class="line">+----------+--------+---------+------+------------+------------+</span><br></pre></td></tr></table></figure>
+
+<p>从表中我们发现Bowser的birth值不太正确，我们可以</p>
+<ul>
+<li><p>在pet.txt中修改文件，然后清空pet表格，接着载入数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DELETE FROM pet;</span><br><span class="line">mysql&gt; LOAD DATA LOCAL INFILE <span class="string">&#x27;/usr/local/src/pet.txt&#x27;</span> INTO TABLE pet;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用UPDATE语句：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; UPDATE pet SET birth = <span class="string">&#x27;1989-08-31&#x27;</span> WHERE name = <span class="string">&#x27;Bowser&#x27;</span>;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>有条件地选择可以通过WHERE来实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name = <span class="string">&#x27;Bowser&#x27;</span>;</span><br><span class="line">+--------+-------+---------+------+------------+------------+</span><br><span class="line">| name   | owner | species | sex  | birth      | death      |</span><br><span class="line">+--------+-------+---------+------+------------+------------+</span><br><span class="line">| Bowser | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">+--------+-------+---------+------+------------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE birth &gt;= <span class="string">&#x27;1998-1-1&#x27;</span>;</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death |</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line">| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |</span><br><span class="line">| Puffball | Diane | hamster | f    | 1999-03-30 | NULL  |</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE species = <span class="string">&#x27;dog&#x27;</span> AND sex = <span class="string">&#x27;f&#x27;</span>;</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE species = <span class="string">&#x27;snake&#x27;</span> OR species = <span class="string">&#x27;bird&#x27;</span>;</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death |</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line">| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |</span><br><span class="line">| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL  |</span><br><span class="line">| Slim     | Benny | snake   | m    | 1996-04-29 | NULL  |</span><br><span class="line">+----------+-------+---------+------+------------+-------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE (species = <span class="string">&#x27;cat&#x27;</span> AND sex = <span class="string">&#x27;m&#x27;</span>)</span><br><span class="line">       OR (species = <span class="string">&#x27;dog&#x27;</span> AND sex = <span class="string">&#x27;f&#x27;</span>);</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br></pre></td></tr></table></figure>
+
+<p>选择特定的列可以通过SELECT语句实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet;</span><br><span class="line">+----------+------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------+------------+</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">+----------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT owner FROM pet;</span><br><span class="line">+--------+</span><br><span class="line">| owner  |</span><br><span class="line">+--------+</span><br><span class="line">| Harold |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Harold |</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">+--------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT DISTINCT owner FROM pet;</span><br><span class="line">+--------+</span><br><span class="line">| owner  |</span><br><span class="line">+--------+</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Harold |</span><br><span class="line">+--------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, species, birth FROM pet</span><br><span class="line">       WHERE species = <span class="string">&#x27;dog&#x27;</span> OR species = <span class="string">&#x27;cat&#x27;</span>;</span><br><span class="line">+--------+---------+------------+</span><br><span class="line">| name   | species | birth      |</span><br><span class="line">+--------+---------+------------+</span><br><span class="line">| Fluffy | cat     | 1993-02-04 |</span><br><span class="line">| Claws  | cat     | 1994-03-17 |</span><br><span class="line">| Buffy  | dog     | 1989-05-13 |</span><br><span class="line">| Fang   | dog     | 1990-08-27 |</span><br><span class="line">| Bowser | dog     | 1989-08-31 |</span><br><span class="line">+--------+---------+------------+</span><br></pre></td></tr></table></figure>
+
+<p>数据间的排序可以通过<code>ORDER BY</code>实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet ORDER BY birth;</span><br><span class="line">+----------+------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------+------------+</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">+----------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth FROM pet ORDER BY birth DESC;</span><br><span class="line">+----------+------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------+------------+</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">+----------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, species, birth FROM pet</span><br><span class="line">       ORDER BY species, birth DESC;</span><br><span class="line">+----------+---------+------------+</span><br><span class="line">| name     | species | birth      |</span><br><span class="line">+----------+---------+------------+</span><br><span class="line">| Chirpy   | bird    | 1998-09-11 |</span><br><span class="line">| Whistler | bird    | 1997-12-09 |</span><br><span class="line">| Claws    | cat     | 1994-03-17 |</span><br><span class="line">| Fluffy   | cat     | 1993-02-04 |</span><br><span class="line">| Fang     | dog     | 1990-08-27 |</span><br><span class="line">| Bowser   | dog     | 1989-08-31 |</span><br><span class="line">| Buffy    | dog     | 1989-05-13 |</span><br><span class="line">| Puffball | hamster | 1999-03-30 |</span><br><span class="line">| Slim     | snake   | 1996-04-29 |</span><br><span class="line">+----------+---------+------------+</span><br></pre></td></tr></table></figure>
+
+<p>和时间相关的处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth, CURDATE(),</span><br><span class="line">       TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age</span><br><span class="line">       FROM pet;</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| name     | birth      | CURDATE()  | age  |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| Fluffy   | 1993-02-04 | 2003-08-19 |   10 |</span><br><span class="line">| Claws    | 1994-03-17 | 2003-08-19 |    9 |</span><br><span class="line">| Buffy    | 1989-05-13 | 2003-08-19 |   14 |</span><br><span class="line">| Fang     | 1990-08-27 | 2003-08-19 |   12 |</span><br><span class="line">| Bowser   | 1989-08-31 | 2003-08-19 |   13 |</span><br><span class="line">| Chirpy   | 1998-09-11 | 2003-08-19 |    4 |</span><br><span class="line">| Whistler | 1997-12-09 | 2003-08-19 |    5 |</span><br><span class="line">| Slim     | 1996-04-29 | 2003-08-19 |    7 |</span><br><span class="line">| Puffball | 1999-03-30 | 2003-08-19 |    4 |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth, CURDATE(),</span><br><span class="line">       TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age</span><br><span class="line">       FROM pet ORDER BY name;</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| name     | birth      | CURDATE()  | age  |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| Bowser   | 1989-08-31 | 2003-08-19 |   13 |</span><br><span class="line">| Buffy    | 1989-05-13 | 2003-08-19 |   14 |</span><br><span class="line">| Chirpy   | 1998-09-11 | 2003-08-19 |    4 |</span><br><span class="line">| Claws    | 1994-03-17 | 2003-08-19 |    9 |</span><br><span class="line">| Fang     | 1990-08-27 | 2003-08-19 |   12 |</span><br><span class="line">| Fluffy   | 1993-02-04 | 2003-08-19 |   10 |</span><br><span class="line">| Puffball | 1999-03-30 | 2003-08-19 |    4 |</span><br><span class="line">| Slim     | 1996-04-29 | 2003-08-19 |    7 |</span><br><span class="line">| Whistler | 1997-12-09 | 2003-08-19 |    5 |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth, CURDATE(),</span><br><span class="line">       TIMESTAMPDIFF(YEAR,birth,CURDATE()) AS age</span><br><span class="line">       FROM pet ORDER BY age;</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| name     | birth      | CURDATE()  | age  |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line">| Chirpy   | 1998-09-11 | 2003-08-19 |    4 |</span><br><span class="line">| Puffball | 1999-03-30 | 2003-08-19 |    4 |</span><br><span class="line">| Whistler | 1997-12-09 | 2003-08-19 |    5 |</span><br><span class="line">| Slim     | 1996-04-29 | 2003-08-19 |    7 |</span><br><span class="line">| Claws    | 1994-03-17 | 2003-08-19 |    9 |</span><br><span class="line">| Fluffy   | 1993-02-04 | 2003-08-19 |   10 |</span><br><span class="line">| Fang     | 1990-08-27 | 2003-08-19 |   12 |</span><br><span class="line">| Bowser   | 1989-08-31 | 2003-08-19 |   13 |</span><br><span class="line">| Buffy    | 1989-05-13 | 2003-08-19 |   14 |</span><br><span class="line">+----------+------------+------------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth, death,</span><br><span class="line">       TIMESTAMPDIFF(YEAR,birth,death) AS age</span><br><span class="line">       FROM pet WHERE death IS NOT NULL ORDER BY age;</span><br><span class="line">+--------+------------+------------+------+</span><br><span class="line">| name   | birth      | death      | age  |</span><br><span class="line">+--------+------------+------------+------+</span><br><span class="line">| Bowser | 1989-08-31 | 1995-07-29 |    5 |</span><br><span class="line">+--------+------------+------------+------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth, MONTH(birth) FROM pet;</span><br><span class="line">+----------+------------+--------------+</span><br><span class="line">| name     | birth      | MONTH(birth) |</span><br><span class="line">+----------+------------+--------------+</span><br><span class="line">| Fluffy   | 1993-02-04 |            2 |</span><br><span class="line">| Claws    | 1994-03-17 |            3 |</span><br><span class="line">| Buffy    | 1989-05-13 |            5 |</span><br><span class="line">| Fang     | 1990-08-27 |            8 |</span><br><span class="line">| Bowser   | 1989-08-31 |            8 |</span><br><span class="line">| Chirpy   | 1998-09-11 |            9 |</span><br><span class="line">| Whistler | 1997-12-09 |           12 |</span><br><span class="line">| Slim     | 1996-04-29 |            4 |</span><br><span class="line">| Puffball | 1999-03-30 |            3 |</span><br><span class="line">+----------+------------+--------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT name, birth FROM pet WHERE MONTH(birth) &#x3D; 5;</span><br><span class="line">+-------+------------+</span><br><span class="line">| name  | birth      |</span><br><span class="line">+-------+------------+</span><br><span class="line">| Buffy | 1989-05-13 |</span><br><span class="line">+-------+------------+</span><br></pre></td></tr></table></figure>
+
+<p>模式匹配的规则如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;b%&#39;;</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death      |</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Bowser | Diane  | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;%fy&#39;;</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death |</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br><span class="line">| Fluffy | Harold | cat     | f    | 1993-02-04 | NULL  |</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;%w%&#39;;</span><br><span class="line">+----------+-------+---------+------+------------+------------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death      |</span><br><span class="line">+----------+-------+---------+------+------------+------------+</span><br><span class="line">| Claws    | Gwen  | cat     | m    | 1994-03-17 | NULL       |</span><br><span class="line">| Bowser   | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL       |</span><br><span class="line">+----------+-------+---------+------+------------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;_____&#39;;</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------+--------+---------+------+------------+-------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE REGEXP_LIKE(name, &#39;^b&#39;);</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death      |</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Bowser | Diane  | dog     | m    | 1979-08-31 | 1995-07-29 |</span><br><span class="line">+--------+--------+---------+------+------------+------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT * FROM pet WHERE REGEXP_LIKE(name, &#39;fy$&#39;);</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death |</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br><span class="line">| Fluffy | Harold | cat     | f    | 1993-02-04 | NULL  |</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+--------+--------+---------+------+------------+-------+</span><br></pre></td></tr></table></figure>
+
+<p>统计查询数目的条数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT COUNT(*) FROM pet;</span><br><span class="line">+----------+</span><br><span class="line">| COUNT(*) |</span><br><span class="line">+----------+</span><br><span class="line">|        9 |</span><br><span class="line">+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT owner, COUNT(*) FROM pet GROUP BY owner;</span><br><span class="line">+--------+----------+</span><br><span class="line">| owner  | COUNT(*) |</span><br><span class="line">+--------+----------+</span><br><span class="line">| Benny  |        2 |</span><br><span class="line">| Diane  |        2 |</span><br><span class="line">| Gwen   |        3 |</span><br><span class="line">| Harold |        2 |</span><br><span class="line">+--------+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT species, COUNT(*) FROM pet GROUP BY species;</span><br><span class="line">+---------+----------+</span><br><span class="line">| species | COUNT(*) |</span><br><span class="line">+---------+----------+</span><br><span class="line">| bird    |        2 |</span><br><span class="line">| cat     |        2 |</span><br><span class="line">| dog     |        3 |</span><br><span class="line">| hamster |        1 |</span><br><span class="line">| snake   |        1 |</span><br><span class="line">+---------+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT sex, COUNT(*) FROM pet GROUP BY sex;</span><br><span class="line">+------+----------+</span><br><span class="line">| sex  | COUNT(*) |</span><br><span class="line">+------+----------+</span><br><span class="line">| NULL |        1 |</span><br><span class="line">| f    |        4 |</span><br><span class="line">| m    |        4 |</span><br><span class="line">+------+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| species | sex  | COUNT(*) |</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| bird    | NULL |        1 |</span><br><span class="line">| bird    | f    |        1 |</span><br><span class="line">| cat     | f    |        1 |</span><br><span class="line">| cat     | m    |        1 |</span><br><span class="line">| dog     | f    |        1 |</span><br><span class="line">| dog     | m    |        2 |</span><br><span class="line">| hamster | f    |        1 |</span><br><span class="line">| snake   | m    |        1 |</span><br><span class="line">+---------+------+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT species, sex, COUNT(*) FROM pet</span><br><span class="line">       WHERE species &#x3D; &#39;dog&#39; OR species &#x3D; &#39;cat&#39;</span><br><span class="line">       GROUP BY species, sex;</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| species | sex  | COUNT(*) |</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| cat     | f    |        1 |</span><br><span class="line">| cat     | m    |        1 |</span><br><span class="line">| dog     | f    |        1 |</span><br><span class="line">| dog     | m    |        2 |</span><br><span class="line">+---------+------+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT species, sex, COUNT(*) FROM pet</span><br><span class="line">       WHERE sex IS NOT NULL</span><br><span class="line">       GROUP BY species, sex;</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| species | sex  | COUNT(*) |</span><br><span class="line">+---------+------+----------+</span><br><span class="line">| bird    | f    |        1 |</span><br><span class="line">| cat     | f    |        1 |</span><br><span class="line">| cat     | m    |        1 |</span><br><span class="line">| dog     | f    |        1 |</span><br><span class="line">| dog     | m    |        2 |</span><br><span class="line">| hamster | f    |        1 |</span><br><span class="line">| snake   | m    |        1 |</span><br><span class="line">+---------+------+----------+</span><br></pre></td></tr></table></figure>
+
+<p>使用多个表格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; LOAD DATA LOCAL INFILE &#39;event.txt&#39; INTO TABLE event;</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT pet.name,</span><br><span class="line">       TIMESTAMPDIFF(YEAR,birth,date) AS age,</span><br><span class="line">       remark</span><br><span class="line">       FROM pet INNER JOIN event</span><br><span class="line">         ON pet.name &#x3D; event.name</span><br><span class="line">       WHERE event.type &#x3D; &#39;litter&#39;;</span><br><span class="line">+--------+------+-----------------------------+</span><br><span class="line">| name   | age  | remark                      |</span><br><span class="line">+--------+------+-----------------------------+</span><br><span class="line">| Fluffy |    2 | 4 kittens, 3 female, 1 male |</span><br><span class="line">| Buffy  |    4 | 5 puppies, 2 female, 3 male |</span><br><span class="line">| Buffy  |    5 | 3 puppies, 3 female         |</span><br><span class="line">+--------+------+-----------------------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT p1.name, p1.sex, p2.name, p2.sex, p1.species</span><br><span class="line">       FROM pet AS p1 INNER JOIN pet AS p2</span><br><span class="line">         ON p1.species &#x3D; p2.species</span><br><span class="line">         AND p1.sex &#x3D; &#39;f&#39; AND p1.death IS NULL</span><br><span class="line">         AND p2.sex &#x3D; &#39;m&#39; AND p2.death IS NULL;</span><br><span class="line">+--------+------+-------+------+---------+</span><br><span class="line">| name   | sex  | name  | sex  | species |</span><br><span class="line">+--------+------+-------+------+---------+</span><br><span class="line">| Fluffy | f    | Claws | m    | cat     |</span><br><span class="line">| Buffy  | f    | Fang  | m    | dog     |</span><br><span class="line">+--------+------+-------+------+---------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="从数据库或者表格中获取相关信息"><a href="#从数据库或者表格中获取相关信息" class="headerlink" title="从数据库或者表格中获取相关信息"></a>从数据库或者表格中获取相关信息</h3><p>查询当前所有的数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW DATABASES;</span><br></pre></td></tr></table></figure>
+
+<p>查询当前数据库中含有的表格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW TABLES;</span><br></pre></td></tr></table></figure>
+
+<p>查询某个表格的表头和属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DESCRIBE pet;</span><br></pre></td></tr></table></figure>
+
+<p>查询当前所在的数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT DATABASE();</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用脚本运行MySQL指令"><a href="#使用脚本运行MySQL指令" class="headerlink" title="使用脚本运行MySQL指令"></a>使用脚本运行MySQL指令</h3><p>运行脚本的指令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -u root -p &lt; batch-file</span><br><span class="line">Enter password: *****</span><br></pre></td></tr></table></figure>
+
+<p>可以通过如下方法来查看或者将输出保存到文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -u root -p &lt; batch-file | more</span><br><span class="line">shell&gt; mysql -u root -p &lt; batch-file &gt; mysql.out</span><br></pre></td></tr></table></figure>
+
+<p>在batch模式和交互模式输出的内容会有不同，可以使用<code>-t</code>参数来得到交互模式下的输出；想要在输出语句中包含执行的指令，可以使用<code>-v</code>参数。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1582114003008.png" class="lazyload" data-srcset="1582114003008.png" srcset="data:image/png;base64,666" alt="1582114003008"/></div><span class="image-caption">1582114003008</span></div>
+<p>也可以在连接mysql后通过<code>source</code>或者<code>\</code>来运行脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; source batch-file</span><br><span class="line">mysql&gt; \ filename</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用的查询语句"><a href="#常用的查询语句" class="headerlink" title="常用的查询语句"></a>常用的查询语句</h3><p>首先创建shop表单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE shop(</span><br><span class="line">    -&gt; article INT UNSIGNED DEFAULT &#39;0000&#39; NOT NULL,</span><br><span class="line">    -&gt; dealer CHAR(20) DEFAULT &#39;&#39; NOT NULL,</span><br><span class="line">    -&gt; price DECIMAL(16, 2) DEFAULT &#39;0.00&#39; NOT NULL,</span><br><span class="line">    -&gt; PRIMARY KEY(article, dealer));</span><br></pre></td></tr></table></figure>
+
+<p>接着插入数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; INSERT INTO shop VALUES</span><br><span class="line">    -&gt; (1, &#39;A&#39;, 3.45), (1, &#39;B&#39;, 3.99), (2, &#39;A&#39;, 10.99), (3, &#39;B&#39;, 1.45),</span><br><span class="line">    -&gt; (3, &#39;C&#39;, 1.69), (3, &#39;D&#39;, 1.25), (4, &#39;D&#39;, 19.95);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>最大的article值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT MAX(ARTICLE) FROM shop;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>找到价格最大的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM shop WHERE price &#x3D; (SELECT MAX(price) FROM shop);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>找到每种物品的最大价格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT article, MAX(price) FROM shop</span><br><span class="line">    -&gt; GROUP BY article;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对每种物品，找到最贵价格的dealer：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT article, dealer, price</span><br><span class="line">	  FROM   shop s1</span><br><span class="line">	  WHERE  price&#x3D;(SELECT MAX(s2.price)</span><br><span class="line">       		       FROM shop s2</span><br><span class="line">              	    WHERE s1.article &#x3D; s2.article)</span><br><span class="line">	  ORDER BY article;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用用户定义的变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT @min_price:=MIN(price),@max_price:=MAX(price) FROM shop;</span><br><span class="line">mysql&gt; SELECT * FROM shop WHERE price=@min_price OR price=@max_price;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="使用AUTO-INCREMENT"><a href="#使用AUTO-INCREMENT" class="headerlink" title="使用AUTO_INCREMENT"></a>使用AUTO_INCREMENT</h3><p>我们可以创建animals的表格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE animals (</span><br><span class="line">     id MEDIUMINT NOT NULL AUTO_INCREMENT,</span><br><span class="line">     name CHAR(30) NOT NULL,</span><br><span class="line">     PRIMARY KEY (id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>然后在插入的时候可以不用设置id的值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO animals VALUES (NULL, &#39;dog&#39;), (NULL, &#39;pig&#39;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="MySQL备份和恢复"><a href="#MySQL备份和恢复" class="headerlink" title="MySQL备份和恢复"></a>MySQL备份和恢复</h2><h3 id="SQL文件格式"><a href="#SQL文件格式" class="headerlink" title="SQL文件格式"></a>SQL文件格式</h3><p>备份全部数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysqldump -u root -p --all-databases &gt; dump.sql</span><br></pre></td></tr></table></figure>
+
+<p>备份某些特定的数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysqldump -u root -p --databases db1 db2 &gt; dump.sql</span><br></pre></td></tr></table></figure>
+
+<p>备份某个数据库的某些表格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysqldump -u root -p db1 tb1 tb2 &gt; dump.sql</span><br></pre></td></tr></table></figure>
+
+<p>恢复文件内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -u root -p &lt; dump.sql</span><br></pre></td></tr></table></figure>
+
+<p>对于那些SQL文件中没有事先选择数据库的，可以先进入mysql，然后使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE db1;</span><br><span class="line">mysql&gt; source dump.sql;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用分割文本格式"><a href="#使用分割文本格式" class="headerlink" title="使用分割文本格式"></a>使用分割文本格式</h3><p>备份数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysqldump -u root -p --tab&#x3D;&#x2F;dir_name db1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果报错：Got error: 1290: The MySQL server is running with the –secure-file-priv option so it cannot execute this statement when executing ‘SELECT INTO OUTFILE’，我们可以使用如下方法来解决：</p>
+<p><code>mysql&gt; show global variables like &#39;%secure%&#39;</code></p>
+<p>查看secure-file-priv对用的目录，然后将上面的<code>dirname</code>改为对应的目录就可以。</p>
+</blockquote>
+<p>恢复文件内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -u root -p db1 &lt; t1.sql</span><br><span class="line">shell&gt; mysqlimport db1 t1.txt</span><br></pre></td></tr></table></figure>
+
+<p>或者在mysql环境下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE db1;</span><br><span class="line">mysql&gt; LOAD DATA INFILE &#39;t1.txt&#39; INTO TABLE t1;</span><br></pre></td></tr></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/>http://blog.zsstrike.top/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/MySQL/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>MySQL</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/&title=MySQL基本操作 - zsStrike&summary=本文介绍MySQL数据库的简单使用方法，包括数据库的启动和连接，以及数据的增删改查等。操作环境在CentOS 7中。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/&title=MySQL基本操作 - zsStrike&summary=本文介绍MySQL数据库的简单使用方法，包括数据库的启动和连接，以及数据的增删改查等。操作环境在CentOS 7中。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/19/MySQL%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/&title=MySQL基本操作 - zsStrike&summary=本文介绍MySQL数据库的简单使用方法，包括数据库的启动和连接，以及数据的增删改查等。操作环境在CentOS 7中。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/23/Vim%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Vim常用命令</p>
+          <p class='content'>本文介绍Vim中常用的命令，帮助我们快速使用Vim处理文本文档。
+
+
+基本操作在Vim中一共有三种模式：命令模式，插入模式和编辑模式（Visual mode）。
+
+在命令模式下可以使用h，j，k...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/18/CentOS-7%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%96%B9%E6%B3%95/'>
+          <p class='title'>CentOS 7安装常用软件方法<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本文将会在CentOS 7的情况下安装一下常用的开发软件，主要记录在软件安装中遇到的问题和解决问题的方法。
+
+
+概述由于国内的网络等原因，国外的一些资源或者被墙，或者是网络连接的速度慢，这个时候...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E5%92%8C%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-text">数据库连接和断开连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-text">查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">创建和使用数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">创建和选择数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8%E6%A0%BC"><span class="toc-text">创建表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-text">写入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E8%A1%A8%E6%A0%BC%E4%B8%AD%E8%8E%B7%E5%8F%96%E4%BF%A1%E6%81%AF"><span class="toc-text">从表格中获取信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E6%88%96%E8%80%85%E8%A1%A8%E6%A0%BC%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF"><span class="toc-text">从数据库或者表格中获取相关信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E8%BF%90%E8%A1%8CMySQL%E6%8C%87%E4%BB%A4"><span class="toc-text">使用脚本运行MySQL指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="toc-text">常用的查询语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8AUTO-INCREMENT"><span class="toc-text">使用AUTO_INCREMENT</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">MySQL备份和恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="toc-text">SQL文件格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%88%86%E5%89%B2%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F"><span class="toc-text">使用分割文本格式</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="MySQL基本操作";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

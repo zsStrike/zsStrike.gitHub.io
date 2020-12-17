@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>在Web中嵌入机器学习模型 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="本章中，我们将学习如何将机器学习模型嵌入到Web应用中，不仅仅是分类，还包括从实时数据中学习。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        在Web中嵌入机器学习模型
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月8日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：14分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="在Web中嵌入机器学习模型" data-path="/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本章中，我们将学习如何将机器学习模型嵌入到Web应用中，不仅仅是分类，还包括从实时数据中学习。</p>
+<a id="more"></a>
+
+<h2 id="序列化通过scikit-laern拟合的模型"><a href="#序列化通过scikit-laern拟合的模型" class="headerlink" title="序列化通过scikit-laern拟合的模型"></a>序列化通过scikit-laern拟合的模型</h2><p>正如我们上一章所述，训练机器模型会带来很高的计算成本。当然，我们不希望每次进行预测分析都需要训练模型。模型持久化的一个方法是使用Python内嵌的pickle模块，它使得我们可以在Python对象与字节码之间进行转换（序列化和反序列化），这样我们就可以将分类器当前的状态保存下来。当需要对新的数据进行分类时，可以直接加载已经保存的分类器，而不必再次用训练数据对模型进行训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">dest = os.path.join(os.getcwd(), <span class="string">&#x27;movieclassifier&#x27;</span>, <span class="string">&#x27;pkl_objects&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dest):</span><br><span class="line">    os.makedirs(dest)</span><br><span class="line">pickle.dump(stop,</span><br><span class="line">           open(os.path.join(dest, <span class="string">&#x27;stopwords.pkl&#x27;</span>), <span class="string">&#x27;wb&#x27;</span>),</span><br><span class="line">           protocol=<span class="number">4</span>)</span><br><span class="line">pickle.dump(clf,</span><br><span class="line">           open(os.path.join(dest, <span class="string">&#x27;classifier.pkl&#x27;</span>), <span class="string">&#x27;wb&#x27;</span>),</span><br><span class="line">           protocol=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+
+<p>由于无需拟合HashingVectorizer，也就不必对其进行持久化操作。相反，我们创建一个新的脚本文件，通过此脚本可以将向量数据导入到当前Python会话中，下面代码以vectorizer.py作为文件名，保存在movieclassifier目录下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> HashingVectorizer</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"></span><br><span class="line">cur_dir = os.path.dirname(__file__)</span><br><span class="line">stop = pickle.load(open(os.path.join(cur_dir, <span class="string">&#x27;pkl_objects&#x27;</span>, <span class="string">&#x27;stopwords.pkl&#x27;</span>), <span class="string">&#x27;rb&#x27;</span>))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tokenizer</span>(<span class="params">text</span>):</span></span><br><span class="line">    text = re.sub(<span class="string">&#x27;&lt;[^&gt;]*&gt;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, text)</span><br><span class="line">    text = re.sub(<span class="string">&#x27;[\W]+&#x27;</span>, <span class="string">&#x27; &#x27;</span>, text.lower())</span><br><span class="line">    tokenized = [w <span class="keyword">for</span> w <span class="keyword">in</span> text.split() <span class="keyword">if</span> w <span class="keyword">not</span> <span class="keyword">in</span> stop]</span><br><span class="line">    <span class="keyword">return</span> tokenized</span><br><span class="line"></span><br><span class="line">vect = HashingVectorizer(decode_error=<span class="string">&#x27;ignore&#x27;</span>,</span><br><span class="line">                        n_features=<span class="number">2</span>**<span class="number">21</span>,</span><br><span class="line">                        preprocessor=<span class="literal">None</span>,</span><br><span class="line">                        tokenizer=tokenizer)</span><br></pre></td></tr></table></figure>
+
+<p>接下来定位到movieclassifer目录，就可以导入vectorizer及对分类器进行持久化处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> vectorizer <span class="keyword">import</span> vect</span><br><span class="line">clf = pickle.load(open(os.path.join(<span class="string">&#x27;pkl_objects&#x27;</span>, <span class="string">&#x27;classifier.pkl&#x27;</span>), <span class="string">&#x27;rb&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>在成功加载vectorizer以及反序列化分类器后，我们现在使用这些对象对文档样本进行预处理，并且对其进行预测：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">label = &#123;<span class="number">0</span>: <span class="string">&#x27;negative&#x27;</span>, <span class="number">1</span>: <span class="string">&#x27;postive&#x27;</span>&#125;</span><br><span class="line">example = [<span class="string">&#x27;I love this movie&#x27;</span>]</span><br><span class="line">X = vect.transform(example)</span><br><span class="line">print(<span class="string">&#x27;Prediction: %s\nProbability: %.3f%%&#x27;</span> % (label[clf.predict(X)[<span class="number">0</span>]], np.max(clf.predict_proba(X))*<span class="number">100</span>))</span><br><span class="line">&gt;&gt; Prediction: postive</span><br><span class="line">&gt;&gt; Probability: <span class="number">81.483</span>%</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用SQLite数据库存储数据"><a href="#使用SQLite数据库存储数据" class="headerlink" title="使用SQLite数据库存储数据"></a>使用SQLite数据库存储数据</h2><p>本节中，我们将创建一个简单的SQLite数据库以收集Web应用的用户对于预测结果的反馈。SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。它是一个零配置的数据库，这意味着与其他数据库一样，我们不需要在系统中配置。就像其他数据库，SQLite 引擎不是一个独立的进程，可以按应用程序需求进行静态或动态连接。SQLite 可以直接访问其存储文件。</p>
+<p>通过如下代码，我们将在movieclassifier所在目录创建一个新的SQLite数据库，并且向其中插入两条电影评论的示例数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">conn = sqlite3.connect(<span class="string">&#x27;reviews.sqlite&#x27;</span>)</span><br><span class="line">c = conn.cursor()</span><br><span class="line">c.execute(<span class="string">&quot;CREATE TABLE review_db&quot;</span>\</span><br><span class="line">         <span class="string">&quot;(review TEXT, sentiment INTEGER, date TEXT)&quot;</span>)</span><br><span class="line">example1 = <span class="string">&#x27;I love this movie&#x27;</span></span><br><span class="line">c.execute(<span class="string">&quot;INSERT INTO review_db&quot;</span>\</span><br><span class="line">         <span class="string">&quot;(review, sentiment, date) VALUES&quot;</span>\</span><br><span class="line">         <span class="string">&quot;(?, ?, DATETIME(&#x27;now&#x27;))&quot;</span>, (example1, <span class="number">1</span>))</span><br><span class="line">example2 = <span class="string">&#x27;I dislike this movie&#x27;</span></span><br><span class="line">c.execute(<span class="string">&quot;INSERT INTO review_db&quot;</span>\</span><br><span class="line">         <span class="string">&quot;(review, sentiment, date) VALUES&quot;</span>\</span><br><span class="line">         <span class="string">&quot;(?, ?, DATETIME(&#x27;now&#x27;))&quot;</span>, (example2, <span class="number">0</span>))</span><br><span class="line">conn.commit()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Flask开发Web应用"><a href="#使用Flask开发Web应用" class="headerlink" title="使用Flask开发Web应用"></a>使用Flask开发Web应用</h2><p>上一节中完成了用于电影评论分类的代码，现在来讨论使用Flask框架开发Web应用的基础知识。</p>
+<h3 id="第一个Flask-Web应用"><a href="#第一个Flask-Web应用" class="headerlink" title="第一个Flask Web应用"></a>第一个Flask Web应用</h3><p>首先，按照如下目录结构创建Web应用的框架：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1st_flask_app_1&#x2F;</span><br><span class="line">	-app.py</span><br><span class="line">	-templates&#x2F;</span><br><span class="line">		-first_app.html</span><br></pre></td></tr></table></figure>
+
+<p>app.py文件中包含了运行Flask Web应用程序而需要在Python解释器中执行的入口代码。templates目录下面是Flask用到的静态HTML文件。首先，看一下app.py的内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;first_app.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+
+<p>其中需要注意的是路由注解（@app.route(‘/‘)）指定触发index函数的URL路径。接下里通过终端窗口执行下列命令启动Web应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 app.py</span><br><span class="line">&gt;&gt; Running on http://127.0.0.1:5000/</span><br></pre></td></tr></table></figure>
+
+<p>接下来打开对应的网站，如果一切正常，将会看到如下内容网页：</p>
+<p>“Hi, this is my first Flask Web app!”。</p>
+<h3 id="表单验证"><a href="#表单验证" class="headerlink" title="表单验证"></a>表单验证</h3><p>本节中，我们使用HTML表单升级Flask Web应用，以及学习如何使用WTForms库收集数据。</p>
+<p>新的应用程序所需的目标结构看起来如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1st_flask_app_1&#x2F;</span><br><span class="line">	-app.py</span><br><span class="line">	-static</span><br><span class="line">		-style.css</span><br><span class="line">	-templates&#x2F;</span><br><span class="line">		-_formhelpers.html</span><br><span class="line">		-first_app.html</span><br><span class="line">		-hello.html</span><br></pre></td></tr></table></figure>
+
+<p>以下为修改后的app.py文件内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, request</span><br><span class="line"><span class="keyword">from</span> wtforms <span class="keyword">import</span> Form, TextAreaFiled, validators</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloForm</span>(<span class="params">Form</span>):</span></span><br><span class="line">    sayhello = TextAreaFiled(<span class="string">&#x27;&#x27;</span>, [validators.DateRequired()])</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    form = HelloForm(request.form)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;first_app.html&#x27;</span>, form=form)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/hello&#x27;, method=[&#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span>():</span></span><br><span class="line">    form = HelloForm(request.form)</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span> <span class="keyword">and</span> form.validate():</span><br><span class="line">        name = request.form[<span class="string">&#x27;sayhello&#x27;</span>]</span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&#x27;hello.html&#x27;</span>, name=name)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;first_app.html&#x27;</span>, form=form)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>现在通过Jinjia2模板引擎，在_formhelper.html文件中实现一个通用宏，后续它会被导入到first_app.html文件中用来渲染文本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;% macro render_field(field) %&#125;</span><br><span class="line">    &lt;dt&gt;&#123;&#123; field.label &#125;&#125;</span><br><span class="line">    &lt;dd&gt;&#123;&#123; field(**kwargs)|safe &#125;&#125;</span><br><span class="line">    &#123;% if field.errors %&#125;</span><br><span class="line">        &lt;ul class&#x3D;errors&gt;</span><br><span class="line">        &#123;% for error in field.errors %&#125;</span><br><span class="line">        &lt;li&gt;&#123;&#123; error &#125;&#125;&lt;&#x2F;li&gt;</span><br><span class="line">        &#123;% endfor %&#125;</span><br><span class="line">        &lt;&#x2F;ul&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">    &lt;&#x2F;dd&gt;</span><br><span class="line">&#123;% endmacro %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们创建一个style.css文件，用于控制样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">	<span class="attribute">font-size</span>: <span class="number">2em</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是修改后的first_app.html文件内容：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>First app<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123; url_for(&#x27;static&#x27;, filename=&#x27;style.css&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    &#123;% from &quot;_formhelpers.html&quot; import render_field %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>What&#x27;s your name?<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">post</span> <span class="attr">action</span>=<span class="string">&quot;/hello&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">        	&#123;&#123; render_field(form.sayhello) &#125;&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Say Hello&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;submit_btn&#x27;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后我们创建一个hello.html的文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>First app<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123; url_for(&#x27;static&#x27;, filename=&#x27;style.css&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">div</span>&gt;</span>Hello &#123;&#123; name &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来通过如下代码来运行我们的Web应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 app.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="将电影分类器嵌入Web应用"><a href="#将电影分类器嵌入Web应用" class="headerlink" title="将电影分类器嵌入Web应用"></a>将电影分类器嵌入Web应用</h2><p>下面更进一步，将电影分类器嵌入到Web应用中。</p>
+<p>首先，看一下此电影评论分类应用的目录结构，如下图：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581131990058.png" class="lazyload" data-srcset="1581131990058.png" srcset="data:image/png;base64,666" alt="1581131990058"/></div><span class="image-caption">1581131990058</span></div>
+<p>在本章前面的小节中，我们已经创建了vectorizer.py文件，reviews.sqlite以及pkl_objects对象。</p>
+<p>由于app.py文件较长，我们分两步来分析。首先导入所需的Python模块和对象，并且通过反序列化恢复我们的分类模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, render_template, request</span><br><span class="line"><span class="keyword">from</span> wtforms <span class="keyword">import</span> Form, TextAreaField, validators</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># import HashingVectorizer from local dir</span></span><br><span class="line"><span class="keyword">from</span> vectorizer <span class="keyword">import</span> vect</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="comment">######## Preparing the Classifier</span></span><br><span class="line">cur_dir = os.path.dirname(__file__)</span><br><span class="line">clf = pickle.load(open(os.path.join(cur_dir, <span class="string">&#x27;pkl_objects/classifier.pkl&#x27;</span>), <span class="string">&#x27;rb&#x27;</span>))</span><br><span class="line">db = os.path.join(cur_dir, <span class="string">&#x27;reviews.sqlite&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classify</span>(<span class="params">document</span>):</span></span><br><span class="line">    label = &#123;<span class="number">0</span>: <span class="string">&#x27;negative&#x27;</span>, <span class="number">1</span>: <span class="string">&#x27;positive&#x27;</span>&#125;</span><br><span class="line">    X = vect.transform([document])</span><br><span class="line">    y = clf.predict(X)[<span class="number">0</span>]</span><br><span class="line">    proba = np.max(clf.predict_proba(X))</span><br><span class="line">    <span class="keyword">return</span> label[y], proba</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">document, y</span>):</span></span><br><span class="line">    X = vect.transform([document])</span><br><span class="line">    clf.partial_fit(X, [y])</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sqlite_entry</span>(<span class="params">path, document, y</span>):</span></span><br><span class="line">    conn = sqlite3.connect(path)</span><br><span class="line">    c = conn.cursor()</span><br><span class="line">    c.execute(<span class="string">&quot;INSERT INTO review_db (review, sentiment, date)&quot;</span>\</span><br><span class="line">    <span class="string">&quot; VALUES (?, ?, DATETIME(&#x27;now&#x27;))&quot;</span>, (document, y))</span><br><span class="line">    conn.commit()</span><br><span class="line">    conn.close()</span><br></pre></td></tr></table></figure>
+
+<p>app.py的第二部分如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReviewForm</span>(<span class="params">Form</span>):</span></span><br><span class="line">	moviereview = TextAreaField(<span class="string">&#x27;&#x27;</span>, [validators.DataRequired(), validators.length(min=<span class="number">15</span>)])</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    form = ReviewForm(request.form)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;reviewform.html&#x27;</span>, form=form)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/results&#x27;, methods=[&#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">results</span>():</span></span><br><span class="line">    form = ReviewForm(request.form)</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;POST&#x27;</span> <span class="keyword">and</span> form.validate():</span><br><span class="line">        review = request.form[<span class="string">&#x27;moviereview&#x27;</span>]</span><br><span class="line">        y, proba = classify(review)</span><br><span class="line">        <span class="keyword">return</span> render_template(<span class="string">&#x27;results.html&#x27;</span>,</span><br><span class="line">                                content=review,</span><br><span class="line">                                prediction=y,</span><br><span class="line">                                probability=round(proba*<span class="number">100</span>, <span class="number">2</span>))</span><br><span class="line">	<span class="keyword">return</span> render_template(<span class="string">&#x27;reviewform.html&#x27;</span>, form=form)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/thanks&#x27;, methods=[&#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">feedback</span>():</span></span><br><span class="line">    feedback = request.form[<span class="string">&#x27;feedback_button&#x27;</span>]</span><br><span class="line">    review = request.form[<span class="string">&#x27;review&#x27;</span>]</span><br><span class="line">    prediction = request.form[<span class="string">&#x27;prediction&#x27;</span>]</span><br><span class="line">    </span><br><span class="line">    inv_label = &#123;<span class="string">&#x27;negative&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;positive&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line">    y = inv_label[prediction]</span><br><span class="line">    <span class="keyword">if</span> feedback == <span class="string">&#x27;Incorrect&#x27;</span>:</span><br><span class="line">		y = int(<span class="keyword">not</span>(y))</span><br><span class="line">    train(review, y)</span><br><span class="line">    sqlite_entry(db, review, y)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;thanks.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	app.run(debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，看一下reviewform.html模板：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">title</span>&gt;</span>Movie Classification<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Please enter your movie review:<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        &#123;% from &quot;_formhelpers.html&quot; import render_field %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">post</span> <span class="attr">action</span>=<span class="string">&quot;/results&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">            &#123;&#123; render_field(form.moviereview, cols=&#x27;30&#x27;, rows=&#x27;10&#x27;) &#125;&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Submit review&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;submit_btn&#x27;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>下一个模板是result.html，看上去很有趣：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Movie Classification<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;&#123;&#123; url_for(&#x27;static&#x27;, filename=&#x27;style.css&#x27;) &#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Your movie review:<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; content &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Prediction:<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>This movie review is <span class="tag">&lt;<span class="name">strong</span>&gt;</span>&#123;&#123; prediction &#125;&#125;<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></span><br><span class="line">        	(probability: &#123;&#123; probability &#125;&#125;%).<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&#x27;button&#x27;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/thanks&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Correct&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;feedback_button&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Incorrect&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;feedback_button&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">hidden</span> <span class="attr">value</span>=<span class="string">&#x27;&#123;&#123; prediction &#125;&#125;&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;prediction&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">hidden</span> <span class="attr">value</span>=<span class="string">&#x27;&#123;&#123; content &#125;&#125;&#x27;</span> <span class="attr">name</span>=<span class="string">&#x27;review&#x27;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&#x27;button&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/&quot;</span>&gt;</span></span><br><span class="line">            	<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Submit another review&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此外，style.css文件如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>&#123;</span><br><span class="line">	<span class="attribute">width</span>:<span class="number">600px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-id">#button</span>&#123;</span><br><span class="line">	<span class="attribute">padding-top</span>: <span class="number">20px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样，thanks.html的内容如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!doctype <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">title</span>&gt;</span>Movie Classification<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Thank you for your feedback!<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&#x27;button&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span> <span class="attr">value</span>=<span class="string">&#x27;Submit another review&#x27;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>同样，最后我们启动Web应用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 app.py</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们就可以访问网站了。</p>
+<h2 id="在公共服务器上部署Web应用"><a href="#在公共服务器上部署Web应用" class="headerlink" title="在公共服务器上部署Web应用"></a>在公共服务器上部署Web应用</h2><p>测试完Web应用后，我们可以将其托管到PythonAnywhere服务器上。托管到PythonAnywhere网站后，我们可以通过访问<code>&lt;username&gt;.pythonanywhere.com</code>。</p>
+<p>当收到用户的反馈后，模型会自动即时更新，但是如果服务器崩溃或者重启，clfd对象的更新就会重置。使得更新能够持久化保存的一个方法就是：模型一旦被更新就立即序列化新的clf对象。但是随着用户的增多，此方案的效率会逐渐底下。另外一种解决方案就是使用SQLite数据库保存的反馈信息更新预测模型。为了更新clf对象，我们创建一个update.py脚本文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># import HashingVectorizer from local dir</span></span><br><span class="line"><span class="keyword">from</span> vectorizer <span class="keyword">import</span> vect</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_model</span>(<span class="params">db_path, model, batch_size=<span class="number">10000</span></span>):</span></span><br><span class="line">    conn = sqlite3.connect(db_path)</span><br><span class="line">    c = conn.cursor()</span><br><span class="line">    c.execute(<span class="string">&#x27;SELECT * from review_db&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    results = c.fetchmany(batch_size)</span><br><span class="line">    <span class="keyword">while</span> results:</span><br><span class="line">        data = np.array(results)</span><br><span class="line">        X = data[:, <span class="number">0</span>]</span><br><span class="line">        y = data[:, <span class="number">1</span>].astype(int)</span><br><span class="line">        </span><br><span class="line">        classes = np.array([<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line">        X_train = vect.transform(X)</span><br><span class="line">        clf.partial_fit(X_train, y, classes=classes)</span><br><span class="line">        results = c.fetchmany(batch_size)</span><br><span class="line">    conn.close()</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">cur_dir = os.path.dirname(__file__)</span><br><span class="line"></span><br><span class="line">clf = pickle.load(open(os.path.join(cur_dir,</span><br><span class="line">                <span class="string">&#x27;pkl_objects&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;classifier.pkl&#x27;</span>), <span class="string">&#x27;rb&#x27;</span>))</span><br><span class="line">db = os.path.join(cur_dir, <span class="string">&#x27;reviews.sqlite&#x27;</span>)</span><br><span class="line"></span><br><span class="line">update_model(db_path=db, model=clf, batch_size=<span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Uncomment the following lines if you are sure that</span></span><br><span class="line"><span class="comment"># you want to update your classifier.pkl file</span></span><br><span class="line"><span class="comment"># permanently.</span></span><br><span class="line"><span class="comment"># pickle.dump(clf, open(os.path.join(cur_dir,</span></span><br><span class="line"><span class="comment"># &#x27;pkl_objects&#x27;, &#x27;classifier.pkl&#x27;), &#x27;wb&#x27;)</span></span><br><span class="line"><span class="comment"># , protocol=4)</span></span><br></pre></td></tr></table></figure>
+
+<p>创建好update.py的脚本中，我们需要在app.py开头增加一行导入update.py脚本中update_model函数的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># import update function from local_dir</span></span><br><span class="line"><span class="keyword">from</span> update <span class="keyword">import</span> update_model</span><br></pre></td></tr></table></figure>
+
+<p>然后在应用程序的主脚本中调用update_model函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">	update_model(filepath=db, model=clf, batch_size=<span class="number">10000</span>)</span><br><span class="line"><span class="meta">... </span>   </span><br></pre></td></tr></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/>http://blog.zsstrike.top/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/&title=在Web中嵌入机器学习模型 - zsStrike&summary=本章中，我们将学习如何将机器学习模型嵌入到Web应用中，不仅仅是分类，还包括从实时数据中学习。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/&title=在Web中嵌入机器学习模型 - zsStrike&summary=本章中，我们将学习如何将机器学习模型嵌入到Web应用中，不仅仅是分类，还包括从实时数据中学习。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/08/%E5%9C%A8Web%E4%B8%AD%E5%B5%8C%E5%85%A5%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%A8%A1%E5%9E%8B/&title=在Web中嵌入机器学习模型 - zsStrike&summary=本章中，我们将学习如何将机器学习模型嵌入到Web应用中，不仅仅是分类，还包括从实时数据中学习。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/08/%E4%BD%BF%E7%94%A8%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90%E9%A2%84%E6%B5%8B%E8%BF%9E%E7%BB%AD%E5%9E%8B%E7%9B%AE%E6%A0%87%E5%8F%98%E9%87%8F/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>使用回归分析预测连续型目标变量</p>
+          <p class='content'>本章将会介绍监督学习的另外一个分支，回归分析（regression analysis）。回归模型可以用于连续型目标变量的预测分析，这使得它在探寻变量间关系，评估趋势，做出预测等领域极具吸引力。具...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/07/%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%BF%9B%E8%A1%8C%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/'>
+          <p class='title'>使用机器学习进行情感分析<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本章我们将深入研究自然语言处理（natural language processing，NLP）领域的一个分支—-情感分析（sentiment analysis），还将学习如何使用机器学习算法基...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E9%80%9A%E8%BF%87scikit-laern%E6%8B%9F%E5%90%88%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="toc-text">序列化通过scikit-laern拟合的模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8SQLite%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE"><span class="toc-text">使用SQLite数据库存储数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Flask%E5%BC%80%E5%8F%91Web%E5%BA%94%E7%94%A8"><span class="toc-text">使用Flask开发Web应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AAFlask-Web%E5%BA%94%E7%94%A8"><span class="toc-text">第一个Flask Web应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="toc-text">表单验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E7%94%B5%E5%BD%B1%E5%88%86%E7%B1%BB%E5%99%A8%E5%B5%8C%E5%85%A5Web%E5%BA%94%E7%94%A8"><span class="toc-text">将电影分类器嵌入Web应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%83%A8%E7%BD%B2Web%E5%BA%94%E7%94%A8"><span class="toc-text">在公共服务器上部署Web应用</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="在Web中嵌入机器学习模型";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>使用scikit-learn实现分类算法 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        使用scikit-learn实现分类算法
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年1月30日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4.6k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：18分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="使用scikit-learn实现分类算法" data-path="/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。</p>
+<a id="more"></a>
+
+<h2 id="分类算法的选择"><a href="#分类算法的选择" class="headerlink" title="分类算法的选择"></a>分类算法的选择</h2><p>机器学习算法涉及到的五个步骤可以描述如下：</p>
+<ol>
+<li>特征的选择</li>
+<li>确定性能评价标准</li>
+<li>选择分类器及其优化算法</li>
+<li>对模型性能的评估</li>
+<li>算法的调优</li>
+</ol>
+<p>在本节中集中学习不同分类算法的概念，并再次回顾特征选择，预处理及性能评价指标等内容。</p>
+<h2 id="初涉-scikit-learn-的使用"><a href="#初涉-scikit-learn-的使用" class="headerlink" title="初涉 scikit-learn 的使用"></a>初涉 scikit-learn 的使用</h2><p>首先，使用 scikit-learn 来实现一个感知器模型，这个模型和前面讲的感知器模型类似。仍旧使用鸢尾花数据集中的两个特征。</p>
+<p>提取150朵鸢尾花的花瓣长度和宽度两个特征的值，并且由此构建矩阵$ X $，同时将对应的类标赋值给$ y $：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X = iris.data[:, [<span class="number">2</span>, <span class="number">3</span>]]</span><br><span class="line">y = iris.target</span><br></pre></td></tr></table></figure>
+
+<p>为了评估训练得到的模型在位置数据上的表现，我们进一步将数据集划分为训练数据集和测试数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="comment"># sklearn.cross_validation 已经废弃，改用sklearn.model_selection</span></span><br><span class="line"></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>由此，我们得到45个测试样本和105个训练样本。为了优化性能，还需要对数据进行特征缩放：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">sc = StandardScaler()</span><br><span class="line">sc.fit(X_train)</span><br><span class="line">X_train_std = sc.transform(X_train)</span><br><span class="line">X_test_std = sc.transform(X_test)</span><br></pre></td></tr></table></figure>
+
+<p>通过调用 <code>sc.fit</code>可以计算出<code>X_train</code>的每个特征的样本均值$ \mu $和标准差$ \sigma $。通过调用<code>transform</code>方法，可以使用已经计算出来的$ \mu $和$ \sigma $来对训练集数据做标准化处理。在特征缩放后，我们就可以训练感知器模型了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Perceptron</span><br><span class="line"></span><br><span class="line">ppn = Perceptron(max_iter=<span class="number">40</span>, eta0=<span class="number">0.1</span>, random_state=<span class="number">0</span>)</span><br><span class="line">ppn.fit(X_train_std, y_train)</span><br></pre></td></tr></table></figure>
+
+<p>训练好后，就可以进行预测了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y_pred = ppn.predict(X_test_std)</span><br><span class="line">print(<span class="string">&#x27;Misclassified samples: %d&#x27;</span> % (y_test != y_pred).sum())</span><br><span class="line">&gt;&gt; Misclassified samples: <span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>最终可以看到有5个预测错误，从而准确率是$ 89% $。同样地，scikit-learn还实现了许多不同 的性能矩阵，可以通过如下代码计算准确率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;Accuracy: %.2f&#x27;</span> % accuracy_score(y_test, y_pred))</span><br><span class="line">&gt;&gt; Accuracy: <span class="number">0.89</span></span><br></pre></td></tr></table></figure>
+
+<p>最后，我们可以在第二章中实现的<code>plot_decision_regions</code>函数来绘制刚刚训练过的<strong>决策区域</strong>，并且观察不同分类的效果，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib.colors <span class="keyword">import</span> ListedColormap</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_decision_regions</span>(<span class="params">X, y, classifier, test_idx=None, resolution=<span class="number">0.02</span></span>):</span></span><br><span class="line">    <span class="comment"># setup marker generator and color map</span></span><br><span class="line">    markers = (<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;^&#x27;</span>, <span class="string">&#x27;v&#x27;</span>)</span><br><span class="line">    colors = (<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;lightgreen&#x27;</span>, <span class="string">&#x27;gray&#x27;</span>, <span class="string">&#x27;cyan&#x27;</span>)</span><br><span class="line">    cmap = ListedColormap(colors[:len(np.unique(y))])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># plot the decision surface</span></span><br><span class="line">    x1_min, x1_max = X[:, <span class="number">0</span>].min() - <span class="number">1</span>, X[:, <span class="number">0</span>].max() + <span class="number">1</span></span><br><span class="line">    x2_min, x2_max = X[:, <span class="number">1</span>].min() - <span class="number">1</span>, X[:, <span class="number">1</span>].max() + <span class="number">1</span></span><br><span class="line">    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))</span><br><span class="line">    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)</span><br><span class="line">    Z = Z.reshape(xx1.shape)</span><br><span class="line">    plt.contourf(xx1, xx2, Z, alpha=<span class="number">0.4</span>, cmap=cmap)</span><br><span class="line">    plt.xlim(xx1.min(), xx1.max())</span><br><span class="line">    plt.ylim(xx2.min(), xx2.max())</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># plot all samples</span></span><br><span class="line">    X_test, y_test = X[test_idx, :], y[test_idx]</span><br><span class="line">    <span class="keyword">for</span> idx, cl <span class="keyword">in</span> enumerate(np.unique(y)):</span><br><span class="line">        plt.scatter(x=X[y == cl, <span class="number">0</span>], y=X[y == cl, <span class="number">1</span>], alpha=<span class="number">0.8</span>, c=cmap(idx), marker=markers[idx], label=cl)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> test_idx:</span><br><span class="line">        X_test, y_test = X[test_idx, :], y[test_idx]</span><br><span class="line">        plt.scatter(X_test[:, <span class="number">0</span>], X_test[:, <span class="number">1</span>], c=<span class="string">&#x27;orange&#x27;</span>, alpha=<span class="number">1</span>, linewidth=<span class="number">1</span>, marker=<span class="string">&#x27;+&#x27;</span>, s=<span class="number">55</span>, label=<span class="string">&#x27;test set&#x27;</span>)</span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+
+<p>接下来，就可以回值决策区域图了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X_combined_std = np.vstack((X_train_std, X_test_std))</span><br><span class="line">y_combined = np.hstack((y_train, y_test))</span><br><span class="line">plot_decision_regions(X=X_combined_std, y=y_combined, classifier=ppn, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;petal length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;petal width&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;upper left&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>绘图如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Thu,%2030%20Jan%202020%20144855.png" class="lazyload" data-srcset="Thu,%2030%20Jan%202020%20144855.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从图中我们发现无法通过一个线性的决策边界完美划分三类样本。对于无法完美线性可分的数据集，感知器算法将会永远无法收敛，这也是实践中一般不使用感知器算法的原因。</p>
+<h2 id="逻辑斯蒂回归中的类别概率"><a href="#逻辑斯蒂回归中的类别概率" class="headerlink" title="逻辑斯蒂回归中的类别概率"></a>逻辑斯蒂回归中的类别概率</h2><h3 id="初识逻辑斯蒂回归模型"><a href="#初识逻辑斯蒂回归模型" class="headerlink" title="初识逻辑斯蒂回归模型"></a>初识逻辑斯蒂回归模型</h3><p>逻辑斯蒂回归模型和Adaline模型类似，不同的是在Adaline中，我们使用$ \phi(z)=z $作为激励函数，而在逻辑斯蒂回归中使用的是sigmoid函数作为激励模型：<br>$$<br>sigmoid(z) = \phi(z) = \frac{1}{1+e^{-z}}<br>$$<br>它的函数图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="timg-1580368063667.jfif" class="lazyload" data-srcset="timg-1580368063667.jfif" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>在给定特征$ x $和权重$ w $的情况下，sigmoid函数的输出值给出了特定样本$ x $属于类别1的概率$ \phi(z) = P(y=1|x;w) $。预测到的概率可以通过一个量化器进行二元输出：<br>$$<br>\hat{y}=\begin{cases}<br>1 &amp; \phi(z) \ge 0.5\<br>0 &amp; others<br>\end{cases}<br>$$<br>对应的，逻辑斯蒂回归模型图如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="th-1580368751444.jfif" class="lazyload" data-srcset="th-1580368751444.jfif" srcset="data:image/png;base64,666" alt="See the source image"/></div><span class="image-caption">See the source image</span></div>
+<h3 id="逻辑斯蒂回归模型的代价函数"><a href="#逻辑斯蒂回归模型的代价函数" class="headerlink" title="逻辑斯蒂回归模型的代价函数"></a>逻辑斯蒂回归模型的代价函数</h3><p>在构建逻辑斯蒂回归模型时，需要先定义一个最大似然函数，公式如下:<br>$$<br>L(w) = \prod_{i=1}^{n}P(y^i|x^i;w)=(\phi(z^i))^{y^i}(1-\phi(z))^{1-y^i}<br>$$<br>然后取对数并且改写一下，得到如下：<br>$$<br>J(w) = \sum_i^n-y^ilog(\phi(z^i)) - (1-y^i)log(1-\phi(z^i))<br>$$<br>我们可以对单个样本实例进行成本分析：<br>$$<br>J(\phi(z),y;w) = \begin{cases}<br>-log(\phi(z)) &amp; y=1\<br>-log(1-\phi(z)) &amp; y=0<br>\end{cases}<br>$$<br><img src="1580370420597.png" class="lazyload" data-srcset="1580370420597.png" srcset="data:image/png;base64,666" alt="1580370420597"></p>
+<p>可以看到，如果正确将样本划分到类别1和0中，代价都将会趋于0，但是如果错误分类，代价将会区域无穷，这也就意味着错误预测带来的代价将会越来越大。</p>
+<h3 id="使用scikit-learn训练逻辑斯蒂回归模型"><a href="#使用scikit-learn训练逻辑斯蒂回归模型" class="headerlink" title="使用scikit-learn训练逻辑斯蒂回归模型"></a>使用scikit-learn训练逻辑斯蒂回归模型</h3><p>接下来，我们使用逻辑斯蒂回归模型来训练鸢尾花数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"></span><br><span class="line">lr = LogisticRegression(C=<span class="number">1000.0</span>, random_state=<span class="number">0</span>)</span><br><span class="line">lr.fit(X_train_std, y_train)</span><br><span class="line">plot_decision_regions(X_combined_std, y_combined, classifier=lr, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;upper left&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的决策区域图如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Thu,%2030%20Jan%202020%20155618.png" class="lazyload" data-srcset="Thu,%2030%20Jan%202020%20155618.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>此外，可以通过<code>predict_proba</code>来预测样本属于某个类别的概率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lr.predict_proba(X_test_std[<span class="number">0</span>:<span class="number">1</span>, :])</span><br><span class="line">&gt;&gt; array([[<span class="number">1.78177322e-11</span>, <span class="number">6.12453348e-02</span>, <span class="number">9.38754665e-01</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>此结果表示模型预测此样本属于类标1的概率是$ 6.1% $，属于类标2的概率是$ 93.9% $。</p>
+<h3 id="通过正则化解决过拟合问题"><a href="#通过正则化解决过拟合问题" class="headerlink" title="通过正则化解决过拟合问题"></a>通过正则化解决过拟合问题</h3><p>过拟合是机器学习中常见的问题，过拟合具有高方差，这可能是使用了较多的参数，使得模型过于复杂。同样地，模型也会面临着欠拟合问题，欠拟合具有高偏差，这意味着模型过于简单，使得我们在预测时性能不佳。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="u=1743534219,2796932966&fm=173&app=49&f=JPEG.jfif" class="lazyload" data-srcset="u=1743534219,2796932966&fm=173&app=49&f=JPEG.jfif" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>偏差-方差权衡（bias-variance tradeoff）就是通过正则化来调整模型的复杂度。正则化时解决共线性（特征间高度相关）的一个很有用的方法，最常用的正则化形式是<strong>L2正则化</strong>，可以写作：<br>$$<br>\frac{\lambda}{2}||w||^2=\frac{\lambda}{2}\sum_{j=1}^m w_j^2<br>$$<br>其中，$ \lambda $是正则化系数。</p>
+<blockquote>
+<p>特征缩放之所以很重要，其中一个原因是正则化。为了使得正则化起作用，需要确保所有特征的衡量标准保持统一。</p>
+</blockquote>
+<p>使用正则化方法时，我们只需要在逻辑斯蒂回归的代价函数中加入正则化项，以降低系数带来的副作用：<br>$$<br>J(w) = \left(\sum_i^n-y^ilog(\phi(z^i)) - (1-y^i)log(1-\phi(z^i))\right)+\frac{\lambda}{2}||w||^2<br>$$<br>前面用到的scikit-learn中的LogisticRegression类，其中的参数<code>C</code>时正则化系数的倒数：<br>$$<br>C = \frac{1}{\lambda}<br>$$</p>
+<h2 id="使用支持向量机最大化分类间隔"><a href="#使用支持向量机最大化分类间隔" class="headerlink" title="使用支持向量机最大化分类间隔"></a>使用支持向量机最大化分类间隔</h2><p>另外一种性能强大且广泛应用的学习算法时支持向量机（SVM），它可以看作是对感知器的扩展。在SVM中，我们的目标是最大化分类间隔。在此处间隔指的是两个分离的决策边界间的距离，而最靠近决策边界的训练样本称作是支持向量：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="v2-197913c461c1953c30b804b4a7eddfcc_1200x500-1580373915538.jpg" class="lazyload" data-srcset="v2-197913c461c1953c30b804b4a7eddfcc_1200x500-1580373915538.jpg" srcset="data:image/png;base64,666" alt="支持向量机（SVM）——原理篇"/></div><span class="image-caption">支持向量机（SVM）——原理篇</span></div>
+<h3 id="对分类间隔最大化的直观认识"><a href="#对分类间隔最大化的直观认识" class="headerlink" title="对分类间隔最大化的直观认识"></a>对分类间隔最大化的直观认识</h3><p>我们将平面分为正平面和负平面，对于正平面来说：<br>$$<br>w_0+w^TX_{pos}=1<br>$$<br>对于负平面：<br>$$<br>w_0+w^TX_{neg}=-1<br>$$<br>对以上两式，相减得<br>$$<br>w^T(X_{pos}-X_{neg})=2<br>$$<br>定义$ ||w|| =  \sqrt{\sum_{j=1}^{m}w_j^2} $，于是可得到如下等式：<br>$$<br>\frac{w^T(X_{pos}-X_{neg})}{||w||}=\frac{2}{||w||}<br>$$<br>上述等式的左侧可以解释为正负平面间的距离，也就是我们要最大化的距离。在样本正确分类的前提下，最大化分类间隔就是$ \frac{2}{||w||} $最大化，这也是SVM的目标函数，记作：<br>$$<br>w_0+w^Tx^i \ge 1, if\ y^i=1\<br>w_0+w^Tx^i \lt -1, if\ y^i=-1<br>$$<br>这两个方程可以解释为：所有的负样本都落在负超平面一侧，所有的正样本都落在正超平面一侧划分的区域中。实践中，使用二次规划方法很容易求出$ \frac{||w||}{2} $的最小值。</p>
+<h3 id="使用松弛变量解决非线性可分问题"><a href="#使用松弛变量解决非线性可分问题" class="headerlink" title="使用松弛变量解决非线性可分问题"></a>使用松弛变量解决非线性可分问题</h3><p>引入松弛变量$ \xi $的目的是：放松线性约束条件，以保证在适当的惩罚项样本下，对错误分类的情况进行优化时能够收敛。</p>
+<p>取值为正的松弛变量可以简单的加到线性约束条件中：<br>$$<br>w^Tx^i \ge 1, if\ y^i=1 - \xi^i\<br>w^Tx^i \lt -1, if\ y^i=-1 + \xi^i<br>$$<br>由此，新的优化目标为<br>$$<br>\frac{||w||}{2}+C(\sum_i\xi^i)<br>$$<br>通过变量C，我们可以控制对错误分类的惩罚程度，进而在偏差和方差之间取得平衡。</p>
+<h3 id="使用scikit-learn实现SVM"><a href="#使用scikit-learn实现SVM" class="headerlink" title="使用scikit-learn实现SVM"></a>使用scikit-learn实现SVM</h3><p>接下来，我们使用SVM模型来对鸢尾花数据集中的样本进行分类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"></span><br><span class="line">svm = SVC(kernel=<span class="string">&#x27;linear&#x27;</span>, C=<span class="number">1.0</span>, random_state=<span class="number">0</span>)</span><br><span class="line">svm.fit(X_train_std, y_train)</span><br><span class="line">plot_decision_regions(X_combined_std, y_combined, classifier=svm, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;upper left&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20123057.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20123057.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<blockquote>
+<p>在实际的分类任务中，线性逻辑斯蒂回归和支持向量机往往得到相似的结果。但是逻辑斯蒂回归比SVM更容易处理离群点，而SVM更关注接近决策边界的点。</p>
+</blockquote>
+<p>在有些数据集很大的时候，可以使用scikit-learn提供的SGDClassifier类供用户选择，这个流泪还提供了<code>partial-fit</code>方法支持在线学习。SGDClassifier类的概念类似于随机梯度算法。</p>
+<p>我们可以使用以下方式分别构建基于随机梯度下降的感知器，逻辑斯蒂回归以及支持向量机模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> SGDClassifier</span><br><span class="line"></span><br><span class="line">ppn = SGDClassifier(loss=<span class="string">&#x27;perceptron&#x27;</span>)</span><br><span class="line">lr = SGDClassifier(loss=<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">svm = SGDClassifier(loss=<span class="string">&#x27;hinge&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用核SVM解决非线性问题"><a href="#使用核SVM解决非线性问题" class="headerlink" title="使用核SVM解决非线性问题"></a>使用核SVM解决非线性问题</h2><p>SVM受欢迎的一个原因是：通过“核技巧”可以很容易解决非线性可分问题。</p>
+<p>首先来了解非线性可分问题到底是什么。通过NumPy的<code>logicol_xor</code>来创建数据集，其中100个样本属于类别1，另外的100个样本属于类别-1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">np.random.seed(<span class="number">0</span>)</span><br><span class="line">X_xor = np.random.randn(<span class="number">200</span>, <span class="number">2</span>)</span><br><span class="line">y_xor = np.logical_xor(X_xor[:, <span class="number">0</span>] &gt; <span class="number">0</span>, X_xor[:, <span class="number">1</span>] &gt; <span class="number">0</span>)</span><br><span class="line">y_xor = np.where(y_xor, <span class="number">1</span>, <span class="number">-1</span>)</span><br><span class="line">plt.scatter(X_xor[y_xor==<span class="number">1</span>, <span class="number">0</span>], X_xor[y_xor==<span class="number">1</span>, <span class="number">1</span>], c=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;x&#x27;</span>, label=<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">plt.scatter(X_xor[y_xor==<span class="number">-1</span>, <span class="number">0</span>], X_xor[y_xor==<span class="number">-1</span>, <span class="number">1</span>], c=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;s&#x27;</span>, label=<span class="string">&#x27;-1&#x27;</span>)</span><br><span class="line">plt.ylim(<span class="number">-3.0</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>执行以上代码后，我们得到了一个“异或”数据集，二维分布如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20134018.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20134018.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>显然，使用前面提到的线性逻辑斯蒂回归或者是线性SVM模型，都无法将样本正确划分为正类别和负类别。</p>
+<p>核方法的基本思想是：通过映射函数$ \phi(\cdot) $将样本的原始特征映射到一个使样本线性可分的更高维的空间中，然后找到分界面后作反变换$ \phi^{-1}(\cdot) $可得到最初的划分平面。</p>
+<p>但是这种映射会带来非常大的计算成本，这个时候我们就可以使用<strong>核技巧</strong>的方法。在实践中，我们所需要做的就是将点积$ x^{iT}x^j $映射为$ \phi((x^i)^T \phi(x^j) $，为此定义<br>$$<br>k(x^i, x^j) = \phi((x^i)^T \phi(x^j)<br>$$<br>一个最常使用的核函数就是径向基核函数（RBF kernel）：<br>$$<br>k(x^i, x^j) = exp(-\frac{||x^i-x^j||^2}{2\sigma^2}) = exp(-\gamma ||x^i-x^j||^2)<br>$$<br>其中，$ \gamma = \frac{1}{2\sigma^2} $是待优化的自由参数。接下来，就使用scikit-learn来训练一个核SVM使之可以对“异或”数据集进行分类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">svm = SVC(kernel=<span class="string">&#x27;rbf&#x27;</span>, random_state=<span class="number">0</span>, gamma=<span class="number">0.10</span>, C=<span class="number">10.0</span>)</span><br><span class="line">svm.fit(X_xor, y_xor)</span><br><span class="line">plot_decision_regions(X_xor, y_xor, classifier=svm)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的决策边界如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20140538.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20140538.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>正如图像所示，核SVM较好地完成了对“异或”数据的划分。</p>
+<p>在此，我们将$ \gamma $参数设置为了0.1，可以将其理解为高斯球面的截止参数（cut-off parameter）。为了更好的理解$ \gamma $参数，我们将基于RBF的SVM应用于鸢尾花数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">svm = SVC(kernel=<span class="string">&#x27;rbf&#x27;</span>, random_state=<span class="number">0</span>, gamma=<span class="number">0.20</span>, C=<span class="number">10.0</span>)</span><br><span class="line">svm.fit(X_train_std, y_train)</span><br><span class="line">plot_decision_regions(X_combined_std, y_combined, classifier=svm, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20141237.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20141237.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>现在改变$ \gamma = 5.0 $，得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20141428.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20141428.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>通过图像可以看出，使用一个较大的$ \gamma $值，会使得类别0核类别1的决策边界变得紧凑了许多。</p>
+<p>虽然模型对训练数据的你和很好，但是类似的分类器对未知数据会有较大的泛化误差。</p>
+<h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p>基于训练集的特征，决策树模型通过一系列的问题来推断样本的类标。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="v2-ff4fe0d16ec17c5520837b3aad52ed54_hd.jpg" class="lazyload" data-srcset="v2-ff4fe0d16ec17c5520837b3aad52ed54_hd.jpg" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从树根开始，基于可获得最大<strong>信息增益（Information Gain, IG）</strong>的特征来对数据进行划分，通过迭代处理，在每个节点重复此过程，直到叶子节点。</p>
+<h3 id="最大化信息增益—-获知尽可能准确的结果"><a href="#最大化信息增益—-获知尽可能准确的结果" class="headerlink" title="最大化信息增益—-获知尽可能准确的结果"></a>最大化信息增益—-获知尽可能准确的结果</h3><p>就目前来说，大多数的库中实现的树算法都是二叉决策树。二叉决策树中常用的三个不纯度衡量标准或者划分标准分别是：基尼系数（Gini index, $ I_G $），熵（entropy， $ I_H $）以及误分类率（classification error， $ I_E $）。</p>
+<p>非空类别熵的定义是<br>$$<br>I_H(t) = -\sum_{i=1}^c p(i|t)\log_2p(i|t)<br>$$<br>其中，$ p(i|t) $为在特定节点t中，属于类别i的样本占特定样本t中样本总数的比例。如果某一个节点中所有样本都属于同一个类别，那么它的熵是0，当样本以相同的比例分属于不同的类时，熵的值最大。</p>
+<p>直观地说，基尼系数可以理解为降低误分类可能性的标准：<br>$$<br>I_G(t) = \sum_{i=1}^{c}p(i|t)(1-p(i|t)) = 1 - \sum_{i=1}^c p(i|t)^2<br>$$<br>和熵类似，当所有样本时等比例分布时，基尼系数的值最大。</p>
+<p>误分类率的定义如下：<br>$$<br>I_E = 1 - max{p(i|t)}<br>$$<br>这是对于剪枝方法很有用的准则，但不建议用于决策树的构建过程，因为它对节点中各类别样本数量的变动不敏感。</p>
+<h3 id="构建决策树"><a href="#构建决策树" class="headerlink" title="构建决策树"></a>构建决策树</h3><p>通过使用scikit-learn来构建一颗二叉决策树，需要注意的是，决策树的深度不是越大越好，深度过大的决策树，很容易产生过拟合的现象。在此，构建一棵深度是3的决策树：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"></span><br><span class="line">tree = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>, max_depth=<span class="number">3</span>, random_state=<span class="number">0</span>)</span><br><span class="line">tree.fit(X_train, y_train)</span><br><span class="line">X_combined = np.vstack((X_train, X_test))</span><br><span class="line">y_combined = np.hstack((y_train, y_test))</span><br><span class="line">plot_decision_regions(X_combined, y_combined, classifier=tree, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的决策边界如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20145128.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20145128.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<h3 id="通过随机森林将弱分类器集成为强分类器"><a href="#通过随机森林将弱分类器集成为强分类器" class="headerlink" title="通过随机森林将弱分类器集成为强分类器"></a>通过随机森林将弱分类器集成为强分类器</h3><p>直观上，随机森林可以看作是多颗决策树的集成。随机森林算法可以概括为一下几个步骤：</p>
+<ol>
+<li>使用bootstrap抽样方法随机选择 n 个样本用于训练（从训练集中随机可重复选择n个样本）</li>
+<li>使用第 1 步选定的样本构建一棵决策树，节点划分如下：<ol>
+<li>不重复选择d个特征</li>
+<li>根据目标函数的要求，使用选定的特征对节点进行划分</li>
+</ol>
+</li>
+<li>重复上述过程1~2000次</li>
+<li>汇总每棵树的类标进行多数投票</li>
+</ol>
+<p>使用scikit-learn来实现随机森林：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"></span><br><span class="line">forest = RandomForestClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>, n_estimators=<span class="number">10</span>, random_state=<span class="number">1</span>, n_jobs=<span class="number">2</span>)</span><br><span class="line">forest.fit(X_train, y_train)</span><br><span class="line">plot_decision_regions(X_combined, y_combined, classifier=forest, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的决策区域如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20150555.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20150555.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>上述代码中，我们以熵作为不纯度衡量标准，且使用了10棵决策树进行随机森林的训练，同时我们还规定算法中使用的处理器内核数量为2。</p>
+<h2 id="惰性学习算法之k-近临算法"><a href="#惰性学习算法之k-近临算法" class="headerlink" title="惰性学习算法之k-近临算法"></a>惰性学习算法之k-近临算法</h2><p>k-近临算法（k-nearest neighbor classifier，KNN）是惰性学习算法的典型例子。KNN算法本身是简单的，可以归纳为以下几步：</p>
+<ol>
+<li>选择近临数量k和距离衡量方法</li>
+<li>找到待分类样本的k个最近邻居</li>
+<li>根据最近临的类标进行多数投票</li>
+</ol>
+<p>下图说明了当k=3时，范围内红色三角形多，这个待分类点属于红色三角形；当K = 5 时，范围内蓝色正方形多，这个待分类点属于蓝色正方形。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="v2-e780b42d95a9d577c264fa1183b571ef_hd.jpg" class="lazyload" data-srcset="v2-e780b42d95a9d577c264fa1183b571ef_hd.jpg" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>KNN算法可以快速适应新的训练数据，不过它的缺点也是显而易见的，在最坏情况下，计算复杂度随着样本的增多而线性增长。</p>
+<p>接下来使用scikit-learn实现KNN模型，在此，我们选择欧几里得距离作为度量标准：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"></span><br><span class="line">knn = KNeighborsClassifier(n_neighbors=<span class="number">5</span>, p=<span class="number">2</span>, metric=<span class="string">&#x27;minkowski&#x27;</span>)</span><br><span class="line">knn.fit(X_train_std, y_train)</span><br><span class="line">plot_decision_regions(X_combined_std, y_combined, classifier=knn, test_idx=range(<span class="number">105</span>, <span class="number">150</span>))</span><br><span class="line">plt.xlabel(<span class="string">&#x27;length&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;width&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的决策区域如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2031%20Jan%202020%20152419.png" class="lazyload" data-srcset="Fri,%2031%20Jan%202020%20152419.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>在代码中用到的“闵可夫斯基（minkowski）”距离是对欧几里得距离和曼哈顿距离的一种泛化，可写作：<br>$$<br>d(x^i, x^j) = \sqrt[p]{\sum_k|x^i_kx^j_k|^p}<br>$$<br>如果将参数p设置为2，那么就是欧几里得距离，设置为1，则为曼哈顿距离。</p>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/>http://blog.zsstrike.top/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/&title=使用scikit-learn实现分类算法 - zsStrike&summary=在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/&title=使用scikit-learn实现分类算法 - zsStrike&summary=在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/&title=使用scikit-learn实现分类算法 - zsStrike&summary=在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>数据预处理</p>
+          <p class='content'>在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。
+
+
+缺失数据的处理在采集数据的时候，可能有的数据会有缺失的情况。通常我们见到的缺失值是数据表中的空值，或...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/01/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/'>
+          <p class='title'>机器学习分类算法<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>介绍最早以算法方式描述的分类机器学习算法：感知器和自适应线性神经元。同时我们也会使用Python来实现一个感知器。
+
+
+
+
+早期机器学习概述罗森布拉特基于MCP模型提出了第一个感知器学习法则。在...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">分类算法的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E6%B6%89-scikit-learn-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">初涉 scikit-learn 的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%88%AB%E6%A6%82%E7%8E%87"><span class="toc-text">逻辑斯蒂回归中的类别概率</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E8%AF%86%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="toc-text">初识逻辑斯蒂回归模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="toc-text">逻辑斯蒂回归模型的代价函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8scikit-learn%E8%AE%AD%E7%BB%83%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="toc-text">使用scikit-learn训练逻辑斯蒂回归模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88%E9%97%AE%E9%A2%98"><span class="toc-text">通过正则化解决过拟合问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E6%9C%80%E5%A4%A7%E5%8C%96%E5%88%86%E7%B1%BB%E9%97%B4%E9%9A%94"><span class="toc-text">使用支持向量机最大化分类间隔</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E5%88%86%E7%B1%BB%E9%97%B4%E9%9A%94%E6%9C%80%E5%A4%A7%E5%8C%96%E7%9A%84%E7%9B%B4%E8%A7%82%E8%AE%A4%E8%AF%86"><span class="toc-text">对分类间隔最大化的直观认识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%9D%BE%E5%BC%9B%E5%8F%98%E9%87%8F%E8%A7%A3%E5%86%B3%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%8F%AF%E5%88%86%E9%97%AE%E9%A2%98"><span class="toc-text">使用松弛变量解决非线性可分问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0SVM"><span class="toc-text">使用scikit-learn实现SVM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%A0%B8SVM%E8%A7%A3%E5%86%B3%E9%9D%9E%E7%BA%BF%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-text">使用核SVM解决非线性问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E5%8C%96%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E2%80%94-%E8%8E%B7%E7%9F%A5%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%87%86%E7%A1%AE%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="toc-text">最大化信息增益—-获知尽可能准确的结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">构建决策树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%B0%86%E5%BC%B1%E5%88%86%E7%B1%BB%E5%99%A8%E9%9B%86%E6%88%90%E4%B8%BA%E5%BC%BA%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">通过随机森林将弱分类器集成为强分类器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B0%E6%80%A7%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E4%B9%8Bk-%E8%BF%91%E4%B8%B4%E7%AE%97%E6%B3%95"><span class="toc-text">惰性学习算法之k-近临算法</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="使用scikit-learn实现分类算法";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Keras概览 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习,TensorFlow">
+  
+
+  
+    <meta name="description" content="本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Keras概览
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月13日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：2.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：10分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="Keras概览" data-path="/2020/02/13/Keras%E6%A6%82%E8%A7%88/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。</p>
+<a id="more"></a>
+
+<h2 id="构建一个简单模型"><a href="#构建一个简单模型" class="headerlink" title="构建一个简单模型"></a>构建一个简单模型</h2><h3 id="层叠式模型"><a href="#层叠式模型" class="headerlink" title="层叠式模型"></a>层叠式模型</h3><p>在Keras中，我们使用层（layers）来构建我们的模型，模型通常是一个由多个层构成的流程图，最简单模型类型是层叠式（Sequential）类型。为了构建一个简单全连接的MLP，我们用如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow <span class="keyword">import</span> keras</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> layers</span><br><span class="line"></span><br><span class="line">model = tf.keras.Sequential()</span><br><span class="line"><span class="comment"># Adds a densely-connected layer with 64 units to the model:</span></span><br><span class="line">model.add(layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>))</span><br><span class="line"><span class="comment"># Add another:</span></span><br><span class="line">model.add(layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>))</span><br><span class="line"><span class="comment"># Add an output layer with 10 output units:</span></span><br><span class="line">model.add(layers.Dense(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="调整层参数"><a href="#调整层参数" class="headerlink" title="调整层参数"></a>调整层参数</h3><p>有很多内建的层，它们都有一些公用的构造参数：</p>
+<ul>
+<li>activation：设置激活函数</li>
+<li>kernel_initializer和bias_initializer：用于初始化权重的方法</li>
+<li>kernel_regularizer和bias_regularizer：定义正则化的方法</li>
+</ul>
+<p>下面的代码构造使用不同的参数构造层：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create a relu layer:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line"><span class="comment"># Or:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, activation=tf.nn.relu)</span><br><span class="line"></span><br><span class="line"><span class="comment"># A linear layer with L1 regularization of factor 0.01 applied to the kernel matrix:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, kernel_regularizer=tf.keras.regularizers.l1(<span class="number">0.01</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># A linear layer with L2 regularization of factor 0.01 applied to the bias vector:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, bias_regularizer=tf.keras.regularizers.l2(<span class="number">0.01</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># A linear layer with a kernel initialized to a random orthogonal matrix:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, kernel_initializer=<span class="string">&#x27;orthogonal&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># A linear layer with a bias vector initialized to 2.0s:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, bias_initializer=tf.keras.initializers.Constant(<span class="number">2.0</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="训练和评估"><a href="#训练和评估" class="headerlink" title="训练和评估"></a>训练和评估</h2><h3 id="训练时的设置"><a href="#训练时的设置" class="headerlink" title="训练时的设置"></a>训练时的设置</h3><p>当模型被构建后，我们可以通过调用compile方法来调整学习过程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">model = tf.keras.Sequential([</span><br><span class="line"><span class="comment"># Adds a densely-connected layer with 64 units to the model:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>, input_shape=(<span class="number">32</span>,)),</span><br><span class="line"><span class="comment"># Add another:</span></span><br><span class="line">layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line"><span class="comment"># Add an output layer with 10 output units:</span></span><br><span class="line">layers.Dense(<span class="number">10</span>)])</span><br><span class="line"></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.Adam(<span class="number">0.01</span>),</span><br><span class="line">      loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">      metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>compile有以下重要参数：</p>
+<ul>
+<li>optimizer：定义优化算法</li>
+<li>loss：定义误差函数</li>
+<li>metrix：用于观察训练的情况</li>
+</ul>
+<p>下面的示例展示了调整模型的情况：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Configure a model for mean-squared error regression.</span></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.Adam(<span class="number">0.01</span>),</span><br><span class="line">              loss=<span class="string">&#x27;mse&#x27;</span>,       <span class="comment"># mean squared error</span></span><br><span class="line">              metrics=[<span class="string">&#x27;mae&#x27;</span>])  <span class="comment"># mean absolute error</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Configure a model for categorical classification.</span></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.RMSprop(<span class="number">0.01</span>),</span><br><span class="line">              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="从NumPy数据训练"><a href="#从NumPy数据训练" class="headerlink" title="从NumPy数据训练"></a>从NumPy数据训练</h3><p>对于小型的数据集，我们可以用如下方法训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.random.random((<span class="number">1000</span>, <span class="number">32</span>))</span><br><span class="line">labels = np.random.random((<span class="number">1000</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">model.fit(data, labels, epochs=<span class="number">10</span>, batch_size=<span class="number">32</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>fit</code>方法有以下重要的参数：</p>
+<ul>
+<li>epochs：训练的迭代次数</li>
+<li>batch_size：每个批次的样本数量</li>
+<li>validation_data：用于定义验证集</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.random.random((<span class="number">1000</span>, <span class="number">32</span>))</span><br><span class="line">labels = np.random.random((<span class="number">1000</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">val_data = np.random.random((<span class="number">100</span>, <span class="number">32</span>))</span><br><span class="line">val_labels = np.random.random((<span class="number">100</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">model.fit(data, labels, epochs=<span class="number">10</span>, batch_size=<span class="number">32</span>,</span><br><span class="line">          validation_data=(val_data, val_labels))</span><br></pre></td></tr></table></figure>
+
+<h3 id="从tf-data中的datasets训练"><a href="#从tf-data中的datasets训练" class="headerlink" title="从tf.data中的datasets训练"></a>从tf.data中的datasets训练</h3><p>使用Datasets中的方法来构建训练数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Instantiates a toy dataset instance:</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices((data, labels))</span><br><span class="line">dataset = dataset.batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">model.fit(dataset, epochs=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>Dataset数据会不断yield小批次的数据，因此不需要batch_size参数。</p>
+<p>同样，Dataset可以用于验证：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dataset = tf.data.Dataset.from_tensor_slices((data, labels))</span><br><span class="line">dataset = dataset.batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">val_dataset = tf.data.Dataset.from_tensor_slices((val_data, val_labels))</span><br><span class="line">val_dataset = val_dataset.batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">model.fit(dataset, epochs=<span class="number">10</span>,</span><br><span class="line">          validation_data=val_dataset)</span><br></pre></td></tr></table></figure>
+
+<h3 id="评估和预测"><a href="#评估和预测" class="headerlink" title="评估和预测"></a>评估和预测</h3><p>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># With Numpy arrays</span></span><br><span class="line">data = np.random.random((<span class="number">1000</span>, <span class="number">32</span>))</span><br><span class="line">labels = np.random.random((<span class="number">1000</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">model.evaluate(data, labels, batch_size=<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># With a Dataset</span></span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices((data, labels))</span><br><span class="line">dataset = dataset.batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">model.evaluate(dataset)</span><br></pre></td></tr></table></figure>
+
+<p>同样，我们可以使用以下代码进行预测：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">result = model.predict(data, batch_size=<span class="number">32</span>)</span><br><span class="line">print(result.shape)</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建复杂模型"><a href="#构建复杂模型" class="headerlink" title="构建复杂模型"></a>构建复杂模型</h2><h3 id="函数式API"><a href="#函数式API" class="headerlink" title="函数式API"></a>函数式API</h3><p>层叠式模型是一种将多个层之间连接的简单模型，我们可以使用Keras中的函数式API来构建复杂的模型：</p>
+<ul>
+<li>多个输入模型</li>
+<li>多个输出模型</li>
+<li>包含共享层（同一个层被多次调用）的模型</li>
+<li>不包含顺序流的模型（如残差模型）</li>
+</ul>
+<p>接下来我们使用函数式API来构建这样的一个模型：</p>
+<ol>
+<li>一个层实例是可以被调用的并且可以返回一个张量</li>
+<li>输入输出张量可以被用来定义模型实例</li>
+<li>该模型训练方法和层叠模型一致</li>
+</ol>
+<p>下面的代码用于构建一个简单全连接的网络：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">inputs = tf.keras.Input(shape=(<span class="number">32</span>,))  <span class="comment"># Returns an input placeholder</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A layer instance is callable on a tensor, and returns a tensor.</span></span><br><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(inputs)</span><br><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">predictions = layers.Dense(<span class="number">10</span>)(x)</span><br></pre></td></tr></table></figure>
+
+<p>接下来实例化模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">model = tf.keras.Model(inputs=inputs, outputs=predictions)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The compile step specifies the training configuration.</span></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.RMSprop(<span class="number">0.001</span>),</span><br><span class="line">              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Trains for 5 epochs</span></span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="模型子类化"><a href="#模型子类化" class="headerlink" title="模型子类化"></a>模型子类化</h3><p>为了构建一个高度定制的模型，我们可以构造模型的子类。我们可以在<code>__init__</code>方法中定义层和层的属性，同时在<code>call</code>方法中定义前向传播。代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyModel</span>(<span class="params">tf.keras.Model</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, num_classes=<span class="number">10</span></span>):</span></span><br><span class="line">    super(MyModel, self).__init__(name=<span class="string">&#x27;my_model&#x27;</span>)</span><br><span class="line">    self.num_classes = num_classes</span><br><span class="line">    <span class="comment"># Define your layers here.</span></span><br><span class="line">    self.dense_1 = layers.Dense(<span class="number">32</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">    self.dense_2 = layers.Dense(num_classes)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    <span class="comment"># Define your forward pass here,</span></span><br><span class="line">    <span class="comment"># using layers you previously defined (in `__init__`).</span></span><br><span class="line">    x = self.dense_1(inputs)</span><br><span class="line">    <span class="keyword">return</span> self.dense_2(x)</span><br></pre></td></tr></table></figure>
+
+<p>接下来定义新的模型子类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">model = MyModel(num_classes=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The compile step specifies the training configuration.</span></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.RMSprop(<span class="number">0.001</span>),</span><br><span class="line">              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Trains for 5 epochs.</span></span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义层"><a href="#自定义层" class="headerlink" title="自定义层"></a>自定义层</h3><p>自定义的层可以通过构建<code>tf.keras.layers.Layer</code>的子类来进行，需要实现如下方法：</p>
+<ul>
+<li><code>__init__</code>：可选，用于定义这一层中将要使用子层</li>
+<li><code>build</code>：创建层的权重，可以通过<code>add_weight</code>方法来添加权重</li>
+<li><code>call</code>：定义前向传播</li>
+<li>可选，可以通过实现get_config和from_config方法实现序列化和反序列化</li>
+</ul>
+<p>下面代码实现了一个矩阵相乘的层：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLayer</span>(<span class="params">layers.Layer</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, output_dim, **kwargs</span>):</span></span><br><span class="line">    self.output_dim = output_dim</span><br><span class="line">    super(MyLayer, self).__init__(**kwargs)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">build</span>(<span class="params">self, input_shape</span>):</span></span><br><span class="line">    <span class="comment"># Create a trainable weight variable for this layer.</span></span><br><span class="line">    self.kernel = self.add_weight(name=<span class="string">&#x27;kernel&#x27;</span>,</span><br><span class="line">                                  shape=(input_shape[<span class="number">1</span>], self.output_dim),</span><br><span class="line">                                  initializer=<span class="string">&#x27;uniform&#x27;</span>,</span><br><span class="line">                                  trainable=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    <span class="keyword">return</span> tf.matmul(inputs, self.kernel)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get_config</span>(<span class="params">self</span>):</span></span><br><span class="line">    base_config = super(MyLayer, self).get_config()</span><br><span class="line">    base_config[<span class="string">&#x27;output_dim&#x27;</span>] = self.output_dim</span><br><span class="line">    <span class="keyword">return</span> base_config</span><br><span class="line"></span><br><span class="line"><span class="meta">  @classmethod</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">from_config</span>(<span class="params">cls, config</span>):</span></span><br><span class="line">    <span class="keyword">return</span> cls(**config)</span><br></pre></td></tr></table></figure>
+
+<p>使用自定义层来构建模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">model = tf.keras.Sequential([</span><br><span class="line">    MyLayer(<span class="number">10</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># The compile step specifies the training configuration</span></span><br><span class="line">model.compile(optimizer=tf.keras.optimizers.RMSprop(<span class="number">0.001</span>),</span><br><span class="line">              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Trains for 5 epochs.</span></span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Callbacks"><a href="#Callbacks" class="headerlink" title="Callbacks"></a>Callbacks</h2><p>callback对象用于传给模型以此在训练期间被使用，可以使用自定义的callback，同样可以使用内建的callback：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/callbacks/ModelCheckpoint"><code>tf.keras.callbacks.ModelCheckpoint</code></a>: 每次迭代保存检验点</li>
+<li><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/callbacks/LearningRateScheduler"><code>tf.keras.callbacks.LearningRateScheduler</code></a>: 动态改变学习速率</li>
+<li><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/callbacks/EarlyStopping"><code>tf.keras.callbacks.EarlyStopping</code></a>: 如果模型没有改经就停止训练</li>
+<li><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/callbacks/TensorBoard"><code>tf.keras.callbacks.TensorBoard</code></a>: 监视模型的行为</li>
+</ul>
+<p>使用方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">callbacks = [</span><br><span class="line">  <span class="comment"># Interrupt training if `val_loss` stops improving for over 2 epochs</span></span><br><span class="line">  tf.keras.callbacks.EarlyStopping(patience=<span class="number">2</span>, monitor=<span class="string">&#x27;val_loss&#x27;</span>),</span><br><span class="line">  <span class="comment"># Write TensorBoard logs to `./logs` directory</span></span><br><span class="line">  tf.keras.callbacks.TensorBoard(log_dir=<span class="string">&#x27;./logs&#x27;</span>)</span><br><span class="line">]</span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>, callbacks=callbacks,</span><br><span class="line">          validation_data=(val_data, val_labels))</span><br></pre></td></tr></table></figure>
+
+<h2 id="保存和恢复"><a href="#保存和恢复" class="headerlink" title="保存和恢复"></a>保存和恢复</h2><h3 id="保存权重值"><a href="#保存权重值" class="headerlink" title="保存权重值"></a>保存权重值</h3><p>使用方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Save weights to a TensorFlow Checkpoint file</span></span><br><span class="line">model.save_weights(<span class="string">&#x27;./weights/my_model&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Restore the model&#x27;s state,</span></span><br><span class="line"><span class="comment"># this requires a model with the same architecture.</span></span><br><span class="line">model.load_weights(<span class="string">&#x27;./weights/my_model&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>同样，可以将文件格式保存为HDF5类型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Save weights to a HDF5 file</span></span><br><span class="line">model.save_weights(<span class="string">&#x27;my_model.h5&#x27;</span>, save_format=<span class="string">&#x27;h5&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Restore the model&#x27;s state</span></span><br><span class="line">model.load_weights(<span class="string">&#x27;my_model.h5&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="保存模型配置参数"><a href="#保存模型配置参数" class="headerlink" title="保存模型配置参数"></a>保存模型配置参数</h3><p>一个模型的配置参数可以被保存（但是不保存权重），即使是在没有代码定义，一个模型的配置可以用于创建和初始化同样的模型。Keras支持JSON和YAML的两种序列化的格式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Serialize a model to JSON format</span></span><br><span class="line">json_string = model.to_json()	<span class="comment"># save</span></span><br><span class="line">fresh_model = tf.keras.models.model_from_json(json_string)	<span class="comment"># restore</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Serialize a model to YAML format</span></span><br><span class="line">yaml_string = model.to_yaml()</span><br><span class="line">fresh_model = tf.keras.models.model_from_yaml(yaml_string)</span><br></pre></td></tr></table></figure>
+
+<h3 id="保存整个模型到一个文件"><a href="#保存整个模型到一个文件" class="headerlink" title="保存整个模型到一个文件"></a>保存整个模型到一个文件</h3><p>整个模型的权重值，模型配置参数和优化配置参数可以被保存在一个文件中，这样可以让我们的模型在检查点处保存和恢复：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create a simple model</span></span><br><span class="line">model = tf.keras.Sequential([</span><br><span class="line">  layers.Dense(<span class="number">10</span>, activation=<span class="string">&#x27;relu&#x27;</span>, input_shape=(<span class="number">32</span>,)),</span><br><span class="line">  layers.Dense(<span class="number">10</span>)</span><br><span class="line">])</span><br><span class="line">model.compile(optimizer=<span class="string">&#x27;rmsprop&#x27;</span>,</span><br><span class="line">              loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line">model.fit(data, labels, batch_size=<span class="number">32</span>, epochs=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Save entire model to a HDF5 file</span></span><br><span class="line">model.save(<span class="string">&#x27;my_model&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Recreate the exact same model, including weights and optimizer.</span></span><br><span class="line">model = tf.keras.models.load_model(<span class="string">&#x27;my_model&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="分布式运行"><a href="#分布式运行" class="headerlink" title="分布式运行"></a>分布式运行</h2><h3 id="在GPUs上运行"><a href="#在GPUs上运行" class="headerlink" title="在GPUs上运行"></a>在GPUs上运行</h3><p>首先需要在分布策略范围内定义模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">strategy = tf.distribute.MirroredStrategy()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> strategy.scope():</span><br><span class="line">  model = tf.keras.Sequential()</span><br><span class="line">  model.add(layers.Dense(<span class="number">16</span>, activation=<span class="string">&#x27;relu&#x27;</span>, input_shape=(<span class="number">10</span>,)))</span><br><span class="line">  model.add(layers.Dense(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">  optimizer = tf.keras.optimizers.SGD(<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">  model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">                optimizer=optimizer)</span><br><span class="line"></span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+
+<p>接下来，按照平常的方式进行训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">x = np.random.random((<span class="number">1024</span>, <span class="number">10</span>))</span><br><span class="line">y = np.random.randint(<span class="number">2</span>, size=(<span class="number">1024</span>, <span class="number">1</span>))</span><br><span class="line">x = tf.cast(x, tf.float32)</span><br><span class="line">dataset = tf.data.Dataset.from_tensor_slices((x, y))</span><br><span class="line">dataset = dataset.shuffle(buffer_size=<span class="number">1024</span>).batch(<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">model.fit(dataset, epochs=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/13/Keras%E6%A6%82%E8%A7%88/>http://blog.zsstrike.top/2020/02/13/Keras%E6%A6%82%E8%A7%88/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/TensorFlow/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>TensorFlow</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/13/Keras%E6%A6%82%E8%A7%88/&title=Keras概览 - zsStrike&summary=本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/13/Keras%E6%A6%82%E8%A7%88/&title=Keras概览 - zsStrike&summary=本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/13/Keras%E6%A6%82%E8%A7%88/&title=Keras概览 - zsStrike&summary=本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Keras函数式API</p>
+          <p class='content'>本章了解Keras的函数式API以及灵活使用它们的方法。
+
+
+简介我们已经熟悉了如何使用keras.Sequential函数来创建我们的层叠模型，而函数式API是比它更加灵活的创建模型的方法：它...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/12/TF2%E5%88%9D%E5%A7%8B%E6%95%99%E7%A8%8B/'>
+          <p class='title'>TF2初始教程<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本节我们学习一些TensorFlow的基本使用方法，包括使用TensorFlow构建神经网络来对MNIST数据集进行划分以及学习一下数据的加载方法。
+
+
+使用TensorFlow对MNIST数据...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E6%A8%A1%E5%9E%8B"><span class="toc-text">构建一个简单模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%82%E5%8F%A0%E5%BC%8F%E6%A8%A1%E5%9E%8B"><span class="toc-text">层叠式模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E6%95%B4%E5%B1%82%E5%8F%82%E6%95%B0"><span class="toc-text">调整层参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E5%92%8C%E8%AF%84%E4%BC%B0"><span class="toc-text">训练和评估</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E6%97%B6%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="toc-text">训练时的设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8ENumPy%E6%95%B0%E6%8D%AE%E8%AE%AD%E7%BB%83"><span class="toc-text">从NumPy数据训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8Etf-data%E4%B8%AD%E7%9A%84datasets%E8%AE%AD%E7%BB%83"><span class="toc-text">从tf.data中的datasets训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E5%92%8C%E9%A2%84%E6%B5%8B"><span class="toc-text">评估和预测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B"><span class="toc-text">构建复杂模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8FAPI"><span class="toc-text">函数式API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E5%AD%90%E7%B1%BB%E5%8C%96"><span class="toc-text">模型子类化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82"><span class="toc-text">自定义层</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Callbacks"><span class="toc-text">Callbacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">保存和恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E6%9D%83%E9%87%8D%E5%80%BC"><span class="toc-text">保存权重值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E6%A8%A1%E5%9E%8B%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-text">保存模型配置参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E6%95%B4%E4%B8%AA%E6%A8%A1%E5%9E%8B%E5%88%B0%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-text">保存整个模型到一个文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E8%BF%90%E8%A1%8C"><span class="toc-text">分布式运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8GPUs%E4%B8%8A%E8%BF%90%E8%A1%8C"><span class="toc-text">在GPUs上运行</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="Keras概览";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

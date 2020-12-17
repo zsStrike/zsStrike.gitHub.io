@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Keras函数式API - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习,TensorFlow">
+  
+
+  
+    <meta name="description" content="本章了解Keras的函数式API以及灵活使用它们的方法。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Keras函数式API
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月14日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3.3k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：16分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="Keras函数式API" data-path="/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本章了解Keras的函数式API以及灵活使用它们的方法。</p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>我们已经熟悉了如何使用<code>keras.Sequential</code>函数来创建我们的层叠模型，而函数式API是比它更加灵活的创建模型的方法：它可以允许我们创建非线性的模型，共用层的模型以及多个输入输出的模型。函数式API的基本思路是深度学习网络是一种有向无环图（DAG），我们可以使用函数式API来创建这些层。</p>
+<p>如下一个包含了3个层的模型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(input: 784-dimensional vectors)</span><br><span class="line">       ↧</span><br><span class="line">[Dense (64 units, relu activation)]</span><br><span class="line">       ↧</span><br><span class="line">[Dense (64 units, relu activation)]</span><br><span class="line">       ↧</span><br><span class="line">[Dense (10 units, softmax activation)]</span><br><span class="line">       ↧</span><br><span class="line">(output: logits of a probability distribution over 10 classes)</span><br></pre></td></tr></table></figure>
+
+<p>为了使用函数式API来创建相同的模型，我们首先创建输入节点：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow <span class="keyword">import</span> keras</span><br><span class="line"></span><br><span class="line">inputs = keras.Input(shape=(<span class="number">784</span>,))</span><br></pre></td></tr></table></figure>
+
+<p>我们声明了输入的数据是一个784维的向量，注意这里的shape是单个样本的shape，不是批次的shape。对于图片，假设数据是（32，32，3）类型的，我们可以使用以下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Just for demonstration purposes</span></span><br><span class="line">img_inputs = keras.Input(shape=(<span class="number">32</span>, <span class="number">32</span>, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+
+<p>我们得到的返回值inputs包含了输入数据的shape和类型。为了创建层节点，我们使用如下方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> layers</span><br><span class="line"></span><br><span class="line">dense = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">x = dense(inputs)</span><br></pre></td></tr></table></figure>
+
+<p>调用层函数的作用相当于在两个节点之间画一条有向线，我们得到了经过第一层处理后的返回值<code>x</code>，接着，我们创建完剩余的层：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">outputs = layers.Dense(<span class="number">10</span>)(x)</span><br></pre></td></tr></table></figure>
+
+<p>到了这一步，我们现在可以创建我们的模型了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = keras.Model(inputs=inputs, outputs=outputs)</span><br></pre></td></tr></table></figure>
+
+<p>至此，我们的模型就创建成功了。</p>
+<h2 id="训练评估和预测"><a href="#训练评估和预测" class="headerlink" title="训练评估和预测"></a>训练评估和预测</h2><p>训练评估和预测的使用方法其实和在Sequential中创建模型一致。下面是使用我们刚刚创建的模型进行训练评估和预测的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()</span><br><span class="line">x_train = x_train.reshape(<span class="number">60000</span>, <span class="number">784</span>).astype(<span class="string">&#x27;float32&#x27;</span>) / <span class="number">255</span></span><br><span class="line">x_test = x_test.reshape(<span class="number">10000</span>, <span class="number">784</span>).astype(<span class="string">&#x27;float32&#x27;</span>) / <span class="number">255</span></span><br><span class="line"></span><br><span class="line">model.compile(loss=keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              optimizer=keras.optimizers.RMSprop(),</span><br><span class="line">              metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line">history = model.fit(x_train, y_train,</span><br><span class="line">                    batch_size=<span class="number">64</span>,</span><br><span class="line">                    epochs=<span class="number">5</span>,</span><br><span class="line">                    validation_split=<span class="number">0.2</span>)</span><br><span class="line">test_scores = model.evaluate(x_test, y_test, verbose=<span class="number">2</span>)</span><br><span class="line">print(<span class="string">&#x27;Test loss:&#x27;</span>, test_scores[<span class="number">0</span>])</span><br><span class="line">print(<span class="string">&#x27;Test accuracy:&#x27;</span>, test_scores[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><p>同样地，使用函数式APiece创建出来的模型序列化和反序列化和使用Sequential创建的模型一致。最常用的方法是使用<code>save</code>方法，它会保存：</p>
+<ul>
+<li>模型的架构</li>
+<li>模型权重值（在训练中得到）</li>
+<li>模型训练配置（在<code>compile</code>的时候得到）</li>
+<li>模型优化配置</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model.save(<span class="string">&#x27;path_to_my_model&#x27;</span>)</span><br><span class="line"><span class="keyword">del</span> model</span><br><span class="line"><span class="comment"># Recreate the exact same model purely from the file:</span></span><br><span class="line">model = keras.models.load_model(<span class="string">&#x27;path_to_my_model&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用相同的层来创建多个模型"><a href="#使用相同的层来创建多个模型" class="headerlink" title="使用相同的层来创建多个模型"></a>使用相同的层来创建多个模型</h2><p>在使用函数式API创建模型时，我们只需要声明模型的输入和输出即可，这也就意味着我们可以使用相同的层来创建多个模型，以下是一个实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">encoder_input = keras.Input(shape=(<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>), name=<span class="string">&#x27;img&#x27;</span>)</span><br><span class="line">x = layers.Conv2D(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(encoder_input)</span><br><span class="line">x = layers.Conv2D(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.MaxPooling2D(<span class="number">3</span>)(x)</span><br><span class="line">x = layers.Conv2D(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.Conv2D(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">encoder_output = layers.GlobalMaxPooling2D()(x)</span><br><span class="line"></span><br><span class="line">encoder = keras.Model(encoder_input, encoder_output, name=<span class="string">&#x27;encoder&#x27;</span>)</span><br><span class="line">encoder.summary()</span><br><span class="line"></span><br><span class="line">x = layers.Reshape((<span class="number">4</span>, <span class="number">4</span>, <span class="number">1</span>))(encoder_output)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.UpSampling2D(<span class="number">3</span>)(x)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">decoder_output = layers.Conv2DTranspose(<span class="number">1</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line"></span><br><span class="line">autoencoder = keras.Model(encoder_input, decoder_output, name=<span class="string">&#x27;autoencoder&#x27;</span>)</span><br><span class="line">autoencoder.summary()</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型可调用"><a href="#模型可调用" class="headerlink" title="模型可调用"></a>模型可调用</h2><p>我们可以将模型看作是特殊的层，因为它接收Input或者其他层的输出作为参数。注意，我们调用模型的时候不仅仅只是使用了它的架构，还使用了它的权重：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">encoder_input = keras.Input(shape=(<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>), name=<span class="string">&#x27;original_img&#x27;</span>)</span><br><span class="line">x = layers.Conv2D(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(encoder_input)</span><br><span class="line">x = layers.Conv2D(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.MaxPooling2D(<span class="number">3</span>)(x)</span><br><span class="line">x = layers.Conv2D(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.Conv2D(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">encoder_output = layers.GlobalMaxPooling2D()(x)</span><br><span class="line"></span><br><span class="line">encoder = keras.Model(encoder_input, encoder_output, name=<span class="string">&#x27;encoder&#x27;</span>)</span><br><span class="line">encoder.summary()</span><br><span class="line"></span><br><span class="line">decoder_input = keras.Input(shape=(<span class="number">16</span>,), name=<span class="string">&#x27;encoded_img&#x27;</span>)</span><br><span class="line">x = layers.Reshape((<span class="number">4</span>, <span class="number">4</span>, <span class="number">1</span>))(decoder_input)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.UpSampling2D(<span class="number">3</span>)(x)</span><br><span class="line">x = layers.Conv2DTranspose(<span class="number">16</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">decoder_output = layers.Conv2DTranspose(<span class="number">1</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line"></span><br><span class="line">decoder = keras.Model(decoder_input, decoder_output, name=<span class="string">&#x27;decoder&#x27;</span>)</span><br><span class="line">decoder.summary()</span><br><span class="line"></span><br><span class="line">autoencoder_input = keras.Input(shape=(<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>), name=<span class="string">&#x27;img&#x27;</span>)</span><br><span class="line">encoded_img = encoder(autoencoder_input)</span><br><span class="line">decoded_img = decoder(encoded_img)</span><br><span class="line">autoencoder = keras.Model(autoencoder_input, decoded_img, name=<span class="string">&#x27;autoencoder&#x27;</span>)</span><br><span class="line">autoencoder.summary()</span><br></pre></td></tr></table></figure>
+
+<p>可以发现，模型可以包含子模型，一个常见的用途是用于模型的聚合：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_model</span>():</span></span><br><span class="line">  inputs = keras.Input(shape=(<span class="number">128</span>,))</span><br><span class="line">  outputs = layers.Dense(<span class="number">1</span>)(inputs)</span><br><span class="line">  <span class="keyword">return</span> keras.Model(inputs, outputs)</span><br><span class="line"></span><br><span class="line">model1 = get_model()</span><br><span class="line">model2 = get_model()</span><br><span class="line">model3 = get_model()</span><br><span class="line"></span><br><span class="line">inputs = keras.Input(shape=(<span class="number">128</span>,))</span><br><span class="line">y1 = model1(inputs)</span><br><span class="line">y2 = model2(inputs)</span><br><span class="line">y3 = model3(inputs)</span><br><span class="line">outputs = layers.average([y1, y2, y3])</span><br><span class="line">ensemble_model = keras.Model(inputs=inputs, outputs=outputs)</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成复杂模型"><a href="#生成复杂模型" class="headerlink" title="生成复杂模型"></a>生成复杂模型</h2><h3 id="包含多个输入和输出的模型"><a href="#包含多个输入和输出的模型" class="headerlink" title="包含多个输入和输出的模型"></a>包含多个输入和输出的模型</h3><p>我们可以使用函数式API生成包含多个输入输出的模型，这在Sequential中是不能被实现的。接下来我们创建一个将用户问题分类并且将其转交给哪个部门的模型，这个模型含有3个输入：</p>
+<ul>
+<li>问题的标题</li>
+<li>问题的内容</li>
+<li>用户添加的问题的标签（分类输入）</li>
+</ul>
+<p>含有2个输出：</p>
+<ul>
+<li>优先级<code>[0, 1]</code></li>
+<li>这个问题该交给哪个部门</li>
+</ul>
+<p>下面是代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">num_tags = <span class="number">12</span>  <span class="comment"># Number of unique issue tags</span></span><br><span class="line">num_words = <span class="number">10000</span>  <span class="comment"># Size of vocabulary obtained when preprocessing text data</span></span><br><span class="line">num_departments = <span class="number">4</span>  <span class="comment"># Number of departments for predictions</span></span><br><span class="line"></span><br><span class="line">title_input = keras.Input(shape=(<span class="literal">None</span>,), name=<span class="string">&#x27;title&#x27;</span>)  <span class="comment"># Variable-length sequence of ints</span></span><br><span class="line">body_input = keras.Input(shape=(<span class="literal">None</span>,), name=<span class="string">&#x27;body&#x27;</span>)  <span class="comment"># Variable-length sequence of ints</span></span><br><span class="line">tags_input = keras.Input(shape=(num_tags,), name=<span class="string">&#x27;tags&#x27;</span>)  <span class="comment"># Binary vectors of size `num_tags`</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Embed each word in the title into a 64-dimensional vector</span></span><br><span class="line">title_features = layers.Embedding(num_words, <span class="number">64</span>)(title_input)</span><br><span class="line"><span class="comment"># Embed each word in the text into a 64-dimensional vector</span></span><br><span class="line">body_features = layers.Embedding(num_words, <span class="number">64</span>)(body_input)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Reduce sequence of embedded words in the title into a single 128-dimensional vector</span></span><br><span class="line">title_features = layers.LSTM(<span class="number">128</span>)(title_features)</span><br><span class="line"><span class="comment"># Reduce sequence of embedded words in the body into a single 32-dimensional vector</span></span><br><span class="line">body_features = layers.LSTM(<span class="number">32</span>)(body_features)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Merge all available features into a single large vector via concatenation</span></span><br><span class="line">x = layers.concatenate([title_features, body_features, tags_input])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Stick a logistic regression for priority prediction on top of the features</span></span><br><span class="line">priority_pred = layers.Dense(<span class="number">1</span>, name=<span class="string">&#x27;priority&#x27;</span>)(x)</span><br><span class="line"><span class="comment"># Stick a department classifier on top of the features</span></span><br><span class="line">department_pred = layers.Dense(num_departments, name=<span class="string">&#x27;department&#x27;</span>)(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Instantiate an end-to-end model predicting both priority and department</span></span><br><span class="line">model = keras.Model(inputs=[title_input, body_input, tags_input],</span><br><span class="line">                    outputs=[priority_pred, department_pred])</span><br></pre></td></tr></table></figure>
+
+<p>至此我们完成的模型的创建，接下里需要完成模型的编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model.compile(optimizer&#x3D;keras.optimizers.RMSprop(1e-3),</span><br><span class="line">              loss&#x3D;[keras.losses.BinaryCrossentropy(from_logits&#x3D;True),</span><br><span class="line">                      keras.losses.CategoricalCrossentropy(from_logits&#x3D;True)],</span><br><span class="line">              loss_weights&#x3D;[1., 0.2])</span><br></pre></td></tr></table></figure>
+
+<p>如上，我们可以为输出赋予不同的误差函数，以帮助我们控制他们两个输出对误差的贡献。由于我们已经为输出层赋予了名字，我们也可以使用如下方式编译：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">model.compile(optimizer=keras.optimizers.RMSprop(<span class="number">1e-3</span>),</span><br><span class="line">              loss=&#123;<span class="string">&#x27;priority&#x27;</span>:keras.losses.BinaryCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">                      <span class="string">&#x27;department&#x27;</span>: keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>)&#125;,</span><br><span class="line">              loss_weights=[<span class="number">1.</span>, <span class="number">0.2</span>])</span><br></pre></td></tr></table></figure>
+
+<p>接下来进行训练，对于在NumPy产生的数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># Dummy input data</span></span><br><span class="line">title_data = np.random.randint(num_words, size=(<span class="number">1280</span>, <span class="number">10</span>))</span><br><span class="line">body_data = np.random.randint(num_words, size=(<span class="number">1280</span>, <span class="number">100</span>))</span><br><span class="line">tags_data = np.random.randint(<span class="number">2</span>, size=(<span class="number">1280</span>, num_tags)).astype(<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line"><span class="comment"># Dummy target data</span></span><br><span class="line">priority_targets = np.random.random(size=(<span class="number">1280</span>, <span class="number">1</span>))</span><br><span class="line">dept_targets = np.random.randint(<span class="number">2</span>, size=(<span class="number">1280</span>, num_departments))</span><br><span class="line"></span><br><span class="line">model.fit(&#123;<span class="string">&#x27;title&#x27;</span>: title_data, <span class="string">&#x27;body&#x27;</span>: body_data, <span class="string">&#x27;tags&#x27;</span>: tags_data&#125;,</span><br><span class="line">          &#123;<span class="string">&#x27;priority&#x27;</span>: priority_targets, <span class="string">&#x27;department&#x27;</span>: dept_targets&#125;,</span><br><span class="line">          epochs=<span class="number">2</span>,</span><br><span class="line">          batch_size=<span class="number">32</span>)</span><br></pre></td></tr></table></figure>
+
+<p>当我们使用<code>Dataset</code>对象时，它要么yield数组元组：<code>([title_data, body_data, tags_data], [priority_targets, dept_targets])</code>，要么yield字典元组：<code>(&#123;&#39;title&#39;: title_data, &#39;body&#39;: body_data, &#39;tags&#39;: tags_data&#125;, &#123;&#39;priority&#39;: priority_targets, &#39;department&#39;: dept_targets&#125;)</code>。</p>
+<h3 id="一个简单的残差网络模型"><a href="#一个简单的残差网络模型" class="headerlink" title="一个简单的残差网络模型"></a>一个简单的残差网络模型</h3><p>函数式API还可以创建非线性的模型，一个常见的应用是构建残差模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">inputs = keras.Input(shape=(<span class="number">32</span>, <span class="number">32</span>, <span class="number">3</span>), name=<span class="string">&#x27;img&#x27;</span>)</span><br><span class="line">x = layers.Conv2D(<span class="number">32</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(inputs)</span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">block_1_output = layers.MaxPooling2D(<span class="number">3</span>)(x)</span><br><span class="line"></span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(block_1_output)</span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(x)</span><br><span class="line">block_2_output = layers.add([x, block_1_output])</span><br><span class="line"></span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(block_2_output)</span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(x)</span><br><span class="line">block_3_output = layers.add([x, block_2_output])</span><br><span class="line"></span><br><span class="line">x = layers.Conv2D(<span class="number">64</span>, <span class="number">3</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(block_3_output)</span><br><span class="line">x = layers.GlobalAveragePooling2D()(x)</span><br><span class="line">x = layers.Dense(<span class="number">256</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">x = layers.Dropout(<span class="number">0.5</span>)(x)</span><br><span class="line">outputs = layers.Dense(<span class="number">10</span>)(x)</span><br><span class="line"></span><br><span class="line">model = keras.Model(inputs, outputs, name=<span class="string">&#x27;toy_resnet&#x27;</span>)</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+
+<p>训练方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()</span><br><span class="line">x_train = x_train.astype(<span class="string">&#x27;float32&#x27;</span>) / <span class="number">255.</span></span><br><span class="line">x_test = x_test.astype(<span class="string">&#x27;float32&#x27;</span>) / <span class="number">255.</span></span><br><span class="line">y_train = keras.utils.to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = keras.utils.to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">model.compile(optimizer=keras.optimizers.RMSprop(<span class="number">1e-3</span>),</span><br><span class="line">              loss=keras.losses.CategoricalCrossentropy(from_logits=<span class="literal">True</span>),</span><br><span class="line">              metrics=[<span class="string">&#x27;acc&#x27;</span>])</span><br><span class="line">model.fit(x_train, y_train,</span><br><span class="line">          batch_size=<span class="number">64</span>,</span><br><span class="line">          epochs=<span class="number">1</span>,</span><br><span class="line">          validation_split=<span class="number">0.2</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="共享层"><a href="#共享层" class="headerlink" title="共享层"></a>共享层</h2><p>函数式API的另外一个优点是我们可以使用共享层。为了创建共享层，我们只需要创建层的实例，然后再不断调用即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Embedding for 1000 unique words mapped to 128-dimensional vectors</span></span><br><span class="line">shared_embedding = layers.Embedding(<span class="number">1000</span>, <span class="number">128</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Variable-length sequence of integers</span></span><br><span class="line">text_input_a = keras.Input(shape=(<span class="literal">None</span>,), dtype=<span class="string">&#x27;int32&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Variable-length sequence of integers</span></span><br><span class="line">text_input_b = keras.Input(shape=(<span class="literal">None</span>,), dtype=<span class="string">&#x27;int32&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># We reuse the same layer to encode both inputs</span></span><br><span class="line">encoded_input_a = shared_embedding(text_input_a)</span><br><span class="line">encoded_input_b = shared_embedding(text_input_b)</span><br></pre></td></tr></table></figure>
+
+<h2 id="提取和重用节点"><a href="#提取和重用节点" class="headerlink" title="提取和重用节点"></a>提取和重用节点</h2><p>由于我们使用函数式API创建的模型是静态的，所以它容易被存取和检查。这个过程和画图差不多。这也就意味着我们可以获取模型中节点并且重用他们。接下来我们看一下带有权重的VGG19模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.applications <span class="keyword">import</span> VGG19</span><br><span class="line"></span><br><span class="line">vgg19 = VGG19()</span><br></pre></td></tr></table></figure>
+
+<p>可以通过模型的结构获取到中间的层（节点）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">features_list = [layer.output <span class="keyword">for</span> layer <span class="keyword">in</span> vgg19.layers]</span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过这些节点来构建一个模型，用于获取通过每个层的中间值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">feat_extraction_model = keras.Model(inputs=vgg19.input, outputs=features_list)</span><br><span class="line"></span><br><span class="line">img = np.random.random((<span class="number">1</span>, <span class="number">224</span>, <span class="number">224</span>, <span class="number">3</span>)).astype(<span class="string">&#x27;float32&#x27;</span>)</span><br><span class="line">extracted_features = feat_extraction_model(img)</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义层来扩展API"><a href="#自定义层来扩展API" class="headerlink" title="自定义层来扩展API"></a>自定义层来扩展API</h2><p><code>tf.keras</code>含有大量的内建层：</p>
+<ul>
+<li>卷积层：<code>Conv1D</code>, <code>Conv2D</code>, <code>Conv3D</code>, <code>Conv2DTranspose</code></li>
+<li>池化层：<code>MaxPooling1D</code>, <code>MaxPooling2D</code>, <code>MaxPooling3D</code>, <code>AveragePooling1D</code></li>
+<li>RNN层：<code>GRU</code>, <code>LSTM</code>, <code>ConvLSTM2D</code></li>
+<li><code>BatchNormalization</code>, <code>Dropout</code>, <code>Embedding</code>，etc.</li>
+</ul>
+<p>如果这些都不能满足要求，我们可以创建Layer的子类，每个子类需要实现：</p>
+<ul>
+<li>call：定义这一层完成的运算</li>
+<li>build：创建这一层的权重</li>
+</ul>
+<p>下面是Dense层的简单实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomDense</span>(<span class="params">layers.Layer</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, units=<span class="number">32</span></span>):</span></span><br><span class="line">    super(CustomDense, self).__init__()</span><br><span class="line">    self.units = units</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">build</span>(<span class="params">self, input_shape</span>):</span></span><br><span class="line">    self.w = self.add_weight(shape=(input_shape[<span class="number">-1</span>], self.units),</span><br><span class="line">                             initializer=<span class="string">&#x27;random_normal&#x27;</span>,</span><br><span class="line">                             trainable=<span class="literal">True</span>)</span><br><span class="line">    self.b = self.add_weight(shape=(self.units,),</span><br><span class="line">                             initializer=<span class="string">&#x27;random_normal&#x27;</span>,</span><br><span class="line">                             trainable=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    <span class="keyword">return</span> tf.matmul(inputs, self.w) + self.b</span><br><span class="line"></span><br><span class="line">inputs = keras.Input((<span class="number">4</span>,))</span><br><span class="line">outputs = CustomDense(<span class="number">10</span>)(inputs)</span><br><span class="line"></span><br><span class="line">model = keras.Model(inputs, outputs)</span><br></pre></td></tr></table></figure>
+
+<p>如果想支持序列化，这时也需要实现get_config方法，该方法将会返回构造器的参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomDense</span>(<span class="params">layers.Layer</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, units=<span class="number">32</span></span>):</span></span><br><span class="line">    super(CustomDense, self).__init__()</span><br><span class="line">    self.units = units</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">build</span>(<span class="params">self, input_shape</span>):</span></span><br><span class="line">    self.w = self.add_weight(shape=(input_shape[<span class="number">-1</span>], self.units),</span><br><span class="line">                             initializer=<span class="string">&#x27;random_normal&#x27;</span>,</span><br><span class="line">                             trainable=<span class="literal">True</span>)</span><br><span class="line">    self.b = self.add_weight(shape=(self.units,),</span><br><span class="line">                             initializer=<span class="string">&#x27;random_normal&#x27;</span>,</span><br><span class="line">                             trainable=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    <span class="keyword">return</span> tf.matmul(inputs, self.w) + self.b</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get_config</span>(<span class="params">self</span>):</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&#x27;units&#x27;</span>: self.units&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">inputs = keras.Input((<span class="number">4</span>,))</span><br><span class="line">outputs = CustomDense(<span class="number">10</span>)(inputs)</span><br><span class="line"></span><br><span class="line">model = keras.Model(inputs, outputs)</span><br><span class="line">config = model.get_config()</span><br><span class="line"></span><br><span class="line">new_model = keras.Model.from_config(</span><br><span class="line">    config, custom_objects=&#123;<span class="string">&#x27;CustomDense&#x27;</span>: CustomDense&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>同样可以实现from_config方法来实现层的重构，默认的from_config方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">from_config</span>(<span class="params">cls, config</span>):</span></span><br><span class="line">  <span class="keyword">return</span> cls(**config)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用函数式API的时机"><a href="#使用函数式API的时机" class="headerlink" title="使用函数式API的时机"></a>使用函数式API的时机</h2><p>什么时候该使用函数式API构建模型，什么时候使用模型子类构建模型？总体来说，函数式API是一种更加易用安全，多特性的方法，而模型子类则提供了更高的灵活性。</p>
+<p>函数式API的优点如下：</p>
+<ul>
+<li><p>简洁的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 函数式API</span></span><br><span class="line">inputs = keras.Input(shape=(<span class="number">32</span>,))</span><br><span class="line">x = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)(inputs)</span><br><span class="line">outputs = layers.Dense(<span class="number">10</span>)(x)</span><br><span class="line">mlp = keras.Model(inputs, outputs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型子类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MLP</span>(<span class="params">keras.Model</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, **kwargs</span>):</span></span><br><span class="line">    super(MLP, self).__init__(**kwargs)</span><br><span class="line">    self.dense_1 = layers.Dense(<span class="number">64</span>, activation=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">    self.dense_2 = layers.Dense(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    x = self.dense_1(inputs)</span><br><span class="line">    <span class="keyword">return</span> self.dense_2(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Instantiate the model.</span></span><br><span class="line">mlp = MLP()</span><br><span class="line"><span class="comment"># Necessary to create the model&#x27;s state.</span></span><br><span class="line"><span class="comment"># The model doesn&#x27;t have a state until it&#x27;s called at least once.</span></span><br><span class="line">_ = mlp(tf.zeros((<span class="number">1</span>, <span class="number">32</span>)))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在构建模型的时候提供检查：每一层可以根据输入数据的shape和dtype判断是否是合法的输入</p>
+</li>
+<li><p>模型更易构建：构建模型就像是画图一样简单</p>
+</li>
+<li><p>模型可以被序列化和克隆</p>
+</li>
+</ul>
+<p>函数式API缺点如下：</p>
+<ul>
+<li>不支持动态架构</li>
+</ul>
+<h2 id="混合模式构建模型"><a href="#混合模式构建模型" class="headerlink" title="混合模式构建模型"></a>混合模式构建模型</h2><p>我们可以混合使用函数式API和模型子类方式来构建模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">units = <span class="number">32</span></span><br><span class="line">timesteps = <span class="number">10</span></span><br><span class="line">input_dim = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Define a Functional model</span></span><br><span class="line">inputs = keras.Input((<span class="literal">None</span>, units))</span><br><span class="line">x = layers.GlobalAveragePooling1D()(inputs)</span><br><span class="line">outputs = layers.Dense(<span class="number">1</span>)(x)</span><br><span class="line">model = keras.Model(inputs, outputs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomRNN</span>(<span class="params">layers.Layer</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">    super(CustomRNN, self).__init__()</span><br><span class="line">    self.units = units</span><br><span class="line">    self.projection_1 = layers.Dense(units=units, activation=<span class="string">&#x27;tanh&#x27;</span>)</span><br><span class="line">    self.projection_2 = layers.Dense(units=units, activation=<span class="string">&#x27;tanh&#x27;</span>)</span><br><span class="line">    <span class="comment"># Our previously-defined Functional model</span></span><br><span class="line">    self.classifier = model</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    outputs = []</span><br><span class="line">    state = tf.zeros(shape=(inputs.shape[<span class="number">0</span>], self.units))</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(inputs.shape[<span class="number">1</span>]):</span><br><span class="line">      x = inputs[:, t, :]</span><br><span class="line">      h = self.projection_1(x)</span><br><span class="line">      y = h + self.projection_2(state)</span><br><span class="line">      state = y</span><br><span class="line">      outputs.append(y)</span><br><span class="line">    features = tf.stack(outputs, axis=<span class="number">1</span>)</span><br><span class="line">    print(features.shape)</span><br><span class="line">    <span class="keyword">return</span> self.classifier(features)</span><br><span class="line"></span><br><span class="line">rnn_model = CustomRNN()</span><br><span class="line">_ = rnn_model(tf.zeros((<span class="number">1</span>, timesteps, input_dim)))</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个使用函数式模型构建RNN网络：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">units = <span class="number">32</span></span><br><span class="line">timesteps = <span class="number">10</span></span><br><span class="line">input_dim = <span class="number">5</span></span><br><span class="line">batch_size = <span class="number">16</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomRNN</span>(<span class="params">layers.Layer</span>):</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">    super(CustomRNN, self).__init__()</span><br><span class="line">    self.units = units</span><br><span class="line">    self.projection_1 = layers.Dense(units=units, activation=<span class="string">&#x27;tanh&#x27;</span>)</span><br><span class="line">    self.projection_2 = layers.Dense(units=units, activation=<span class="string">&#x27;tanh&#x27;</span>)</span><br><span class="line">    self.classifier = layers.Dense(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span>(<span class="params">self, inputs</span>):</span></span><br><span class="line">    outputs = []</span><br><span class="line">    state = tf.zeros(shape=(inputs.shape[<span class="number">0</span>], self.units))</span><br><span class="line">    <span class="keyword">for</span> t <span class="keyword">in</span> range(inputs.shape[<span class="number">1</span>]):</span><br><span class="line">      x = inputs[:, t, :]</span><br><span class="line">      h = self.projection_1(x)</span><br><span class="line">      y = h + self.projection_2(state)</span><br><span class="line">      state = y</span><br><span class="line">      outputs.append(y)</span><br><span class="line">    features = tf.stack(outputs, axis=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> self.classifier(features)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Note that we specify a static batch size for the inputs with the `batch_shape`</span></span><br><span class="line"><span class="comment"># arg, because the inner computation of `CustomRNN` requires a static batch size</span></span><br><span class="line"><span class="comment"># (when we create the `state` zeros tensor).</span></span><br><span class="line">inputs = keras.Input(batch_shape=(batch_size, timesteps, input_dim))</span><br><span class="line">x = layers.Conv1D(<span class="number">32</span>, <span class="number">3</span>)(inputs)</span><br><span class="line">outputs = CustomRNN()(x)</span><br><span class="line"></span><br><span class="line">model = keras.Model(inputs, outputs)</span><br><span class="line"></span><br><span class="line">rnn_model = CustomRNN()</span><br><span class="line">_ = rnn_model(tf.zeros((<span class="number">1</span>, <span class="number">10</span>, <span class="number">5</span>)))</span><br></pre></td></tr></table></figure>
+
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/>http://blog.zsstrike.top/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/TensorFlow/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>TensorFlow</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/&title=Keras函数式API - zsStrike&summary=本章了解Keras的函数式API以及灵活使用它们的方法。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/&title=Keras函数式API - zsStrike&summary=本章了解Keras的函数式API以及灵活使用它们的方法。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/14/Keras%E5%87%BD%E6%95%B0%E5%BC%8FAPI/&title=Keras函数式API - zsStrike&summary=本章了解Keras的函数式API以及灵活使用它们的方法。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/15/%E8%AE%AD%E7%BB%83%E5%92%8C%E8%AF%84%E4%BC%B0/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>训练和评估</p>
+          <p class='content'>本节主要从两方面学习模型的训练和评估：使用内建的API进行训练和评估或者是自定义函数实现训练和评估。不管使用哪种方法，不同方式构建的模型的训练和评估方式是一样的。
+
+
+使用内建API 当我们使用...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/13/Keras%E6%A6%82%E8%A7%88/'>
+          <p class='title'>Keras概览<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本节介绍Keras及其相关模块，以帮助我们快速构建人工神经网络。
+
+
+构建一个简单模型层叠式模型在Keras中，我们使用层（layers）来构建我们的模型，模型通常是一个由多个层构成的流程图，最...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E8%AF%84%E4%BC%B0%E5%92%8C%E9%A2%84%E6%B5%8B"><span class="toc-text">训练评估和预测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%9B%B8%E5%90%8C%E7%9A%84%E5%B1%82%E6%9D%A5%E5%88%9B%E5%BB%BA%E5%A4%9A%E4%B8%AA%E6%A8%A1%E5%9E%8B"><span class="toc-text">使用相同的层来创建多个模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E5%8F%AF%E8%B0%83%E7%94%A8"><span class="toc-text">模型可调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B"><span class="toc-text">生成复杂模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="toc-text">包含多个输入和输出的模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%AE%8B%E5%B7%AE%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="toc-text">一个简单的残差网络模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%B1%82"><span class="toc-text">共享层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E5%92%8C%E9%87%8D%E7%94%A8%E8%8A%82%E7%82%B9"><span class="toc-text">提取和重用节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82%E6%9D%A5%E6%89%A9%E5%B1%95API"><span class="toc-text">自定义层来扩展API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8FAPI%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="toc-text">使用函数式API的时机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E6%A8%A1%E5%BC%8F%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9E%8B"><span class="toc-text">混合模式构建模型</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="Keras函数式API";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

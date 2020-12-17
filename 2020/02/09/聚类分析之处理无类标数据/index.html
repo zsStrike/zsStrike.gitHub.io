@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>聚类分析之处理无类标数据 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种无监督学习技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含的结构等信息。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        聚类分析之处理无类标数据
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月9日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3.7k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：16分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="聚类分析之处理无类标数据" data-path="/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种<strong>无监督学习</strong>技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含的结构等信息。</p>
+<a id="more"></a>
+
+<h2 id="使用k-means算法对相似对象进行分组"><a href="#使用k-means算法对相似对象进行分组" class="headerlink" title="使用k-means算法对相似对象进行分组"></a>使用k-means算法对相似对象进行分组</h2><p>本节讨论最流行的聚类算法：<strong>k-means算法</strong>，它在学术邻域及业界都得到了广泛应用。聚类是一种可以找到相似对象群组的技术，与组间对象相比，组内对象之间具有更高的相似度。</p>
+<p>尽管k-means算法适用于高维数据，但出于可视化需要，我们使用一个二维数据集的例子演示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_blobs</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X, y = make_blobs(n_samples=<span class="number">150</span>,</span><br><span class="line">                 n_features=<span class="number">2</span>,</span><br><span class="line">                 centers=<span class="number">3</span>,</span><br><span class="line">                 cluster_std=<span class="number">0.5</span>,</span><br><span class="line">                 shuffle=<span class="literal">True</span>,</span><br><span class="line">                 random_state=<span class="number">0</span>)</span><br><span class="line">plt.scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>], c=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, s=<span class="number">50</span>)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20115154.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20115154.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>k-means算法具体有四个步骤：</p>
+<ol>
+<li>从样本点随机选择k个点作为初始簇中心</li>
+<li>将每个样本点划分到距离它最近的中心点$ \mu^j, j\in{1,\cdots ,k} $所代表的簇中</li>
+<li>用各簇中所有样本的中心点替代原有的中心点</li>
+<li>重复步骤2和3，直到中心点不变或者达到预定迭代次数时，算法终止</li>
+</ol>
+<p>度量对象之间的相似性可以用欧几里得距离的平方：<br>$$<br>d(x, y)^2 = \sum_{j=1}^{m}(x_j-y_j)^2=||x-y||^2_2<br>$$<br>基于欧几里得标准，我们可以将k-means算法描述为一个简单的优化问题，也就是使得<strong>簇内误差平方和（SSE）</strong>最小：<br>$$<br>SSE = \sum_{j=1}^n\sum_{j=1}^{k}w^{i,j}=||x^i-\mu^j||_2^2<br>$$<br>现在借助scikit-learn中的KMeans类将k-means算法应用于我们的示例数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">km = KMeans(n_clusters=<span class="number">3</span>,</span><br><span class="line">           init=<span class="string">&#x27;random&#x27;</span>,</span><br><span class="line">           n_init=<span class="number">10</span>,</span><br><span class="line">           max_iter=<span class="number">300</span>,</span><br><span class="line">           tol=<span class="number">1e-04</span>,</span><br><span class="line">           random_state=<span class="number">0</span>)</span><br><span class="line">y_km = km.fit_predict(X)</span><br></pre></td></tr></table></figure>
+
+<p>在k-means算法的某次迭代中，可能会发生无法收敛的问题，特别是我们设置了较大的max_iter。解决这个问题的方法是为tol参数设置一个较大的值，上述容忍度为1e-04。</p>
+<h3 id="k-means"><a href="#k-means" class="headerlink" title="k-means++"></a>k-means++</h3><p>我们讨论了经典的k-means算法，它使用随机点作为初始中心点，但是初始中心点选择不当，就会导致收敛速度慢的问题。解决此问题的方法是在数据集上多次运行k-mean算法，并且根据SSE选择性能更好的模型。另外一种方案是使用k-means++算法让初始中心点彼此尽可能远离，相比传统的k-means算法，它能够产生更好的结果。k-means++算法的初始化过程如下：</p>
+<ol>
+<li>初始化一个空的集合M，用于存储选定的k个中心点</li>
+<li>从输入样本中随机选定第一个中心点$ \mu^j $，并且将其加入到集合M中</li>
+<li>对于集合M之外的任一样本点$ x^i $，通过计算找到与其平方距离最小的样本$ d(x^i, M)^2 $</li>
+<li>使用加权概率分布$ \frac{d(\mu, M)^2}{\sum_id(x^i, M)^2} $来随机选择下一个中心点$ \mu^p $</li>
+<li>重复步骤2，3，直到选定k个中心点</li>
+<li>基于选定的中心点执行k-means算法</li>
+</ol>
+<p>现在对k-means算法的结果做可视化展示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">plt.scatter(X[y_km==<span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">           X[y_km==<span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">50</span>,</span><br><span class="line">           c=<span class="string">&#x27;lightgreen&#x27;</span>,</span><br><span class="line">           marker=<span class="string">&#x27;s&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;cluster 1&#x27;</span>)</span><br><span class="line">plt.scatter(X[y_km==<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">           X[y_km==<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">50</span>,</span><br><span class="line">           c=<span class="string">&#x27;orange&#x27;</span>,</span><br><span class="line">           marker=<span class="string">&#x27;o&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;cluster 2&#x27;</span>)</span><br><span class="line">plt.scatter(X[y_km==<span class="number">2</span>, <span class="number">0</span>],</span><br><span class="line">           X[y_km==<span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">50</span>,</span><br><span class="line">           c=<span class="string">&#x27;lightblue&#x27;</span>,</span><br><span class="line">           marker=<span class="string">&#x27;v&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;cluster 3&#x27;</span>)</span><br><span class="line">plt.scatter(km.cluster_centers_[:, <span class="number">0</span>],</span><br><span class="line">           km.cluster_centers_[:, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">250</span>,</span><br><span class="line">           marker=<span class="string">&#x27;*&#x27;</span>,</span><br><span class="line">           c=<span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;centroids&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20122642.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20122642.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>散点图显示的结果中3个中心点位于各个簇的中心，分组结果看起来是合理的。</p>
+<p>k-means算法的一个缺点是我们必须先指定一个簇数量k，但是在实际应用中，簇数量并不总是显而易见的。</p>
+<h3 id="硬聚类与软聚类"><a href="#硬聚类与软聚类" class="headerlink" title="硬聚类与软聚类"></a>硬聚类与软聚类</h3><p><strong>硬聚类</strong>指每个样本只能划至一个簇的算法，如k-means算法；<strong>软聚类</strong>算法可以将样本划分到一个或多个簇，如FCM算法。</p>
+<p>FCM算法和k-means算法十分相似，k-means算法某个样本预测结果是$ [0,1,0] $，表明该样本属于簇2。FCM中可以允许预测的结果中含有分数，如$ [0.7, 0.2, 0.1] $表明该样本属于簇1的概率是0.7，簇2的概率是0.2。FCM的步骤如下：</p>
+<ol>
+<li>指定k个中心点，并随机将样本点划分至某个簇</li>
+<li>计算各个簇的中心$ \mu^j ,j\in{1, \cdots,k}$</li>
+<li>更新各样本点所属簇的成员隶属度</li>
+<li>重复步骤2，3，直到各个样本点所属簇成员隶属度不变或者是达到最大的迭代次数</li>
+</ol>
+<p>FCM的目标函数如下：<br>$$<br>J_m = \sum_{i=1}^{n}\sum_{j=1}^{m}w^m(i,j)||x^i-\mu^j||^2_2<br>$$</p>
+<h3 id="使用肘方法确定簇的最佳数量"><a href="#使用肘方法确定簇的最佳数量" class="headerlink" title="使用肘方法确定簇的最佳数量"></a>使用肘方法确定簇的最佳数量</h3><p>簇内误差平方和可以通过<code>inertia</code>访问，基于簇内误差平方和，我们可以使用图形工具，即所谓的肘方法，针对特定任务估计出最优的簇数量k。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">distortions = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">11</span>):</span><br><span class="line">    km = KMeans(n_clusters=i,</span><br><span class="line">               init=<span class="string">&#x27;k-means++&#x27;</span>,</span><br><span class="line">               n_init=<span class="number">10</span>,</span><br><span class="line">               max_iter=<span class="number">300</span>,</span><br><span class="line">               random_state=<span class="number">0</span>)</span><br><span class="line">    km.fit(X)</span><br><span class="line">    distortions.append(km.inertia_)</span><br><span class="line">plt.plot(range(<span class="number">1</span>, <span class="number">11</span>), distortions, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Number of clusters&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Distortion&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20125357.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20125357.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>如图，当k=3时团呈现肘形，这表明对于此数据来说，k=3是一个好的选择。</p>
+<h3 id="通过轮廓图定量分析聚类质量"><a href="#通过轮廓图定量分析聚类质量" class="headerlink" title="通过轮廓图定量分析聚类质量"></a>通过轮廓图定量分析聚类质量</h3><p>另外一种聚类质量的评估方法时<strong>轮廓分析</strong>，此方法用于k-means算法之外的其他聚类方法。我们通过以下步骤计算<strong>轮廓系数</strong>：</p>
+<ol>
+<li><p>将某样本$ x^i $与簇内其他点之间的平均距离看作是簇的内聚度$ a^i $</p>
+</li>
+<li><p>将样本$ x^i $与其最近簇中所有点之间的平均距离看作是与下一最近簇的分离度$ b^i $</p>
+</li>
+<li><p>轮廓系数如下：<br>$$<br>s^i = \frac{b^i - a^i}{max{b^i, a^i}}<br>$$</p>
+</li>
+</ol>
+<p>可以发现，理想的轮廓系数时1，轮廓系数代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">km = KMeans(n_clusters=<span class="number">3</span>,</span><br><span class="line">           init=<span class="string">&#x27;k-means++&#x27;</span>,</span><br><span class="line">           n_init=<span class="number">10</span>,</span><br><span class="line">           max_iter=<span class="number">300</span>,</span><br><span class="line">           tol=<span class="number">1e-04</span>, </span><br><span class="line">           random_state=<span class="number">0</span>)</span><br><span class="line">y_km = km.fit_predict(X)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> cm</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_samples</span><br><span class="line">cluster_labels = np.unique(y_km)</span><br><span class="line">n_clusters = cluster_labels.shape[<span class="number">0</span>]</span><br><span class="line">silhouette_vals = silhouette_samples(X,</span><br><span class="line">                                    y_km,</span><br><span class="line">                                    metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line">y_ax_lower, y_ax_upper = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">yticks = []</span><br><span class="line"><span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(cluster_labels):</span><br><span class="line">    c_silhouette_vals = silhouette_vals[y_km == c]</span><br><span class="line">    c_silhouette_vals.sort()</span><br><span class="line">    y_ax_upper += len(c_silhouette_vals)</span><br><span class="line">    color = cm.jet(float(i) / n_clusters)</span><br><span class="line">    plt.barh(range(y_ax_lower, y_ax_upper),</span><br><span class="line">                    c_silhouette_vals,</span><br><span class="line">                    height=<span class="number">1.0</span>,</span><br><span class="line">                    edgecolor=<span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">                    color=color)</span><br><span class="line">    yticks.append((y_ax_lower + y_ax_upper) / <span class="number">2.</span>)</span><br><span class="line">    y_ax_lower += len(c_silhouette_vals)</span><br><span class="line">silhouette_avg = np.mean(silhouette_vals)</span><br><span class="line">plt.axvline(silhouette_avg,</span><br><span class="line">            color=<span class="string">&quot;red&quot;</span>,</span><br><span class="line">            linestyle=<span class="string">&quot;--&quot;</span>)</span><br><span class="line">plt.yticks(yticks, cluster_labels + <span class="number">1</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Cluster&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Silhouette coefficient&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20140933.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20140933.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从上图可见，轮廓系数未接近0点，此指标显示聚类效果不错。为了解聚类效果不佳的轮廓图的形状，我们使用两个中心点来初始化k-means算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">km = KMeans(n_clusters=<span class="number">2</span>,</span><br><span class="line">           init=<span class="string">&#x27;k-means++&#x27;</span>,</span><br><span class="line">           n_init=<span class="number">10</span>,</span><br><span class="line">           max_iter=<span class="number">300</span>,</span><br><span class="line">           tol=<span class="number">1e-04</span>,</span><br><span class="line">           random_state=<span class="number">0</span>)</span><br><span class="line">y_km = km.fit_predict(X)</span><br><span class="line"></span><br><span class="line">plt.scatter(X[y_km==<span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">           X[y_km==<span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">50</span>,</span><br><span class="line">           c=<span class="string">&#x27;lightgreen&#x27;</span>,</span><br><span class="line">           marker=<span class="string">&#x27;s&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;cluster 1&#x27;</span>)</span><br><span class="line">plt.scatter(X[y_km==<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">           X[y_km==<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">50</span>,</span><br><span class="line">           c=<span class="string">&#x27;orange&#x27;</span>,</span><br><span class="line">           marker=<span class="string">&#x27;o&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;cluster 2&#x27;</span>)</span><br><span class="line">plt.scatter(km.cluster_centers_[:, <span class="number">0</span>],</span><br><span class="line">           km.cluster_centers_[:, <span class="number">1</span>],</span><br><span class="line">           s=<span class="number">250</span>,</span><br><span class="line">           marker=<span class="string">&#x27;*&#x27;</span>,</span><br><span class="line">           c=<span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">           label=<span class="string">&#x27;centroids&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20141417.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20141417.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>接下来，我们绘制轮廓图来对聚类结果进行评估：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">cluster_labels = np.unique(y_km)</span><br><span class="line">n_clusters = cluster_labels.shape[<span class="number">0</span>]</span><br><span class="line">silhouette_vals = silhouette_samples(X,</span><br><span class="line">                                    y_km,</span><br><span class="line">                                    metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line">y_ax_lower, y_ax_upper = <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">yticks = []</span><br><span class="line"><span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(cluster_labels):</span><br><span class="line">    c_silhouette_vals = silhouette_vals[y_km == c]</span><br><span class="line">    c_silhouette_vals.sort()</span><br><span class="line">    y_ax_upper += len(c_silhouette_vals)</span><br><span class="line">    color = cm.jet(float(i) / n_clusters)</span><br><span class="line">    plt.barh(range(y_ax_lower, y_ax_upper),</span><br><span class="line">                    c_silhouette_vals,</span><br><span class="line">                    height=<span class="number">1.0</span>,</span><br><span class="line">                    edgecolor=<span class="string">&#x27;none&#x27;</span>,</span><br><span class="line">                    color=color)</span><br><span class="line">    yticks.append((y_ax_lower + y_ax_upper) / <span class="number">2.</span>)</span><br><span class="line">    y_ax_lower += len(c_silhouette_vals)</span><br><span class="line">silhouette_avg = np.mean(silhouette_vals)</span><br><span class="line">plt.axvline(silhouette_avg,</span><br><span class="line">            color=<span class="string">&quot;red&quot;</span>,</span><br><span class="line">            linestyle=<span class="string">&quot;--&quot;</span>)</span><br><span class="line">plt.yticks(yticks, cluster_labels + <span class="number">1</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Cluster&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Silhouette coefficient&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>由结果可见，轮廓图由明显不同的长度和宽度，这说明该聚类并非最优结果：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20141646.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20141646.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<h2 id="层次聚类"><a href="#层次聚类" class="headerlink" title="层次聚类"></a>层次聚类</h2><p>本节中，我们将学习另外一种基于原型的聚类：<strong>层次聚类</strong>。层次聚类算法的优势在于：他能够使我们绘制出树状图，这有助于我们使用有意义的分类解释聚类结果。层次聚类的另外一个优势在于我们无需指定簇数量。</p>
+<p>层次聚类有两种主要方法：<strong>凝聚</strong>层次聚类和<strong>分裂</strong>层次聚类。在凝聚层次聚类中，判定簇间距离的两个标准方法分别是<strong>单连接</strong>和<strong>全连接</strong>。单连接方法计算每一对簇中最相似两个样本的距离，并且合并距离最近的两个样本所属簇。与之相反，全连接方法是通过比较找到分布于两个簇中最不相似的样本（距离最远的样本），进而完成簇的合并。</p>
+<p>本节中，我们主要关注基于全连接方法的凝聚层次聚类，迭代过程如下：</p>
+<ol>
+<li>计算得到所有样本间的距离矩阵</li>
+<li>将每个数据点看作是一个单独的簇</li>
+<li>基于最不相似（距离最远）样本的距离，合并两个最接近的簇</li>
+<li>更新相似矩阵</li>
+<li>重复步骤2到4，直到所有样本都合并到一个簇为止</li>
+</ol>
+<p>计算距离矩阵的方式如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.random.seed(<span class="number">123</span>)</span><br><span class="line">variables = [<span class="string">&#x27;X&#x27;</span>, <span class="string">&#x27;Y&#x27;</span>, <span class="string">&#x27;Z&#x27;</span>]</span><br><span class="line">labels = [<span class="string">&#x27;ID_0&#x27;</span>, <span class="string">&#x27;ID_1&#x27;</span>, <span class="string">&#x27;ID_2&#x27;</span>, <span class="string">&#x27;ID_3&#x27;</span>, <span class="string">&#x27;ID_4&#x27;</span>]</span><br><span class="line">X = np.random.random_sample([<span class="number">5</span>, <span class="number">3</span>])*<span class="number">10</span></span><br><span class="line">df = pd.DataFrame(X, columns=variables, index=labels)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<p>得到的数据如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581229979827.png" class="lazyload" data-srcset="1581229979827.png" srcset="data:image/png;base64,666" alt="1581229979827"/></div><span class="image-caption">1581229979827</span></div>
+<h3 id="基于距离矩阵进行层次聚类"><a href="#基于距离矩阵进行层次聚类" class="headerlink" title="基于距离矩阵进行层次聚类"></a>基于距离矩阵进行层次聚类</h3><p>我们基于SciPy来计算距离矩阵：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from scipy.spatial.distance import pdist, squareform</span><br><span class="line">row_dist &#x3D; pd.DataFrame(squareform(pdist(df, metric&#x3D;&#39;euclidean&#39;)), columns&#x3D;labels, index&#x3D;labels)</span><br><span class="line">row_dist</span><br></pre></td></tr></table></figure>
+
+<p>得到的数据如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581230299131.png" class="lazyload" data-srcset="1581230299131.png" srcset="data:image/png;base64,666" alt="1581230299131"/></div><span class="image-caption">1581230299131</span></div>
+<p>接下来我们使用linkage函数，此函数以全连接作为距离判定标准：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.cluster.hierarchy <span class="keyword">import</span> linkage</span><br><span class="line">row_clusters = linkage(df.values, method=<span class="string">&#x27;complete&#x27;</span>, metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line">pd.DataFrame(row_clusters, columns=[<span class="string">&#x27;row label 1&#x27;</span>, <span class="string">&#x27;row label 2&#x27;</span>, <span class="string">&#x27;distance&#x27;</span>, <span class="string">&#x27;no. of items&#x27;</span>], </span><br><span class="line">            index=[<span class="string">&#x27;cluster %d&#x27;</span> % (i+<span class="number">1</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(row_clusters.shape[<span class="number">0</span>])])</span><br></pre></td></tr></table></figure>
+
+<p>得到的数据如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581230747985.png" class="lazyload" data-srcset="1581230747985.png" srcset="data:image/png;base64,666" alt="1581230747985"/></div><span class="image-caption">1581230747985</span></div>
+<p>接下来采用树状图的形式对聚类结果进行可视化展示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.cluster.hierarchy <span class="keyword">import</span> dendrogram</span><br><span class="line">row_dendr = dendrogram(row_clusters, labels=labels)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Euclidean distance&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20144813.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20144813.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>此树状图采用了凝聚层次聚类合并生成不同簇的过程，从图中可见，首先ID_0和ID_4合并，解下来是ID_1和ID_2合并。</p>
+<h3 id="树状图与热度图的关联"><a href="#树状图与热度图的关联" class="headerlink" title="树状图与热度图的关联"></a>树状图与热度图的关联</h3><p>实际应用中，层次聚类的树状图与热度图结合使用，本节中我们讨论如何将树状图附加到热度图上：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fig = plt.figure(figsize=(<span class="number">8</span>, <span class="number">8</span>))</span><br><span class="line">axd = fig.add_axes([<span class="number">0.09</span>, <span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.6</span>])</span><br><span class="line">row_dendr = dendrogram(row_clusters, orientation=<span class="string">&#x27;left&#x27;</span>)</span><br><span class="line">df_rowclust = df.ix[row_dendr[<span class="string">&#x27;leaves&#x27;</span>][::<span class="number">-1</span>]]</span><br><span class="line">axm = fig.add_axes([<span class="number">0.23</span>, <span class="number">0.1</span>, <span class="number">0.6</span>, <span class="number">0.6</span>])</span><br><span class="line">cax = axm.matshow(df_rowclust, interpolation=<span class="string">&#x27;nearest&#x27;</span>, cmap=<span class="string">&#x27;hot_r&#x27;</span>)</span><br><span class="line">axd.set_xticks([])</span><br><span class="line">axd.set_yticks([])</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> axd.spines.values():</span><br><span class="line">    i.set_visible(<span class="literal">False</span>)</span><br><span class="line">fig.colorbar(cax)</span><br><span class="line">axm.set_xticklabels([<span class="string">&#x27;&#x27;</span>] + list(df_rowclust.columns))</span><br><span class="line">axm.set_yticklabels([<span class="string">&#x27;&#x27;</span>] + list(df_rowclust.index))</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>得到图像可得：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20145923.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20145923.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<h3 id="通过scikit-learn进行凝聚聚类"><a href="#通过scikit-learn进行凝聚聚类" class="headerlink" title="通过scikit-learn进行凝聚聚类"></a>通过scikit-learn进行凝聚聚类</h3><p>本节使用scikit-learn进行基于凝聚的层次聚类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> AgglomerativeClustering</span><br><span class="line">ac = AgglomerativeClustering(n_clusters=<span class="number">2</span>, affinity=<span class="string">&#x27;euclidean&#x27;</span>, linkage=<span class="string">&#x27;complete&#x27;</span>)</span><br><span class="line">labels = ac.fit_predict(X)</span><br><span class="line">print(<span class="string">&#x27;Cluster labels: %s&#x27;</span> % labels)</span><br><span class="line">&gt;&gt; Cluster labels: [<span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">0</span> <span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<p>通过对簇类标的预测结果进行分析，我们可以看出第一第四第五样本被划分至第一个簇，第二第三样本被划分到第二个簇。</p>
+<h2 id="使用DBSCAN划分高密度区域"><a href="#使用DBSCAN划分高密度区域" class="headerlink" title="使用DBSCAN划分高密度区域"></a>使用DBSCAN划分高密度区域</h2><p>接下来我们介绍另外一种聚类方法：<strong>基于密度空间的聚类算法</strong>。在DBSCAN中，基于一下标准，每个样本都被赋予了一个特殊的标签：</p>
+<ul>
+<li>如果一个点周边的指定半径$ \epsilon $内，其他样本点的数量不小于指定数量（MinPts），则此样本点称为核心点（core point）</li>
+<li>在指定半径$ \epsilon $内，如果一个点的邻居数量小于MinPts时，但是却包含一个核心点，则此点称为边界点（border point）</li>
+<li>除了核心点和边界点外的其他样本点称为噪声点（noise point）</li>
+</ul>
+<p>完成对核心点，边界点和噪声点的标记后，DBSCAN算法可以总结为两个简单的步骤：</p>
+<ol>
+<li>基于每个核心点或者一组相连的核心点形成一个单独的簇</li>
+<li>将每个边界点划分到对应核心点所在的簇中</li>
+</ol>
+<p>为了给出一个更能说明问题的例子，我们创建一个半月形的数据集，以及k-means聚类，层次聚类和DBSCAN聚类进行比较，首先得到半月形数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_moons</span><br><span class="line">X, y = make_moons(n_samples=<span class="number">200</span>, noise=<span class="number">0.05</span>, random_state=<span class="number">0</span>)</span><br><span class="line">plt.scatter(X[:, <span class="number">0</span>], X[:, <span class="number">1</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20152126.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20152126.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>下面首先使用前面讨论过的k-means算法和基于全连接的层次聚类算法，算法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">f, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">8</span>, <span class="number">3</span>))</span><br><span class="line">km = KMeans(n_clusters=<span class="number">2</span>, random_state=<span class="number">0</span>)</span><br><span class="line">y_km = km.fit_predict(X)</span><br><span class="line">ax1.scatter(X[y_km==<span class="number">0</span>,<span class="number">0</span>], X[y_km==<span class="number">0</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;lightblue&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;o&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 1&#x27;</span>)</span><br><span class="line">ax1.scatter(X[y_km==<span class="number">1</span>,<span class="number">0</span>],</span><br><span class="line">            X[y_km==<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;s&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 2&#x27;</span>)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;K-means clustering&#x27;</span>)</span><br><span class="line">ac = AgglomerativeClustering(n_clusters=<span class="number">2</span>,</span><br><span class="line">                            affinity=<span class="string">&#x27;euclidean&#x27;</span>,</span><br><span class="line">                            linkage=<span class="string">&#x27;complete&#x27;</span>)</span><br><span class="line">y_ac = ac.fit_predict(X)</span><br><span class="line">ax2.scatter(X[y_ac==<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">            X[y_ac==<span class="number">0</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;lightblue&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;o&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 1&#x27;</span>)</span><br><span class="line">ax2.scatter(X[y_ac==<span class="number">1</span>,<span class="number">0</span>],</span><br><span class="line">            X[y_ac==<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;s&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 2&#x27;</span>)</span><br><span class="line">ax2.set_title(<span class="string">&#x27;Agglomerative clustering&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20152445.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20152445.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现，上述两个算法无法有效分开两个数组。最后我们试一下DBSCAN算法在此数据集上的效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> DBSCAN</span><br><span class="line">db = DBSCAN(eps=<span class="number">0.2</span>,</span><br><span class="line">            min_samples=<span class="number">5</span>,</span><br><span class="line">            metric=<span class="string">&#x27;euclidean&#x27;</span>)</span><br><span class="line">y_db = db.fit_predict(X)</span><br><span class="line">plt.scatter(X[y_db==<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">            X[y_db==<span class="number">0</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;lightblue&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;o&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 1&#x27;</span>)</span><br><span class="line">plt.scatter(X[y_db==<span class="number">1</span>,<span class="number">0</span>],</span><br><span class="line">            X[y_db==<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">            c=<span class="string">&#x27;red&#x27;</span>,</span><br><span class="line">            edgecolor=<span class="string">&#x27;black&#x27;</span>,</span><br><span class="line">            marker=<span class="string">&#x27;s&#x27;</span>,</span><br><span class="line">            s=<span class="number">40</span>,</span><br><span class="line">            label=<span class="string">&#x27;cluster 2&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20152755.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20152755.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现，DBSCAN算法可以成功地对半月形数据进行划分，这也是DBSCAN算法的优势。</p>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/>http://blog.zsstrike.top/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/&title=聚类分析之处理无类标数据 - zsStrike&summary=前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种无监督学习技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含的结构等信息。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/&title=聚类分析之处理无类标数据 - zsStrike&summary=前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种无监督学习技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含的结构等信息。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/&title=聚类分析之处理无类标数据 - zsStrike&summary=前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种无监督学习技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含的结构等信息。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>实现多层人工神经网络</p>
+          <p class='content'>本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。
+
+
+使用人工神经网络对复杂函数建模我们在第二章中从人工神经元入手，开始了机器学习算法的探索。对于本章中将要讨论的多层人...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/08/%E4%BD%BF%E7%94%A8%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90%E9%A2%84%E6%B5%8B%E8%BF%9E%E7%BB%AD%E5%9E%8B%E7%9B%AE%E6%A0%87%E5%8F%98%E9%87%8F/'>
+          <p class='title'>使用回归分析预测连续型目标变量<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本章将会介绍监督学习的另外一个分支，回归分析（regression analysis）。回归模型可以用于连续型目标变量的预测分析，这使得它在探寻变量间关系，评估趋势，做出预测等领域极具吸引力。具...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8k-means%E7%AE%97%E6%B3%95%E5%AF%B9%E7%9B%B8%E4%BC%BC%E5%AF%B9%E8%B1%A1%E8%BF%9B%E8%A1%8C%E5%88%86%E7%BB%84"><span class="toc-text">使用k-means算法对相似对象进行分组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#k-means"><span class="toc-text">k-means++</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E8%81%9A%E7%B1%BB%E4%B8%8E%E8%BD%AF%E8%81%9A%E7%B1%BB"><span class="toc-text">硬聚类与软聚类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%82%98%E6%96%B9%E6%B3%95%E7%A1%AE%E5%AE%9A%E7%B0%87%E7%9A%84%E6%9C%80%E4%BD%B3%E6%95%B0%E9%87%8F"><span class="toc-text">使用肘方法确定簇的最佳数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%BD%AE%E5%BB%93%E5%9B%BE%E5%AE%9A%E9%87%8F%E5%88%86%E6%9E%90%E8%81%9A%E7%B1%BB%E8%B4%A8%E9%87%8F"><span class="toc-text">通过轮廓图定量分析聚类质量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB"><span class="toc-text">层次聚类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%B7%9D%E7%A6%BB%E7%9F%A9%E9%98%B5%E8%BF%9B%E8%A1%8C%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB"><span class="toc-text">基于距离矩阵进行层次聚类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%91%E7%8A%B6%E5%9B%BE%E4%B8%8E%E7%83%AD%E5%BA%A6%E5%9B%BE%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-text">树状图与热度图的关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87scikit-learn%E8%BF%9B%E8%A1%8C%E5%87%9D%E8%81%9A%E8%81%9A%E7%B1%BB"><span class="toc-text">通过scikit-learn进行凝聚聚类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8DBSCAN%E5%88%92%E5%88%86%E9%AB%98%E5%AF%86%E5%BA%A6%E5%8C%BA%E5%9F%9F"><span class="toc-text">使用DBSCAN划分高密度区域</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="聚类分析之处理无类标数据";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

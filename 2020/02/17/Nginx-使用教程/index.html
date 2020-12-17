@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Nginx 使用教程 - zsStrike</title>
+  
+    <meta name="keywords" content="Nginx">
+  
+
+  
+    <meta name="description" content="本章学习如何在 CentOS 7下使用 Nginx 来搭建反向代理和配置动静分离以及负载均衡过程的步骤。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        Nginx 使用教程
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月17日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3.5k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：12分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="Nginx 使用教程" data-path="/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本章学习如何在 CentOS 7下使用 Nginx 来搭建反向代理和配置动静分离以及负载均衡过程的步骤。</p>
+<a id="more"></a>
+
+<h2 id="Nginx-基本概念"><a href="#Nginx-基本概念" class="headerlink" title="Nginx 基本概念"></a>Nginx 基本概念</h2><h3 id="Nginx简介"><a href="#Nginx简介" class="headerlink" title="Nginx简介"></a>Nginx简介</h3><p>Nginx是以一个高性能的HTTP和反向代理服务器，特点是内存占用小，并发能力强，事实上Nginx的并发能力确实在同类型的网页服务器中表现良好。Nginx专为性能优化而开发，性能是其最重要的考量，实现上非常注重效率，能够经受高负载的考验，有报告表明它能支持高达50000个并发连接数。</p>
+<h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>在介绍反向代理之前，我们先介绍一下<strong>正向代理</strong>。正向代理是一个位于客户端和目标服务器之间的代理服务器(中间服务器)。为了从原始服务器取得内容，客户端向代理服务器发送一个请求，并且指定目标服务器，之后代理向目标服务器转交并且将获得的内容返回给客户端。正向代理的情况下客户端必须要进行一些特别的设置才能使用。正向代理实际上代理的是用户。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581916914941.png" class="lazyload" data-srcset="1581916914941.png" srcset="data:image/png;base64,666" alt="1581916914941"/></div><span class="image-caption">1581916914941</span></div>
+<p>反向代理正好相反。对于客户端来说，反向代理就好像目标服务器。并且客户端不需要进行任何设置。客户端向反向代理发送请求，接着反向代理判断请求走向何处，并将请求转交给客户端，使得这些内容就好似他自己一样，一次客户端并不会感知到反向代理后面的服务，也因此不需要客户端做任何设置，只需要把反向代理服务器当成真正的服务器就好了。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581916934765.png" class="lazyload" data-srcset="1581916934765.png" srcset="data:image/png;base64,666" alt="1581916934765"/></div><span class="image-caption">1581916934765</span></div>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>在因特网中，用户对服务器的访问并发量是很高的，通常单个服务器不可能完成对用户的响应。此时我们可以增加服务器的数量，然后将请求分发到各个服务器上，将原来请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器上，这也就是通常所说的负载均衡。</p>
+<h3 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h3><p>动静分离是指在web服务器架构中，将静态页面与动态页面或者静态内容接口和动态内容接口分开不同系统访问的架构设计方法，进而提升整个服务访问性能和可维护性。</p>
+<h2 id="Nginx基本使用"><a href="#Nginx基本使用" class="headerlink" title="Nginx基本使用"></a>Nginx基本使用</h2><h3 id="Nginx安装"><a href="#Nginx安装" class="headerlink" title="Nginx安装"></a>Nginx安装</h3><p>安装Nginx需要先安装该软件的依赖：pcre，openssl，zlib，最后安装Nginx。可通过如下命令安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc zlib zlib-devel pcre-devel openssl openssl-devel</span><br></pre></td></tr></table></figure>
+
+<p>接下来安装Nginx。首先下载nginx的源码包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.2.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>接下来，解压配置编译安装就行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf nginx-1.16.2.tar.gz</span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.2</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+
+<p>至此，Nginx安装成功，转到/usr/local/nginx/sbin目录下，查看版本号：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./nginx -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nginx常用命令"><a href="#Nginx常用命令" class="headerlink" title="Nginx常用命令"></a>Nginx常用命令</h3><ul>
+<li><p>启动Nginx：<code>./nginx</code></p>
+<p>如果没有修改Nginx的配置文件，我们现在就可以在内网中通过访问该服务器的地址获得Nginx的主页，如果没有看到Nginx的主页，此时需要配置防火墙开放80端口。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581928110804.png" class="lazyload" data-srcset="1581928110804.png" srcset="data:image/png;base64,666" alt="1581928110804"/></div><span class="image-caption">1581928110804</span></div>
+<blockquote>
+<ol>
+<li>查看开放的端口：<code>firewall-cmd --list-all</code></li>
+<li>设置开放的端口：<code>firewall-cmd --add-port=80/tcp --permanent</code></li>
+<li>设置开放的服务：<code>firewall-cmd --add-service=http --permanent</code></li>
+<li>设置之后重启防火墙：<code>firewall-cmd --reload</code></li>
+</ol>
+</blockquote>
+</li>
+<li><p>停止Nginx：<code>./nginx -s stop</code></p>
+</li>
+<li><p>重加载Nginx：<code>./nginx -s reload</code></p>
+</li>
+</ul>
+<h3 id="Nginx配置文件"><a href="#Nginx配置文件" class="headerlink" title="Nginx配置文件"></a>Nginx配置文件</h3><p>配置文件位于/usr/local/nginx/conf/nginx.conf，配置文件可以划分为三个部分：</p>
+<ul>
+<li><p>全局块：配置服务器整体运行的配置指令</p>
+<p>从配置文件开始到events块之间的内容，主要会设置一些影响 nginx 服务器整体运行的配置指令，主要包括配置运行 Nginx 服务器的用户（组）、允许生成的 worker process 数，进程 PID 存放路径、日志存放路径和类型以及配置文件的引入等。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927474071.png" class="lazyload" data-srcset="1581927474071.png" srcset="data:image/png;base64,666" alt="1581927474071"/></div><span class="image-caption">1581927474071</span></div>
+<p>上面的第一行配置的就是worker进程的数目，进程数目越大，相应的并发能力也就也强，通常将它的值设置为CPU的核数目。</p>
+</li>
+<li><p>events块：影响 Nginx 服务器与用户的网络连接</p>
+<p>events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 worker进程下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 worker进程可以同时支持的最大连接数等。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927674793.png" class="lazyload" data-srcset="1581927674793.png" srcset="data:image/png;base64,666" alt="1581927674793"/></div><span class="image-caption">1581927674793</span></div>
+<p>上面的例子表示的是一个worker进程支持的最大连接数。</p>
+</li>
+<li><p>http块</p>
+<p>这算是 Nginx 服务器配置中最频繁的部分，代理、缓存和日志定义等绝大多数功能和第三方模块的配置都在这里。需要注意的是http块也可以进一步划分为http全局块核server块。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927895940.png" class="lazyload" data-srcset="1581927895940.png" srcset="data:image/png;base64,666" alt="1581927895940"/></div><span class="image-caption">1581927895940</span></div>
+<ul>
+<li>http全局块：http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等。</li>
+<li>server块：这块和虚拟主机有密切关系，虚拟主机从用户角度看，和一台独立的硬件主机是完全一样的，该技术的产生是为了节省互联网服务器硬件成本。每个 http 块可以包括多个 server 块，而每个 server 块就相当于一个虚拟主机。而每个 server 块也分为全局 server 块，以及可以同时包含多个 locaton 块。<ul>
+<li>全局server块：最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或 IP 配置。</li>
+<li>location块：一个 server 块可以配置多个 location 块。这块的主要作用是基于 Nginx 服务器接收到的请求字符串（例如 server_name/uri-string），对虚拟主机名称（也可以是 IP 别名）之外的字符串（例如 前面的 /uri-string）进行匹配，对特定的请求进行处理。地址定向、数据缓存和应答控制等功能，还有许多第三方模块的配置也在这里进行。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Nginx配置实例"><a href="#Nginx配置实例" class="headerlink" title="Nginx配置实例"></a>Nginx配置实例</h2><h3 id="反向代理-1"><a href="#反向代理-1" class="headerlink" title="反向代理 1"></a>反向代理 1</h3><ol>
+<li><p>实现效果：打开浏览器，在浏览器地址栏输入地址<code>server.test.com</code>，跳转到 liunx 系统 tomcat 主页</p>
+<p>面中。</p>
+</li>
+<li><p>准备工作</p>
+<ol>
+<li><p>在CentOS中安装tomcat，使用默认的端口8080启动服务，即进入tomcat的bin目录中，运行<code>./startup.sh</code>启动tomcat服务器</p>
+</li>
+<li><p>修改防火墙，使其对外开放8080端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --add-port=8080/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在windows中通过浏览器<code>ip:8080</code>访问tomcat服务器</p>
+</li>
+</ol>
+</li>
+<li><p>具体配置</p>
+<ol>
+<li><p>打开windows的host文件，添加<code>192.168.85.129 server.test.com</code>。</p>
+</li>
+<li><p>在nginx进行请求转发的配置</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581939678141.png" class="lazyload" data-srcset="1581939678141.png" srcset="data:image/png;base64,666" alt="1581939678141"/></div><span class="image-caption">1581939678141</span></div>
+</li>
+<li><p>接着重启以下nginx：<code>./nginx -s reload</code>。然后在浏览器中输入<code>server.test.com</code>，就可以得到tomcat的网页：</p>
+<p><img src="1581939968797.png" class="lazyload" data-srcset="1581939968797.png" srcset="data:image/png;base64,666" alt="1581939968797">  </p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="反向代理2"><a href="#反向代理2" class="headerlink" title="反向代理2"></a>反向代理2</h3><ol>
+<li><p>实现效果：使用nginx反向代理，根据访问的路径跳转到不同端口的服务中，nginx监听端口9001，当访问<code>ip:9001/edu</code>直接跳转到<code>127.0.0.1:8080</code>，当访问<code>ip:9001/vod</code>，直接跳转到<code>127.0.0.1:8081</code>。</p>
+</li>
+<li><p>准备工作</p>
+<ol>
+<li>准备两个tomcat服务器，一个配置在8080端口，一个配置在8081端口。修改conf/server.xml里面的两个端口，使得两个tomcat能够同时运行起来。</li>
+<li>创建文件夹和测试文件。创建的文件夹和文件等会在被解析的时候用到。</li>
+</ol>
+</li>
+<li><p>具体配置</p>
+<ol>
+<li><p>找到nginx配置文件，进行反向代理配置：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581940620095.png" class="lazyload" data-srcset="1581940620095.png" srcset="data:image/png;base64,666" alt="1581940620095"/></div><span class="image-caption">1581940620095</span></div>
+</li>
+<li><p>防火墙对外开放9001，8080和8081端口。</p>
+</li>
+<li><p>测试如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581943507419.png" class="lazyload" data-srcset="1581943507419.png" srcset="data:image/png;base64,666" alt="1581943507419"/></div><span class="image-caption">1581943507419</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581943526797.png" class="lazyload" data-srcset="1581943526797.png" srcset="data:image/png;base64,666" alt="1581943526797"/></div><span class="image-caption">1581943526797</span></div>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="负载均衡-1"><a href="#负载均衡-1" class="headerlink" title="负载均衡"></a>负载均衡</h3><ol>
+<li><p>实现效果：浏览器地址栏输入地址<code>ip:9002/edu/</code>，使得后台的服务器均匀负载，将请求平均分发到8080和8081端口的服务器上。</p>
+</li>
+<li><p>准备工作</p>
+<ol>
+<li>准备两台服务器，一台8080，另外一台8081</li>
+<li>在两台tomcat服务器的webapps目录，创建edu文件夹，同时在edu文件里面创建index.html</li>
+</ol>
+</li>
+<li><p>具体配置</p>
+<ol>
+<li><p>找到nginx配置文件，进行负载均衡的配置</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581944619600.png" class="lazyload" data-srcset="1581944619600.png" srcset="data:image/png;base64,666" alt="1581944619600"/></div><span class="image-caption">1581944619600</span></div>
+</li>
+<li><p>防火墙开放9002端口。</p>
+</li>
+<li><p>测试如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581944727364.png" class="lazyload" data-srcset="1581944727364.png" srcset="data:image/png;base64,666" alt="1581944727364"/></div><span class="image-caption">1581944727364</span></div>
+<p><img src="1581944749452.png" class="lazyload" data-srcset="1581944749452.png" srcset="data:image/png;base64,666" alt="1581944749452">   </p>
+</li>
+</ol>
+</li>
+<li><p>Nginx分配服务器策略</p>
+<ol>
+<li><p>轮询（默认）：每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器 down 掉，能自动剔除。</p>
+</li>
+<li><p>权重（weight）：weight 代表权重默认为 1,权重越高被分配的客户端越多。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103434709-133983538-1581944951431.png" class="lazyload" data-srcset="1455597-20191029103434709-133983538-1581944951431.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+</li>
+<li><p>ip_hash：每个请求按访问 ip 的 hash 结果分配，这样每个访客固定访问一个后端服务器。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103440910-1253898902.png" class="lazyload" data-srcset="1455597-20191029103440910-1253898902.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+</li>
+<li><p>fair：按后端服务器的响应时间来分配请求，响应时间短的优先分配。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103448391-1932086344.png" class="lazyload" data-srcset="1455597-20191029103448391-1932086344.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="动静分离-1"><a href="#动静分离-1" class="headerlink" title="动静分离"></a>动静分离</h3><ol>
+<li><p>动静分离：Nginx 动静分离简单来说就是把动态跟静态请求分开，不能理解成只是单纯的把动态页面和静态页面物理分离。严格意义上说应该是动态请求跟静态请求分开，可以理解成使用 Nginx处理静态页面，Tomcat 处理动态页面。动静分离从目前实现角度来讲大致分为两种，一种是纯粹把静态文件独立成单独的域名，放在独立的服务器上，也是目前主流推崇的方案；另外一种方法就是动态跟静态文件混合在一起发布，通过 nginx 来分开。通过 location 指定不同的后缀名实现不同的请求转发。通过 expires 参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires 定义：是给一个资源设定一个过期时间，也就是说无需去服务端验证，直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。（如果经常更新的文件，不建议使用 Expires 来缓存），我这里设置 3d，表示在这 3 天之内访问这个 URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码 304，如果有修改，则直接从服务器重新下载，返回状态码 200。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103503613-506507153.png" class="lazyload" data-srcset="1455597-20191029103503613-506507153.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+</li>
+<li><p>准备工作：在CentOS中，创建/static/www，/static/image文件夹，接着放入静态文件。</p>
+</li>
+<li><p>Nginx配置：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946029645.png" class="lazyload" data-srcset="1581946029645.png" srcset="data:image/png;base64,666" alt="1581946029645"/></div><span class="image-caption">1581946029645</span></div>
+<blockquote>
+<p><code>autoindex</code>能够为目录下的文件自动创建索引。</p>
+</blockquote>
+</li>
+<li><p>效果：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946053128.png" class="lazyload" data-srcset="1581946053128.png" srcset="data:image/png;base64,666" alt="1581946053128"/></div><span class="image-caption">1581946053128</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946068998.png" class="lazyload" data-srcset="1581946068998.png" srcset="data:image/png;base64,666" alt="1581946068998"/></div><span class="image-caption">1581946068998</span></div>
+</li>
+</ol>
+<h3 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h3><p>下面将使用keepalived实现服务器的高可用性。详细的讲解见<strong>Nginx原理</strong>一节。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581947505380.png" class="lazyload" data-srcset="1581947505380.png" srcset="data:image/png;base64,666" alt="1581947505380"/></div><span class="image-caption">1581947505380</span></div>
+<ol>
+<li><p>两台Nginx服务器</p>
+<p>准备两台服务器，在此地址是<code>192.168.85.129</code>和<code>192.168.85.130</code>。然后再在两台服务器上安装Nginx软件。</p>
+</li>
+<li><p>keepalived软件</p>
+<p>使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install keepalived -y</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，可以在/etc/keepalived中找到配置文件。</p>
+</li>
+<li><p>完成高可用的配置</p>
+<ol>
+<li><p>修改/etc/keepalived/keepalived.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id LVS_DEVEL</span><br><span class="line">&#125;</span><br><span class="line">vrrp_script chk_http_port &#123;</span><br><span class="line">    script &quot;&#x2F;usr&#x2F;local&#x2F;src&#x2F;nginx_check.sh&quot;</span><br><span class="line">    interval 2</span><br><span class="line">    weight 2</span><br><span class="line">&#125;</span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface ens33</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 90</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    track_script &#123;</span><br><span class="line">        chk_http_port</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        192.168.85.120</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在/usr/local/src/中添加nginx_check.sh文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">A=`ps -C nginx --no-header | wc -l`</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$A</span> -eq 0 ];<span class="keyword">then</span></span><br><span class="line">        /usr/<span class="built_in">local</span>/nginx/sbin/nginx</span><br><span class="line">        sleep 2</span><br><span class="line">        <span class="keyword">if</span> [`ps -C nginx --no-header | wc -l` -eq 0];<span class="keyword">then</span></span><br><span class="line">                killall keepalived</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>测试</p>
+<ol>
+<li><p>启动nginx：<code>./nginx</code></p>
+</li>
+<li><p>启动keepalived：<code>systemctl start keepalived.service</code></p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581993867642.png" class="lazyload" data-srcset="1581993867642.png" srcset="data:image/png;base64,666" alt="1581993867642"/></div><span class="image-caption">1581993867642</span></div>
+</li>
+<li><p>关闭主服务器上的nginx，再次访问虚拟地址</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581993920791.png" class="lazyload" data-srcset="1581993920791.png" srcset="data:image/png;base64,666" alt="1581993920791"/></div><span class="image-caption">1581993920791</span></div>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="Nginx原理"><a href="#Nginx原理" class="headerlink" title="Nginx原理"></a>Nginx原理</h2><p>Nginx在启动时会以daemon形式在后台运行，采用多进程+异步非阻塞IO事件模型来处理各种连接请求。多进程模型包括一个master进程，多个worker进程，一般worker进程个数是根据服务器CPU核数来决定的。master进程负责管理Nginx本身和其他worker进程。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="6807865-b1413f8b819b7d44.webp" class="lazyload" data-srcset="6807865-b1413f8b819b7d44.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>Master进程作用是读取并验证配置文件nginx.conf，管理worker进程；每一个Worker进程都维护一个线程（避免线程切换），处理连接和请求；注意Worker进程的个数由配置文件决定，一般和CPU个数相关（有利于进程切换），配置几个就有几个Worker进程。</p>
+<p>Nginx热部署的方式：修改配置文件nginx.conf后，重新生成新的worker进程，当然会以新的配置进行处理请求，而且新的请求必须都交给新的worker进程，至于老的worker进程，等把那些以前的请求处理完毕后，kill掉即可。</p>
+<p>Nginx的高并发：Nginx采用了Linux的epoll模型，epoll模型基于事件驱动机制，它可以监控多个事件是否准备完毕，如果OK，那么放入epoll队列中，这个过程是异步的。worker只需要从epoll队列循环处理即可。</p>
+<p>Nginx的高可用性：Keepalived是一个高可用解决方案，主要是用来防止服务器单点发生故障，可以通过和Nginx配合来实现Web服务的高可用（其实，Keepalived不仅仅可以和Nginx配合，还可以和很多其他服务配合）。Keepalived+Nginx实现高可用的思路：第一：请求不要直接打到Nginx上，应该先通过Keepalived（这就是所谓虚拟IP，VIP）第二：Keepalived应该能监控Nginx的生命状态（提供一个用户自定义的脚本，定期检查Nginx进程状态，进行权重变化,，从而实现Nginx故障切换）</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="6807865-d87387daf7a20f64.webp" class="lazyload" data-srcset="6807865-d87387daf7a20f64.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/>http://blog.zsstrike.top/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Nginx/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Nginx</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/&title=Nginx 使用教程 - zsStrike&summary=本章学习如何在 CentOS 7下使用 Nginx 来搭建反向代理和配置动静分离以及负载均衡过程的步骤。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/&title=Nginx 使用教程 - zsStrike&summary=本章学习如何在 CentOS 7下使用 Nginx 来搭建反向代理和配置动静分离以及负载均衡过程的步骤。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/17/Nginx-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/&title=Nginx 使用教程 - zsStrike&summary=本章学习如何在 CentOS 7下使用 Nginx 来搭建反向代理和配置动静分离以及负载均衡过程的步骤。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/18/CentOS-7%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%96%B9%E6%B3%95/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>CentOS 7安装常用软件方法</p>
+          <p class='content'>本文将会在CentOS 7的情况下安装一下常用的开发软件，主要记录在软件安装中遇到的问题和解决问题的方法。
+
+
+概述由于国内的网络等原因，国外的一些资源或者被墙，或者是网络连接的速度慢，这个时候...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/15/%E8%AE%AD%E7%BB%83%E5%92%8C%E8%AF%84%E4%BC%B0/'>
+          <p class='title'>训练和评估<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本节主要从两方面学习模型的训练和评估：使用内建的API进行训练和评估或者是自定义函数实现训练和评估。不管使用哪种方法，不同方式构建的模型的训练和评估方式是一样的。
+
+
+使用内建API 当我们使用...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">Nginx 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E7%AE%80%E4%BB%8B"><span class="toc-text">Nginx简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB"><span class="toc-text">动静分离</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="toc-text">Nginx基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E5%AE%89%E8%A3%85"><span class="toc-text">Nginx安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Nginx常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">Nginx配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B"><span class="toc-text">Nginx配置实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-1"><span class="toc-text">反向代理 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%862"><span class="toc-text">反向代理2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-1"><span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB-1"><span class="toc-text">动静分离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="toc-text">高可用集群</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx%E5%8E%9F%E7%90%86"><span class="toc-text">Nginx原理</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="Nginx 使用教程";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

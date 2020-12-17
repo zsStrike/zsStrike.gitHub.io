@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>通过降维压缩数据 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="在本章中，我们将会学习到三种特征提取的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        通过降维压缩数据
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月4日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4.3k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：19分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="通过降维压缩数据" data-path="/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>在本章中，我们将会学习到三种<strong>特征提取</strong>的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。</p>
+<a id="more"></a>
+
+<h2 id="无监督数据降维技术之主成分分析"><a href="#无监督数据降维技术之主成分分析" class="headerlink" title="无监督数据降维技术之主成分分析"></a>无监督数据降维技术之主成分分析</h2><p><strong>主成分分析</strong>（PCA）是一种广泛应用于不同领域的无监督线性数据转换技术，突出作用是降维。PCA的目标是在高维数据中找到最大方差的方向，并且将数据映射到一个维度不大于原始数据的新的子空间上。</p>
+<p>如果使用PCA技术，我们需要构建一个$ d * k $维的转换矩阵$ W $，从而将原来的d维特征向量转换为k维特征向量（k&lt;d）。PCA算法的步骤如下：</p>
+<ol>
+<li>对原始d维数据做标准化处理</li>
+<li>构造样本的协方差矩阵</li>
+<li>计算协方差矩阵的特征值和相应的特征向量</li>
+<li>选择前k个最大特征对应的特征向量（k为新的特征空间维度）</li>
+<li>通过前k个特征向量构建映射矩阵$ W $</li>
+<li>将原始的d维特征$ x $通过$ W $转换为新的k维特征$ x’ $</li>
+</ol>
+<h3 id="总体方差和贡献方差"><a href="#总体方差和贡献方差" class="headerlink" title="总体方差和贡献方差"></a>总体方差和贡献方差</h3><p>这一小节完成PCA的前四个步骤。</p>
+<p>首先，使用前面用到的葡萄酒数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">df_wine = pd.read_csv(<span class="string">&#x27;https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&#x27;</span>, header=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接着，将数据集划分为训练集和测试集，同时使用<code>StandardScaler</code>来将其标准化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">X, y = df_wine.iloc[:, <span class="number">1</span>:].values, df_wine.iloc[:, <span class="number">0</span>].values</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</span><br><span class="line">sc = StandardScaler()</span><br><span class="line">X_train_std = sc.fit_transform(X_train)</span><br><span class="line">X_test_std = sc.fit_transform(X_test)</span><br></pre></td></tr></table></figure>
+
+<p>接下来构造协方差矩阵，同时求解协方差矩阵的特征值和特征向量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">cov_mat = np.cov(X_train_std.T)</span><br><span class="line">eigen_vals, eigen_vecs = np.linalg.eig(cov_mat)</span><br><span class="line">print(eigen_vals)</span><br><span class="line">&gt;&gt; [<span class="number">4.8923083</span>  <span class="number">2.46635032</span> <span class="number">1.42809973</span> <span class="number">1.01233462</span> <span class="number">0.84906459</span> <span class="number">0.60181514</span></span><br><span class="line">&gt;&gt; <span class="number">0.52251546</span> <span class="number">0.08414846</span> <span class="number">0.33051429</span> <span class="number">0.29595018</span> <span class="number">0.16831254</span> <span class="number">0.21432212</span></span><br><span class="line">&gt;&gt; <span class="number">0.2399553</span> ]</span><br></pre></td></tr></table></figure>
+
+<p>通过使用<code>np.linalg.elg</code>函数，可以得到一个包含有13个特征值的向量（eigen_vals）和一个13 * 13的特征矩阵（eigen_vecs），其中，特征向量以列的方式存在于特征矩阵中。</p>
+<p>由于我们需要将数据压缩到一个新的特征子空间上实现降维，我们只需要选择那些包含最多信息的特征向量组成的子集。在此衡量函数是特征值$ \lambda_j $的方差贡献率：<br>$$<br>\frac{\lambda_j}{\sum_{i=1}^{d}j}<br>$$<br>接下来看一下不同特征值对应的方差贡献率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tot = sum(eigen_vals)</span><br><span class="line">var_exp = [(i / tot) <span class="keyword">for</span> i <span class="keyword">in</span> sorted(eigen_vals, reverse=<span class="literal">True</span>)]</span><br><span class="line">print(var_exp)</span><br><span class="line">&gt;&gt; [<span class="number">0.3732964772349068</span>, <span class="number">0.18818926106599568</span>, <span class="number">0.10896790724757796</span>, <span class="number">0.07724389477124863</span>, <span class="number">0.0647859460182618</span>, <span class="number">0.045920138114781475</span>, <span class="number">0.03986935597634714</span>, <span class="number">0.025219142607261574</span>, <span class="number">0.022581806817679666</span>, <span class="number">0.01830924471952691</span>, <span class="number">0.016353362655051454</span>, <span class="number">0.01284270583749274</span>, <span class="number">0.006420756933868311</span>]</span><br></pre></td></tr></table></figure>
+
+<p>可以知道，第一主成分占方差总和的$ 40% $左右。</p>
+<h3 id="特征转换"><a href="#特征转换" class="headerlink" title="特征转换"></a>特征转换</h3><p>接下来继续执行PCA方法的最后三个步骤。</p>
+<p>首先，按照特征值的降序排列特征对：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eigen_pairs = [(np.abs(eigen_vals[i]), eigen_vecs[:, i]) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(eigen_vals))]</span><br><span class="line">eigen_pairs.sort(reverse=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们只选择两个对应的最大的特征向量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">w = np.hstack((eigen_pairs[<span class="number">0</span>][<span class="number">1</span>][:, np.newaxis],</span><br><span class="line">              eigen_pairs[<span class="number">1</span>][<span class="number">1</span>][:, np.newaxis]))</span><br><span class="line">print(w)</span><br><span class="line">&gt;&gt; [[ <span class="number">0.14669811</span>  <span class="number">0.50417079</span>]</span><br><span class="line">&gt;&gt;  [<span class="number">-0.24224554</span>  <span class="number">0.24216889</span>]</span><br><span class="line">&gt;&gt;  [<span class="number">-0.02993442</span>  <span class="number">0.28698484</span>]</span><br><span class="line">&gt;&gt;  [<span class="number">-0.25519002</span> <span class="number">-0.06468718</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.12079772</span>  <span class="number">0.22995385</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.38934455</span>  <span class="number">0.09363991</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.42326486</span>  <span class="number">0.01088622</span>]</span><br><span class="line">&gt;&gt;  [<span class="number">-0.30634956</span>  <span class="number">0.01870216</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.30572219</span>  <span class="number">0.03040352</span>]</span><br><span class="line">&gt;&gt;  [<span class="number">-0.09869191</span>  <span class="number">0.54527081</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.30032535</span> <span class="number">-0.27924322</span>]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.36821154</span> <span class="number">-0.174365</span>  ]</span><br><span class="line">&gt;&gt;  [ <span class="number">0.29259713</span>  <span class="number">0.36315461</span>]]</span><br></pre></td></tr></table></figure>
+
+<p>从而我们现在得到了一个13*2的映射矩阵$ W $。接下来转换原始的数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_train_pca = X_train_std.dot(w)</span><br></pre></td></tr></table></figure>
+
+<p>最后，新的数据集被保存在124*2的矩阵中，接下来对其进行可视化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">colors = [<span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line">markers = [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> l, c, m <span class="keyword">in</span> zip(np.unique(y_train), colors, markers):</span><br><span class="line">    plt.scatter(X_train_pca[y_train==l, <span class="number">0</span>], X_train_pca[y_train==l, <span class="number">1</span>], c=c, label=l, marker=m)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;PC 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;PC 2&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Tue,%2004%20Feb%202020%20184309.png" class="lazyload" data-srcset="Tue,%2004%20Feb%202020%20184309.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从上图可以很直观的看到，线性分类器能够对其有很好的划分。</p>
+<h3 id="使用scikit-learn进行主成分分析"><a href="#使用scikit-learn进行主成分分析" class="headerlink" title="使用scikit-learn进行主成分分析"></a>使用scikit-learn进行主成分分析</h3><p>我们先使用PCA对葡萄酒数据做预处理，然后再使用逻辑斯蒂回归模型对转换后的数据进行分类，最后绘制出散点图：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"></span><br><span class="line">pca = PCA(n_components=<span class="number">2</span>)</span><br><span class="line">X_train_pca = pca.fit_transform(X_train_std)</span><br><span class="line">X_test_pca = pca.transform(X_test_std)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">colors = [<span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line">markers = [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> l, c, m <span class="keyword">in</span> zip(np.unique(y_train), colors, markers):</span><br><span class="line">    plt.scatter(X_train_pca[y_train==l, <span class="number">0</span>], X_train_pca[y_train==l, <span class="number">1</span>], c=c, label=l, marker=m)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;PC 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;PC 2&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Tue,%2004%20Feb%202020%20193047.png" class="lazyload" data-srcset="Tue,%2004%20Feb%202020%20193047.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>比较该图和上一节中的图像，可以发现上图实际上就是我们自己完成的PCA图沿着PC1轴翻转的结果。出现此差异的原因在于特征分析方法：特征向量为正或者为负。</p>
+<p>接下来使用逻辑斯蒂回归模型进行训练，并且得到训练结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line">lr = LogisticRegression()</span><br><span class="line">lr.fit(X_train_pca, y_train)</span><br><span class="line">y_pred = lr.predict(X_test_pca)</span><br><span class="line">accuracy_score(y_test, y_pred)</span><br><span class="line">&gt;&gt; <span class="number">0.9814814814814815</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现的逻辑斯蒂回归模型的拟合率很优良。</p>
+<h2 id="通过线性判别分析压缩无监督数据"><a href="#通过线性判别分析压缩无监督数据" class="headerlink" title="通过线性判别分析压缩无监督数据"></a>通过线性判别分析压缩无监督数据</h2><p><strong>线性判别分析</strong>（LDA）是一种可作为特征抽取的技术，它可以提高数据分析过程中的计算效率，同时，对于不适用于正则化的模型，它可以降低因维度灾难带来的过拟合。</p>
+<p>LDA方法的步骤如下：</p>
+<ol>
+<li>对d为数据集进行标准化处理</li>
+<li>对于每一类别，计算d维的均值向量</li>
+<li>构造类间的散布矩阵$ S_{B} $以及类内的散布举证$ S_{W} $</li>
+<li>计算矩阵$ s_{W}^{-1}S_{B} $的特征值及对应的特征向量</li>
+<li>选取前k个特征值对应的特征向量，构造一个d*k维的转换矩阵$ W $</li>
+<li>使用转换矩阵$ W $将样本映射到新的特征子空间中</li>
+</ol>
+<h3 id="计算散布矩阵"><a href="#计算散布矩阵" class="headerlink" title="计算散布矩阵"></a>计算散布矩阵</h3><p>葡萄酒数据我们已经经过标准化处理，接下来求解均值向量$ m_i $：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">np.set_printoptions(precision=<span class="number">4</span>)</span><br><span class="line">mean_vecs = []</span><br><span class="line"><span class="keyword">for</span> label <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">4</span>):</span><br><span class="line">    mean_vecs.append(np.mean(X_train_std[y_train==label], axis=<span class="number">0</span>))</span><br><span class="line">print(mean_vecs)</span><br><span class="line">&gt;&gt; [array([ <span class="number">0.9259</span>, <span class="number">-0.3091</span>,  <span class="number">0.2592</span>, <span class="number">-0.7989</span>,  <span class="number">0.3039</span>,  <span class="number">0.9608</span>,  <span class="number">1.0515</span>,</span><br><span class="line">&gt;&gt;         <span class="number">-0.6306</span>,  <span class="number">0.5354</span>,  <span class="number">0.2209</span>,  <span class="number">0.4855</span>,  <span class="number">0.798</span> ,  <span class="number">1.2017</span>]),</span><br><span class="line">&gt;&gt;  array([<span class="number">-0.8727</span>, <span class="number">-0.3854</span>, <span class="number">-0.4437</span>,  <span class="number">0.2481</span>, <span class="number">-0.2409</span>, <span class="number">-0.1059</span>,  <span class="number">0.0187</span>,</span><br><span class="line">&gt;&gt;         <span class="number">-0.0164</span>,  <span class="number">0.1095</span>, <span class="number">-0.8796</span>,  <span class="number">0.4392</span>,  <span class="number">0.2776</span>, <span class="number">-0.7016</span>]),</span><br><span class="line">&gt;&gt;  array([ <span class="number">0.1637</span>,  <span class="number">0.8929</span>,  <span class="number">0.3249</span>,  <span class="number">0.5658</span>, <span class="number">-0.01</span>  , <span class="number">-0.9499</span>, <span class="number">-1.228</span> ,</span><br><span class="line">&gt;&gt;          <span class="number">0.7436</span>, <span class="number">-0.7652</span>,  <span class="number">0.979</span> , <span class="number">-1.1698</span>, <span class="number">-1.3007</span>, <span class="number">-0.3912</span>])]</span><br></pre></td></tr></table></figure>
+
+<p>通过均值向量，我们计算一下类内散布矩阵$ S_W $:<br>$$<br>S_W = \sum_{i=1}^cS_i<br>$$<br>这可以通过累加各类别i的散步矩阵$ S_i $来计算：<br>$$<br>S_i = \sum_{x \in D_i}^{c}(x-m_i)(x-m_i)^T<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="number">13</span></span><br><span class="line">S_W = np.zeros((d, d))</span><br><span class="line"><span class="keyword">for</span> label, mv <span class="keyword">in</span> zip(range(<span class="number">1</span>, <span class="number">4</span>), mean_vecs):</span><br><span class="line">    class_scater = np.zeros((d, d))</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> X[y==label]:</span><br><span class="line">        row, mv = row.reshape(d, <span class="number">1</span>), mv.reshape(d, <span class="number">1</span>)</span><br><span class="line">        class_scater += (row - mv).dot((row - mv).T)</span><br><span class="line">    S_W += class_scater</span><br><span class="line">S_W.shape</span><br><span class="line">&gt;&gt; (<span class="number">13</span>, <span class="number">13</span>)</span><br></pre></td></tr></table></figure>
+
+<p>此前，我们假定对散步矩阵计算时，曾假设训练集的类标是均匀分布的，但是，通过以下程序，我们发现其不遵守这个假设：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.bincount(y_train)</span><br><span class="line">&gt;&gt; array([ <span class="number">0</span>, <span class="number">40</span>, <span class="number">49</span>, <span class="number">35</span>], dtype=int64)</span><br></pre></td></tr></table></figure>
+
+<p>因此，在我们通过累加方式计算散布矩阵$ S_{W} $前，需要对各类别的散步矩阵$ S_i $做缩放处理。但采用此种方式时，此时散布矩阵和协方差矩阵计算方式相同。协方差矩阵可以看作是归一化的散布矩阵：<br>$$<br>\frac{1}{N_i}S_{W} = \frac{1}{N_i}\sum_{x \in D_i}^c(x-m_i)(x-m_i)^T<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d = <span class="number">13</span></span><br><span class="line">S_W = np.zeros((d, d))</span><br><span class="line"><span class="keyword">for</span> label, mv <span class="keyword">in</span> zip(range(<span class="number">1</span>, <span class="number">4</span>), mean_vecs):</span><br><span class="line">    class_scater = np.cov(X_train_std[y_train==label].T)</span><br><span class="line">    S_W += class_scater</span><br><span class="line">S_W.shape</span><br><span class="line">&gt;&gt; (<span class="number">13</span>, <span class="number">13</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来计算类间散布矩阵$ S_B $:<br>$$<br>S_B = \sum_{i=1}^cN_i(m_i-m)(m_i-m)^T<br>$$<br>其中，m是全局均值，他在计算时用到了所有类别中的全部样本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mean_overall = np.mean(X_train_std, axis=<span class="number">0</span>)</span><br><span class="line">d = <span class="number">13</span></span><br><span class="line">S_B = np.zeros((d, d))</span><br><span class="line"><span class="keyword">for</span> i, mean_vec <span class="keyword">in</span> enumerate(mean_vecs):</span><br><span class="line">    n = X[y==i+<span class="number">1</span>, :].shape[<span class="number">0</span>]</span><br><span class="line">    mean_vec = mean_vec.reshape(d, <span class="number">1</span>)</span><br><span class="line">    mean_overall = mean_overall.reshape(d, <span class="number">1</span>)</span><br><span class="line">    S_B += n * (mean_vec - mean_overall).dot((mean_vec - mean_overall).T)</span><br><span class="line">S_B.shape</span><br><span class="line">&gt;&gt; (<span class="number">13</span>, <span class="number">13</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="在新特征子空间上选取线性判别算法"><a href="#在新特征子空间上选取线性判别算法" class="headerlink" title="在新特征子空间上选取线性判别算法"></a>在新特征子空间上选取线性判别算法</h3><p>LDA余下的步骤和PCA的步骤相似：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">eigen_vals, eigen_vecs = np.linalg.eig(np.linalg.inv(S_W).dot(S_B))</span><br><span class="line">eigen_pairs = [(np.abs(eigen_vals[i]), eigen_vecs[:, i]) <span class="keyword">for</span> i <span class="keyword">in</span> range(len(eigen_vals))]</span><br><span class="line">eigen_pairs = sorted(eigen_pairs, key=<span class="keyword">lambda</span> k: k[<span class="number">0</span>], reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">for</span> eigen_pair <span class="keyword">in</span> eigen_pairs:</span><br><span class="line">    print(eigen_pair[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<p>得到的结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">643.0153843460517</span></span><br><span class="line"><span class="number">225.08698185416256</span></span><br><span class="line"><span class="number">8.002675183788468e-14</span></span><br><span class="line"><span class="number">5.757534614184537e-14</span></span><br><span class="line"><span class="number">3.5105079604736804e-14</span></span><br><span class="line"><span class="number">3.4638958368304884e-14</span></span><br><span class="line"><span class="number">2.587811510007498e-14</span></span><br><span class="line"><span class="number">2.587811510007498e-14</span></span><br><span class="line"><span class="number">2.4449817310582036e-14</span></span><br><span class="line"><span class="number">1.6532199129716054e-14</span></span><br><span class="line"><span class="number">8.331225171347768e-15</span></span><br><span class="line"><span class="number">2.3238388797036527e-15</span></span><br><span class="line"><span class="number">6.522430076120113e-16</span></span><br></pre></td></tr></table></figure>
+
+<p>从上述输出来看，我们只得到了两个非零特征值（实际得到的3-13个特征值并未严格为0，这是由numpy的浮点数运算导致的），说明只有前面两个特征值对应的特征几乎包含了葡萄酒训练数据集中的全部有用信息。</p>
+<p>接下来构造转换矩阵：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">w = np.hstack((eigen_pairs[<span class="number">0</span>][<span class="number">1</span>][:, np.newaxis].real, eigen_pairs[<span class="number">1</span>][<span class="number">1</span>][:, np.newaxis].real))</span><br><span class="line">w</span><br><span class="line">&gt;&gt; array([[<span class="number">-0.0707</span>,  <span class="number">0.3778</span>],</span><br><span class="line">&gt;&gt;        [ <span class="number">0.0359</span>,  <span class="number">0.2223</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.0263</span>,  <span class="number">0.3813</span>],</span><br><span class="line">&gt;&gt;        [ <span class="number">0.1875</span>, <span class="number">-0.2955</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.0033</span>, <span class="number">-0.0143</span>],</span><br><span class="line">&gt;&gt;        [ <span class="number">0.2328</span>, <span class="number">-0.0151</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.7719</span>, <span class="number">-0.2149</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.0803</span>, <span class="number">-0.0726</span>],</span><br><span class="line">&gt;&gt;        [ <span class="number">0.0896</span>, <span class="number">-0.1767</span>],</span><br><span class="line">&gt;&gt;        [ <span class="number">0.1815</span>,  <span class="number">0.2909</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.0631</span>, <span class="number">-0.2376</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.3794</span>, <span class="number">-0.0867</span>],</span><br><span class="line">&gt;&gt;        [<span class="number">-0.3355</span>,  <span class="number">0.586</span> ]])</span><br></pre></td></tr></table></figure>
+
+<h3 id="将样本映射到新的特征空间"><a href="#将样本映射到新的特征空间" class="headerlink" title="将样本映射到新的特征空间"></a>将样本映射到新的特征空间</h3><p>通过上一节中构建的转换矩阵$ W $，我们来对原始数据进行转换：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">X_train_lda = X_train_std.dot(w)</span><br><span class="line">colors = [<span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line">markers = [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> l, c, m <span class="keyword">in</span> zip(np.unique(y_train), colors, markers):</span><br><span class="line">    plt.scatter(X_train_lda[y_train==l, <span class="number">0</span>], X_train_lda[y_train==l, <span class="number">1</span>], c=c, label=l, marker=m)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;LD 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;LD 2&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Tue,%2004%20Feb%202020%20211842.png" class="lazyload" data-srcset="Tue,%2004%20Feb%202020%20211842.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>通过图像可知，三个葡萄酒类在新的特征子空间上是线性可分的。</p>
+<h3 id="使用scikit-laern进行LDA分析"><a href="#使用scikit-laern进行LDA分析" class="headerlink" title="使用scikit-laern进行LDA分析"></a>使用scikit-laern进行LDA分析</h3><p>接下来，看一下scikit-laern中对LDA类的实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.discriminant_analysis <span class="keyword">import</span> LinearDiscriminantAnalysis <span class="keyword">as</span> LDA</span><br><span class="line">lda = LDA(n_components=<span class="number">2</span>)</span><br><span class="line">X_train_lda = lda.fit_transform(X_train_std, y_train)</span><br><span class="line">colors = [<span class="string">&#x27;r&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line">markers = [<span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> l, c, m <span class="keyword">in</span> zip(np.unique(y_train), colors, markers):</span><br><span class="line">    plt.scatter(X_train_lda[y_train==l, <span class="number">0</span>], X_train_lda[y_train==l, <span class="number">1</span>], c=c, label=l, marker=m)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;LD 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;LD 2&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Tue,%2004%20Feb%202020%20212606.png" class="lazyload" data-srcset="Tue,%2004%20Feb%202020%20212606.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>此时看一下逻辑斯蒂回归模型的预测准确度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lr = LogisticRegression()</span><br><span class="line">lr = lr.fit(X_train_lda, y_train)</span><br><span class="line">X_test_lda = lda.fit_transform(X_test_std, y_test)</span><br><span class="line">y_pred = lr.predict(X_test_lda)</span><br><span class="line">accuracy_score(y_pred, y_test)</span><br><span class="line">&gt;&gt; <span class="number">1.0</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，逻辑斯蒂回归模型在测试数据集上对样本分类可谓完美。</p>
+<h2 id="使用核主成分分析进行非线性映射"><a href="#使用核主成分分析进行非线性映射" class="headerlink" title="使用核主成分分析进行非线性映射"></a>使用核主成分分析进行非线性映射</h2><p>许多机器学习算法都假定输入数据是线性可分的，但是在现实世界中，大多数的数据是线性不可分的，针对此类问题，使用PCA或者LDA等降维技术，将其转化为线性问题并不是最好的方法。在本节中，我们将了解一下利用核技巧的PCA，或者称其为核PCA，这和第三章中我们介绍的核支持向量机的概念有一定的联系。使用核PCA，我们将学习如何将非线性可分的数据转换到一个适合对其进行线性分类的新的低维子空间中。</p>
+<h3 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h3><p>通过核PCA，我们能够得到已经映射到各成分的样本，而不像标准PCA那样去构建一个转换矩阵。简单地说，可以将核函数理解为：通过两个向量点积来度量向量间相似度的函数。最常用的核函数有：</p>
+<ul>
+<li><p>多项式核：<br>$$<br>k(x^i, x^j) = (x^{iT}x^j + \theta)^p<br>$$<br>其中，阈值$ \theta $和幂的值$ p $需要自行定义。</p>
+</li>
+<li><p>双曲正切（sigmoid）核：<br>$$<br>k(x^i, x^j) = thah(\eta x^{iT}x^j+\theta)<br>$$</p>
+</li>
+<li><p>径向基核函数（RBF）或者称为高斯核函数：<br>$$<br>k(x^i, x^j) = exp\left(-\frac{||x^i-x^j||^2}{2\sigma^2}\right)<br>= exp(-\gamma||x^i - x^j||^2)<br>$$</p>
+<p>基于RBF核的PCA可以通过如下三个步骤实现：</p>
+</li>
+</ul>
+<ol>
+<li><p>为了计算核矩阵$ k $，我们需要做如下计算：<br>$$<br>k(x^i,x^j) = = exp(-\gamma||x^i - x^j||^2)<br>$$<br>我们需要计算任意两个样本对之间的值：<br>$$<br>K = \begin{bmatrix}<br>k(x^1,x^1) &amp; k(x^1, x^2) &amp; \cdots &amp; k(x^1, x^n)\<br>k(x^2,x^1) &amp; k(x^2, x^2) &amp; \cdots &amp; k(x^2, x^n)\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots\<br>k(x^n,x^1) &amp; k(x^n, x^2) &amp; \cdots &amp; k(x^n, x^n)\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>通过如下公式，使得核矩阵$ k $更为聚集：<br>$$<br>K’ = K-l_nK-Kl_n+l_nKl_n<br>$$<br>其中， $ l_n $是一个n*n的矩阵，其所有的值都是$ \frac{1}{n} $。</p>
+</li>
+<li><p>将聚集后的核矩阵的特征值按照降序排列，选择前k个特征值对应的特征向量。和标准PCA不同，这里的特征向量不是主成分轴，而是将样本映射到这些轴上。</p>
+</li>
+</ol>
+<h3 id="使用Python实现主成分分析"><a href="#使用Python实现主成分分析" class="headerlink" title="使用Python实现主成分分析"></a>使用Python实现主成分分析</h3><p>接下来，借助SciPy和NumPy的函数，我们手动实现一个核PCA：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> pdist, squareform</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> exp</span><br><span class="line"><span class="keyword">from</span> scipy.linalg <span class="keyword">import</span> eigh</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rbf_kernel_pca</span>(<span class="params">X, gamma, n_components</span>):</span></span><br><span class="line">    sq_dists = pdist(X, <span class="string">&#x27;sqeuclidean&#x27;</span>)</span><br><span class="line">    mat_sq_dists = squareform(sq_dists)</span><br><span class="line">    K = exp(-gamma * mat_sq_dists)</span><br><span class="line">    N = K.shape[<span class="number">0</span>]</span><br><span class="line">    one_n = np.ones((N, N)) / N</span><br><span class="line">    K = K - one_n.dot(K) - k.dot(one_n) + one_n.dot(K).dot(one_n)</span><br><span class="line">    eigvals, eigvecs = eigh(K)</span><br><span class="line">    X_pc = np.column_stack((eigvecs[:, -i] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n_components + <span class="number">1</span>)))</span><br><span class="line">    <span class="keyword">return</span> X_pc</span><br></pre></td></tr></table></figure>
+
+<p>接下来查看几个实例。</p>
+<ol>
+<li><p>实例一：分离半月形数据</p>
+<p>首先创建一个包含100个样本点的二维数据集，以两个半月形状表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_moons</span><br><span class="line">X, y = make_moons(n_samples=<span class="number">100</span>, random_state=<span class="number">123</span>)</span><br><span class="line">plt.scatter(X[y==<span class="number">0</span>, <span class="number">0</span>], X[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X[y==<span class="number">1</span>, <span class="number">0</span>], X[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20130704.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20130704.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>显然，这两个半月形不是线性可分的，我们的目标是通过核PCA将这两个半月形数据展开，使得数据集成为适用于某一线性分类器的输入数据。</p>
+<p>首先，我们看一下经过标准PCA处理的数据集的图像：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line">scikit_pca = PCA(n_components=<span class="number">2</span>)</span><br><span class="line">X_spca = scikit_pca.fit_transform(X)</span><br><span class="line">plt.scatter(X_spca[y==<span class="number">0</span>, <span class="number">0</span>], X_spca[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X_spca[y==<span class="number">1</span>, <span class="number">0</span>], X_spca[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20131323.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20131323.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现，经过标准化PCA处理后，线性分类器未必能很好地发挥作用。</p>
+<p>接下来尝试一下核PCA函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X_kpca = rbf_kernel_pca(X, gamma=<span class="number">15</span>, n_components=<span class="number">2</span>)</span><br><span class="line">plt.scatter(X_kpca[y==<span class="number">0</span>, <span class="number">0</span>], X_kpca[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X_kpca[y==<span class="number">1</span>, <span class="number">0</span>], X_kpca[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20131739.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20131739.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以看到，此时两个类别是线性可分的。</p>
+</li>
+<li><p>示例二：分离同心圆</p>
+<p>接下俩看一下非线性相关的另外一个例子：同心圆：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_circles</span><br><span class="line">X, y = make_circles(n_samples=<span class="number">1000</span>, random_state=<span class="number">123</span>, noise=<span class="number">0.1</span>, factor=<span class="number">0.2</span>)</span><br><span class="line">plt.scatter(X[y==<span class="number">0</span>, <span class="number">0</span>], X[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X[y==<span class="number">1</span>, <span class="number">0</span>], X[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20132116.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20132116.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>接下来使用核PCA，观察数据集分布：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X_kpca = rbf_kernel_pca(X, gamma=<span class="number">15</span>, n_components=<span class="number">2</span>)</span><br><span class="line">plt.scatter(X_kpca[y==<span class="number">0</span>, <span class="number">0</span>], X_kpca[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X_kpca[y==<span class="number">1</span>, <span class="number">0</span>], X_kpca[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20132252.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20132252.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现，此时两个类别的数据是线性可分的。</p>
+</li>
+</ol>
+<h3 id="映射新的数据点"><a href="#映射新的数据点" class="headerlink" title="映射新的数据点"></a>映射新的数据点</h3><p>在标准PCA方法中，我们通过转换矩阵和输入样本之间的点积来对数据进行映射。但是在核PCA中，该如何转换型的数据点呢？实际上，如果我们希望将新的样本$ x’ $映射到此主成分轴，需要进行如下计算：<br>$$<br>\phi(x’)^Tv<br>$$<br>幸运的是，我们可以使用核技巧，这样就无需精确计算映射$ \phi(x’)^Tv $。通过以下公式计算：<br>$$<br>\phi(x’)^Tv = \sum_ia^ik(x’, x^i)^T<br>$$<br>其中，核矩阵K的特征向量$ a $和特征值$ \lambda $关系如下：<br>$$<br>Ka = \lambda a<br>$$<br>通过如下程序实现映射：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">project_x</span>(<span class="params">x_new, X, gamma, alphas, lambdas</span>):</span></span><br><span class="line">    pair_dist = np.array([np.sum(x_new - row)**<span class="number">2</span> <span class="keyword">for</span> row <span class="keyword">in</span> X])</span><br><span class="line">    k = np.exp(-gamma * pair_dist)</span><br><span class="line">    <span class="keyword">return</span> k.dot(alphas / lambdas)</span><br></pre></td></tr></table></figure>
+
+<p>其中，alphas是前k个特征向量，lambdas是前k个对应的特征值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alphas = np.column_stack((eigvecs[:, i] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n_components+<span class="number">1</span>)))</span><br><span class="line">lambdas = [eigvals[-i] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n_components+<span class="number">1</span>)]</span><br></pre></td></tr></table></figure>
+
+<p>将上述两条语句加到<code>rbf_kernel_pca</code>函数末端并且返回他们的值即可。</p>
+<h3 id="scikit-learn中的核主成分分析"><a href="#scikit-learn中的核主成分分析" class="headerlink" title="scikit-learn中的核主成分分析"></a>scikit-learn中的核主成分分析</h3><p>使用scikit-learn中的API实现核PCA如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> KernelPCA</span><br><span class="line">X, y = make_moons(n_samples=<span class="number">100</span>, random_state=<span class="number">123</span>)</span><br><span class="line">scikit_kpca = KernelPCA(n_components=<span class="number">2</span>, kernel=<span class="string">&#x27;rbf&#x27;</span>, gamma=<span class="number">15</span>)</span><br><span class="line">X_skpca = scikit_kpca.fit_transform(X)</span><br><span class="line">plt.scatter(X_skpca[y==<span class="number">0</span>, <span class="number">0</span>], X_skpca[y==<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.scatter(X_skpca[y==<span class="number">1</span>, <span class="number">0</span>], X_skpca[y==<span class="number">1</span>, <span class="number">1</span>], color=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Wed,%2005%20Feb%202020%20141751.png" class="lazyload" data-srcset="Wed,%2005%20Feb%202020%20141751.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从上图来看，scikit-learn中KernelPCA得到的结果核我们手动实现的结果相一致。</p>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/>http://blog.zsstrike.top/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/&title=通过降维压缩数据 - zsStrike&summary=在本章中，我们将会学习到三种特征提取的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/&title=通过降维压缩数据 - zsStrike&summary=在本章中，我们将会学习到三种特征提取的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/&title=通过降维压缩数据 - zsStrike&summary=在本章中，我们将会学习到三种特征提取的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/05/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98%E5%AE%9E%E6%88%98/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>模型评估与参数调优实战</p>
+          <p class='content'>本章中，我们将使用代码进行实践，通过对算法进行调优来构建性能良好的机器学习模型，并对模型的性能进行评估。
+
+
+基于流水线的工作流本节学习scikit-learn中的Pipeline类，它使得我们...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/'>
+          <p class='title'>数据预处理<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。
+
+
+缺失数据的处理在采集数据的时候，可能有的数据会有缺失的情况。通常我们见到的缺失值是数据表中的空值，或...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%9B%91%E7%9D%A3%E6%95%B0%E6%8D%AE%E9%99%8D%E7%BB%B4%E6%8A%80%E6%9C%AF%E4%B9%8B%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90"><span class="toc-text">无监督数据降维技术之主成分分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E4%BD%93%E6%96%B9%E5%B7%AE%E5%92%8C%E8%B4%A1%E7%8C%AE%E6%96%B9%E5%B7%AE"><span class="toc-text">总体方差和贡献方差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E8%BD%AC%E6%8D%A2"><span class="toc-text">特征转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8scikit-learn%E8%BF%9B%E8%A1%8C%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90"><span class="toc-text">使用scikit-learn进行主成分分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90%E5%8E%8B%E7%BC%A9%E6%97%A0%E7%9B%91%E7%9D%A3%E6%95%B0%E6%8D%AE"><span class="toc-text">通过线性判别分析压缩无监督数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%95%A3%E5%B8%83%E7%9F%A9%E9%98%B5"><span class="toc-text">计算散布矩阵</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E6%96%B0%E7%89%B9%E5%BE%81%E5%AD%90%E7%A9%BA%E9%97%B4%E4%B8%8A%E9%80%89%E5%8F%96%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E7%AE%97%E6%B3%95"><span class="toc-text">在新特征子空间上选取线性判别算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%A0%B7%E6%9C%AC%E6%98%A0%E5%B0%84%E5%88%B0%E6%96%B0%E7%9A%84%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4"><span class="toc-text">将样本映射到新的特征空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8scikit-laern%E8%BF%9B%E8%A1%8CLDA%E5%88%86%E6%9E%90"><span class="toc-text">使用scikit-laern进行LDA分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%A0%B8%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90%E8%BF%9B%E8%A1%8C%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%98%A0%E5%B0%84"><span class="toc-text">使用核主成分分析进行非线性映射</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-text">核函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Python%E5%AE%9E%E7%8E%B0%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90"><span class="toc-text">使用Python实现主成分分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%A0%E5%B0%84%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E7%82%B9"><span class="toc-text">映射新的数据点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#scikit-learn%E4%B8%AD%E7%9A%84%E6%A0%B8%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90"><span class="toc-text">scikit-learn中的核主成分分析</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="通过降维压缩数据";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

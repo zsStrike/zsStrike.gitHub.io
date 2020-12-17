@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>集成学习之组合不同的模型 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="本章中，我们将会学习如何构建一组分类器的集合，使得整体分类效果优于其中任意一个单独的分类器。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        集成学习之组合不同的模型
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月6日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：18分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="集成学习之组合不同的模型" data-path="/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本章中，我们将会学习如何构建一组分类器的集合，使得整体分类效果优于其中任意一个单独的分类器。</p>
+<a id="more"></a>
+
+<h2 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h2><p><strong>集成方法</strong>（ensemble method）的目标是：将不同的分类器组合成一个元分类器，与包含于其中的单个分类器相比，元分类器具有更好的泛化性能。</p>
+<p>本章中介绍的几种流行的集成方法，它们都使用了<strong>多数投票</strong>（majority voting）。多数投票原则是将大多数分类器预测的结果作为最终的预测指标。基于训练集，我们首先训练m个不同的成员分类器（$ C_1, \cdots, C_m $），接着我们将新的未知数据$ x $输入，然后对所有分类器$ C_j $的预测类标进行汇总，选择出得票率最高的类标$ \hat{y} $：<br>$$<br>\hat{y} = mode{C_1(x), \cdots, C_m(x)}<br>$$</p>
+<blockquote>
+<p>mode函数：众数函数，返回出现次数最多的值。</p>
+</blockquote>
+<p>另外，由统计学知识得到，当成员分类器出错率低于$ 50% $时，集成分类器的出错率要低于单个分类器。</p>
+<h2 id="实现一个简单的多数投票分类器"><a href="#实现一个简单的多数投票分类器" class="headerlink" title="实现一个简单的多数投票分类器"></a>实现一个简单的多数投票分类器</h2><p>集成算法允许我们使用单独的权重对不同分类算法进行组合，可以将加权多数投票记为：<br>$$<br>\hat{y} = argmax_i\sum_{j=1}^{m}w_j\chi_A(C_j(x)=i)<br>$$<br>其中，$ w_j $是$ C_j $分类器的权重。</p>
+<blockquote>
+<p>argmax是一种函数，是对函数求参数(集合)的函数。当我们有另一个函数$ y=f(x) $时，若有结果$ x_0= argmax(f(x)) $，则表示当函数$ argmax(f(x)) $取$ x=x_0 $的时候，得到f(x)取值范围的最大值；若有多个点使得f(x)取得相同的最大值，那么$ argmax(f(x)) $的结果就是一个点集。</p>
+</blockquote>
+<p>为了使用Python代码实现加权多数投票，我们可以使用NumPy中的argmax和bincount函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">np.argmax(np.bincount([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],  weights=[<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.6</span>]))</span><br><span class="line">&gt;&gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>在实际应用中，我们可以将原来的类标转换为预测类表的概率，这样修正公式如下：<br>$$<br>\hat{y} = argmax_i\sum_{j=1}^mw_jp_{ij}<br>$$<br>其中，$ p_{ij} $是第j个分类器预测样本类标为i的概率。</p>
+<p>为实现基于类别预测概率的加权多数投票，我们可以使用如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ex = np.array([[<span class="number">0.9</span>, <span class="number">0.1</span>],</span><br><span class="line">              [<span class="number">0.8</span>, <span class="number">0.2</span>],</span><br><span class="line">              [<span class="number">0.4</span>, <span class="number">0.6</span>]])</span><br><span class="line">p = np.average(ex, axis=<span class="number">0</span>, weights=[<span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.6</span>])</span><br><span class="line">print(p, np.argmax(p))</span><br><span class="line">&gt;&gt; [<span class="number">0.58</span> <span class="number">0.42</span>] <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>综上，我们可以实现<code>MajorityVoteClassifier</code>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.base <span class="keyword">import</span> BaseEstimator</span><br><span class="line"><span class="keyword">from</span> sklearn.base <span class="keyword">import</span> ClassifierMixin</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> six</span><br><span class="line"><span class="keyword">from</span> sklearn.base <span class="keyword">import</span> clone</span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> _name_estimators</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MajorityVoteClassifier</span>(<span class="params">BaseEstimator, ClassifierMixin</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, classifiers, vote=<span class="string">&#x27;classlabel&#x27;</span>, weights=None</span>):</span></span><br><span class="line">        self.classifiers = classifiers</span><br><span class="line">        self.named_classifiers = &#123;key: value <span class="keyword">for</span> key, value <span class="keyword">in</span> _name_estimators(classifiers)&#125;</span><br><span class="line">        self.vote = vote</span><br><span class="line">        self.weights = weights</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span>(<span class="params">self, X, y</span>):</span></span><br><span class="line">        self.labelenc_ = LabelEncoder()</span><br><span class="line">        self.labelenc_.fit(y)</span><br><span class="line">        self.classes_ = self.labelenc_.classes_</span><br><span class="line">        self.classifiers_ = []</span><br><span class="line">        <span class="keyword">for</span> clf <span class="keyword">in</span> self.classifiers:</span><br><span class="line">            fitted_clf = clone(clf).fit(X, self.labelenc_.transform(y))</span><br><span class="line">            self.classifiers_.append(fitted_clf)</span><br><span class="line">        <span class="keyword">return</span> self</span><br></pre></td></tr></table></figure>
+
+<p>在这里，我们使用了两个基类<code>BaseEstimator</code>和<code>ClassifierMixIn</code>获取某些基本方法，包括设定分类器参数的<code>set_params</code>和返回参数的<code>get_params</code>方法，以及用于计算预测准确度的score方法。此外，导入six包是为了使得MajorityVoteClassifier与Python 2.7兼容。</p>
+<p>接下来，我们加入predict方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">self, X</span>):</span></span><br><span class="line">    <span class="keyword">if</span> self.vote == <span class="string">&#x27;probability&#x27;</span>:</span><br><span class="line">        maj_vote = np.argmax(self.predict_proba(X), axis=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        predictions = np.asarray([clf.predict(X) <span class="keyword">for</span> clf <span class="keyword">in</span> self.classifiers_]).T</span><br><span class="line">        maj_vote = np.apply_along_axis(<span class="keyword">lambda</span> x:</span><br><span class="line">                                      np.argmax(np.bincount(x, weights=self.weights)),</span><br><span class="line">                                      axis=<span class="number">1</span>,</span><br><span class="line">                                      arr=predictions)</span><br><span class="line">    maj_vote = self.labelenc_.inverse_transform(maj_vote)</span><br><span class="line">    <span class="keyword">return</span> maj_vote</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_proba</span>(<span class="params">self, X</span>):</span></span><br><span class="line">    probas = np.asarray([clf.predict_proba(X) <span class="keyword">for</span> clf <span class="keyword">in</span> self.classifiers_])</span><br><span class="line">    avg_proba = np.average(probas, axis=<span class="number">0</span>, weights=self.weights)</span><br><span class="line">    <span class="keyword">return</span> avg_proba</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_params</span>(<span class="params">self, deep=True</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> deep:</span><br><span class="line">        <span class="keyword">return</span> super(MajorityVoteClassifier, self).get_params(deep=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        out = self.named_classifiers.copy()</span><br><span class="line">        <span class="keyword">for</span> name, step <span class="keyword">in</span> six.iteritems(self.named_classifiers):</span><br><span class="line">            <span class="keyword">for</span> key, value <span class="keyword">in</span> six.iteritems(step.get_params(deep=<span class="literal">True</span>)):</span><br><span class="line">                out[<span class="string">&#x27;%s__%s&#x27;</span> % (name, key)] = value</span><br><span class="line">        <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们可以将上述算法用于实战了。我们导入鸢尾花数据集，并且只是用其中的两个特征：<strong>萼片宽度</strong>和<strong>花瓣长度</strong>。同时我们只区分两个类别的样本：Iris-Versicolor和Iris-Virginica，并且绘制ROC AUC曲线：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X, y = iris.data[<span class="number">50</span>:, [<span class="number">1</span>, <span class="number">2</span>]], iris.target[<span class="number">50</span>:]</span><br><span class="line">le = LabelEncoder()</span><br><span class="line">y = le.fit_transform(y)</span><br></pre></td></tr></table></figure>
+
+<p>下面划分数据集为测试数据集和训练数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.5</span>, random_state=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来将数据集训练三种不同类型的分类器：逻辑斯蒂回归分类器，决策树分类器和k-近邻分类器各一个：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> py</span><br><span class="line"></span><br><span class="line">clf1 = LogisticRegression(penalty=<span class="string">&#x27;l2&#x27;</span>, C=<span class="number">0.01</span>, random_state=<span class="number">0</span>)</span><br><span class="line">clf2 = DecisionTreeClassifier(max_depth=<span class="number">1</span>, criterion=<span class="string">&#x27;entropy&#x27;</span>, random_state=<span class="number">0</span>)</span><br><span class="line">clf3 = KNeighborsClassifier(n_neighbors=<span class="number">1</span>, p=<span class="number">2</span>, metric=<span class="string">&#x27;minkowski&#x27;</span>)</span><br><span class="line">pipe1 = Pipeline([[<span class="string">&#x27;sc&#x27;</span>, StandardScaler()], [<span class="string">&#x27;clf&#x27;</span>, clf1]])</span><br><span class="line">pipe3 = Pipeline([[<span class="string">&#x27;sc&#x27;</span>, StandardScaler()], [<span class="string">&#x27;clf&#x27;</span>, clf3]])</span><br><span class="line">clf_labels = [<span class="string">&#x27;LR&#x27;</span>, <span class="string">&#x27;DT&#x27;</span>, <span class="string">&#x27;KNN&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> clf, label <span class="keyword">in</span> zip([pipe1, clf2, pipe3], clf_labels):</span><br><span class="line">    scores = cross_val_score(estimator=clf, X=X_train, y=y_train, cv=<span class="number">10</span>, scoring=<span class="string">&#x27;roc_auc&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;ROC AUC: %.3f +/- %.3f [%s]&#x27;</span> % (scores.mean(), scores.std(), label))</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.917</span> +/- <span class="number">0.201</span> [LR]</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.917</span> +/- <span class="number">0.154</span> [DT]</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.933</span> +/- <span class="number">0.104</span> [KNN]</span><br></pre></td></tr></table></figure>
+
+<p>在此，为什么将逻辑斯蒂回归和k-近邻分类器的训练作为流水线的一部分？不同于决策树，逻辑斯蒂回归和k-近邻算法对数据缩放不敏感，需要对其进行数据标准化处理。</p>
+<p>接下来我们基于多数投票原则，在其中组合成员分类器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mv_clf = MajorityVoteClassifier(classifiers=[pipe1, clf2, pipe3])</span><br><span class="line">clf_labels += [<span class="string">&#x27;MV&#x27;</span>]</span><br><span class="line">all_clf = (pipe1, clf2, pipe3, mv_clf)</span><br><span class="line"><span class="keyword">for</span> clf, label <span class="keyword">in</span> zip(all_clf, clf_labels):</span><br><span class="line">    scores = cross_val_score(estimator=clf, X=X_train, y=y_train, cv=<span class="number">10</span>, scoring=<span class="string">&#x27;roc_auc&#x27;</span>)</span><br><span class="line">    print(<span class="string">&#x27;ROC AUC: %.3f +/- %.3f [%s]&#x27;</span> % (scores.mean(), scores.std(), label))</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.917</span> +/- <span class="number">0.201</span> [LR]</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.917</span> +/- <span class="number">0.154</span> [DT]</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.933</span> +/- <span class="number">0.104</span> [KNN]</span><br><span class="line">&gt;&gt; ROC AUC: <span class="number">0.967</span> +/- <span class="number">0.100</span> [MV]</span><br></pre></td></tr></table></figure>
+
+<p>从上述输出来看，以10折交叉验证作为评估标准，MajorityVotingClassifier的性能与单个成员分类器相比有着质的提高。</p>
+<h2 id="评估与调优集成分类器"><a href="#评估与调优集成分类器" class="headerlink" title="评估与调优集成分类器"></a>评估与调优集成分类器</h2><p>接下来，我们将在测试数据上计算多数投票的ROC曲线，以验证其在未知数据上的泛化性能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> auc</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">colors = [<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;orange&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>]</span><br><span class="line">linestyles = [<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;--&#x27;</span>, <span class="string">&#x27;-.&#x27;</span>, <span class="string">&#x27;-&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> clf, label, clr, ls <span class="keyword">in</span> zip(all_clf, clf_labels, colors, linestyles):</span><br><span class="line">    y_pred = clf.fit(X_train, y_train).predict_proba(X_test)[:, <span class="number">1</span>]</span><br><span class="line">    fpr, tpr, thresholds = roc_curve(y_true=y_test, y_score=y_pred)</span><br><span class="line">    roc_auc = auc(x=fpr, y=tpr)</span><br><span class="line">    plt.plot(fpr, tpr, color=clr, linestyle=ls, label=<span class="string">&#x27;%s (auc = %.3f)&#x27;</span> % (label, roc_auc))</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlim([<span class="number">-0.1</span>, <span class="number">1.1</span>])</span><br><span class="line">plt.ylim([<span class="number">-0.1</span>, <span class="number">1.1</span>])</span><br><span class="line">plt.grid()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;False Positive Rate&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True Postive Rate&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Thu,%2006%20Feb%202020%20201055.png" class="lazyload" data-srcset="Thu,%2006%20Feb%202020%20201055.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>由ROC结果我们可以得到，继承分类器在测试集上表现优秀（ROC AUC = 0.95），而KNN分类器对于训练数据有些过拟合。</p>
+<p>在学习集成分类的成员分类器调优之前，我们调用一下get_param方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv_clf.get_params()</span><br></pre></td></tr></table></figure>
+
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&#x27;pipeline-1&#x27;</span>: Pipeline(memory=<span class="literal">None</span>,</span><br><span class="line">          steps=[(<span class="string">&#x27;sc&#x27;</span>,</span><br><span class="line">                  StandardScaler(copy=<span class="literal">True</span>, with_mean=<span class="literal">True</span>, with_std=<span class="literal">True</span>)),</span><br><span class="line">                 [<span class="string">&#x27;clf&#x27;</span>,</span><br><span class="line">                  LogisticRegression(C=<span class="number">0.01</span>, class_weight=<span class="literal">None</span>, dual=<span class="literal">False</span>,</span><br><span class="line">                                     fit_intercept=<span class="literal">True</span>, intercept_scaling=<span class="number">1</span>,</span><br><span class="line">                                     l1_ratio=<span class="literal">None</span>, max_iter=<span class="number">100</span>,</span><br><span class="line">                                     multi_class=<span class="string">&#x27;warn&#x27;</span>, n_jobs=<span class="literal">None</span>,</span><br><span class="line">                                     penalty=<span class="string">&#x27;l2&#x27;</span>, random_state=<span class="number">0</span>, solver=<span class="string">&#x27;warn&#x27;</span>,</span><br><span class="line">                                     tol=<span class="number">0.0001</span>, verbose=<span class="number">0</span>, warm_start=<span class="literal">False</span>)]],</span><br><span class="line">          verbose=<span class="literal">False</span>),</span><br><span class="line">...</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__leaf_size&#x27;</span>: <span class="number">30</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__metric&#x27;</span>: <span class="string">&#x27;minkowski&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__metric_params&#x27;</span>: <span class="literal">None</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__n_jobs&#x27;</span>: <span class="literal">None</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__n_neighbors&#x27;</span>: <span class="number">1</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__p&#x27;</span>: <span class="number">2</span>,</span><br><span class="line"> <span class="string">&#x27;pipeline-2__clf__weights&#x27;</span>: <span class="string">&#x27;uniform&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们先通过网格搜索来调整逻辑斯蒂回归分类器的正则化系数倒数C以及决策深度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line">params = &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: [<span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">         <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: [<span class="number">0.001</span>, <span class="number">0.1</span>, <span class="number">100.0</span>]&#125;</span><br><span class="line">grid = GridSearchCV(estimator=mv_clf, param_grid=params, cv=<span class="number">10</span>, scoring=<span class="string">&#x27;roc_auc&#x27;</span>)</span><br><span class="line">grid.fit(X_train, y_train)</span><br><span class="line">res = grid.cv_results_</span><br><span class="line"><span class="keyword">for</span> params, mean_score, std_score <span class="keyword">in</span> zip(res[<span class="string">&#x27;params&#x27;</span>], res[<span class="string">&#x27;mean_test_score&#x27;</span>], res[<span class="string">&#x27;std_test_score&#x27;</span>]):</span><br><span class="line">    print(<span class="string">&#x27;%.3f +/- %.3f %r&#x27;</span> % (mean_score, std_score, params))</span><br></pre></td></tr></table></figure>
+
+<p>得到的结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.967</span> +/- <span class="number">0.100</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">0.001</span>&#125;</span><br><span class="line"><span class="number">0.967</span> +/- <span class="number">0.100</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">0.1</span>&#125;</span><br><span class="line"><span class="number">1.000</span> +/- <span class="number">0.000</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">100.0</span>&#125;</span><br><span class="line"><span class="number">0.967</span> +/- <span class="number">0.100</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">0.001</span>&#125;</span><br><span class="line"><span class="number">0.967</span> +/- <span class="number">0.100</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">0.1</span>&#125;</span><br><span class="line"><span class="number">1.000</span> +/- <span class="number">0.000</span> &#123;<span class="string">&#x27;decisiontreeclassifier__max_depth&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;pipeline-1__clf__C&#x27;</span>: <span class="number">100.0</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最优的参数和准确度如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&#x27;Best params: %s\nAcc: %.3f&#x27;</span> % (grid.best_score_, grid.best_score_))</span><br><span class="line">&gt;&gt; Best params: <span class="number">1.0</span></span><br><span class="line">&gt;&gt; Acc: <span class="number">1.000</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现，当选择正则化强度较小时，我们能得到最佳的交叉验证结果，而决策树的深度似乎没有什么影响。注意在模型评估时，不止一次使用测试集并非一个好的做法。接下来将学习另外一种集成方法：bagging。</p>
+<blockquote>
+<p>在本节中我们实现的多数投票方法有时也成为堆叠（stocking）。</p>
+</blockquote>
+<h2 id="bagging–通过bootstrap样本构建集成分类器"><a href="#bagging–通过bootstrap样本构建集成分类器" class="headerlink" title="bagging–通过bootstrap样本构建集成分类器"></a>bagging–通过bootstrap样本构建集成分类器</h2><p>bagging是一种与上节实现的MajorityVoteClassifier关系紧密的集成学习技术，但是不同的是这个算法没有使用相同的训练数据集拟合集成分类器中的单个成员分类器。由于原始数据集使用了bootstrap抽样（有放回的随机抽样），这也是bagging被称为bootstrap aggregating的原因。</p>
+<p>接下来为了检验bagging的实际效果，我们用葡萄酒数据集构建一个更复杂的分类问题，在此我们只考虑葡萄酒中的类别2和类别3，且只选择Alcohol和Hue这两个特征：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">df_wine = pd.read_csv(<span class="string">&#x27;./wine.data&#x27;</span>, header=<span class="literal">None</span>)</span><br><span class="line">df_wine.columns = [<span class="string">&#x27;Class label&#x27;</span>, <span class="string">&#x27;Alcohol&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Malic acid&#x27;</span>, <span class="string">&#x27;Ash&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Alcalinity&#x27;</span>, <span class="string">&#x27;Magnesium&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Total phenols&#x27;</span>, <span class="string">&#x27;Flavanoids&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Nonflavanoids&#x27;</span>, <span class="string">&#x27;Proanthocyanins&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Color intensity&#x27;</span>, <span class="string">&#x27;Hue&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Diluted&#x27;</span>, <span class="string">&#x27;Proline&#x27;</span>]</span><br><span class="line">df_wine = df_wine[df_wine[<span class="string">&#x27;Class label&#x27;</span>] != <span class="number">1</span>]</span><br><span class="line">y = df_wine[<span class="string">&#x27;Class label&#x27;</span>].values</span><br><span class="line">X = df_wine[[<span class="string">&#x27;Alcohol&#x27;</span>, <span class="string">&#x27;Hue&#x27;</span>]].values</span><br></pre></td></tr></table></figure>
+
+<p>接下来，对类标进行编码，同时将数据集划分为测试集和训练集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">le = LabelEncoder()</span><br><span class="line">y = le.fit_transform(y)</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.4</span>, random_state=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>scikit-learn中已经实现了Bagging Classifier相关算法，我们可以从ensemble子模块中导入使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> BaggingClassifier</span><br><span class="line"></span><br><span class="line">tree = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>, max_depth=<span class="literal">None</span>)</span><br><span class="line">bag = BaggingClassifier(base_estimator=tree,</span><br><span class="line">                       n_estimators=<span class="number">500</span>,</span><br><span class="line">                       max_samples=<span class="number">1.0</span>,</span><br><span class="line">                       max_features=<span class="number">1.0</span>,</span><br><span class="line">                       bootstrap=<span class="literal">True</span>,</span><br><span class="line">                       bootstrap_features=<span class="literal">False</span>,</span><br><span class="line">                       n_jobs=<span class="number">-1</span>,</span><br><span class="line">                       random_state=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们将计算训练数据集和测试数据集上的预测准确率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line">tree = tree.fit(X_train, y_train)</span><br><span class="line">y_train_pred = tree.predict(X_train)</span><br><span class="line">y_test_pred = tree.predict(X_test)</span><br><span class="line">tree_train = accuracy_score(y_train, y_train_pred)</span><br><span class="line">tree_test = accuracy_score(y_test, y_test_pred)</span><br><span class="line">print(tree_train, tree_test)</span><br><span class="line">&gt;&gt; <span class="number">1.0</span> <span class="number">0.8333333333333334</span></span><br></pre></td></tr></table></figure>
+
+<p>基于上述代码执行的结果可见，未经剪枝的决策树显现出过拟合的现象。接下来看一下bag的拟合效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bag = bag.fit(X_train, y_train)</span><br><span class="line">y_train_pred = bag.predict(X_train)</span><br><span class="line">y_test_pred = bag.predict(X_test)</span><br><span class="line">bag_train = accuracy_score(y_train, y_train_pred)</span><br><span class="line">bag_test = accuracy_score(y_test, y_test_pred)</span><br><span class="line">print(tree_train, tree_test)</span><br><span class="line">&gt;&gt; <span class="number">1.0</span> <span class="number">0.8958333333333334</span></span><br></pre></td></tr></table></figure>
+
+<p>从上图可见bagging分类器在测试数据上的泛化性能稍有胜出。接下来看一下它们的决策区域：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">x_min = X_train[:, <span class="number">0</span>].min() - <span class="number">1</span></span><br><span class="line">x_max = X_train[:, <span class="number">0</span>].max() + <span class="number">1</span></span><br><span class="line">y_min = X_train[:, <span class="number">1</span>].min() - <span class="number">1</span></span><br><span class="line">y_max = X_train[:, <span class="number">1</span>].max() + <span class="number">1</span></span><br><span class="line">xx, yy = np.meshgrid(np.arange(x_min, x_max, <span class="number">0.1</span>), np.arange(y_min, y_max, <span class="number">0.1</span>))</span><br><span class="line">f, axarr = plt.subplots(nrows=<span class="number">1</span>, ncols=<span class="number">2</span>, sharex=<span class="string">&#x27;col&#x27;</span>, sharey=<span class="string">&#x27;row&#x27;</span>, figsize=(<span class="number">8</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> idx, clf, tt <span class="keyword">in</span> zip([<span class="number">0</span>, <span class="number">1</span>], [tree, bag], [<span class="string">&#x27;DT&#x27;</span>, <span class="string">&#x27;Bagging&#x27;</span>]):</span><br><span class="line">    clf.fit(X_train, y_train)</span><br><span class="line">    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])</span><br><span class="line">    Z = Z.reshape(xx.shape)</span><br><span class="line">    axarr[idx].contourf(xx, yy, Z, alpha=<span class="number">0.3</span>)</span><br><span class="line">    axarr[idx].scatter(X_train[y_train==<span class="number">0</span>, <span class="number">0</span>], X_train[y_train==<span class="number">0</span>, <span class="number">1</span>], c=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>)</span><br><span class="line">    axarr[idx].scatter(X_train[y_train==<span class="number">1</span>, <span class="number">0</span>], X_train[y_train==<span class="number">1</span>, <span class="number">1</span>], c=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">    axarr[idx].set_title(tt)</span><br><span class="line">axarr[<span class="number">0</span>].set_ylabel(<span class="string">&#x27;Alcohol&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>可以得到图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2007%20Feb%202020%20124204.png" class="lazyload" data-srcset="Fri,%2007%20Feb%202020%20124204.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从结果可见，和深度为3的决策树相比，bagging集成分类器的决策边界显得更加平滑。</p>
+<p>bagging算法是降低模型方差的一种有效方法，但是它在降低模型偏差方面的作用不大。</p>
+<h2 id="通过自适应boosting提高弱学习机的性能"><a href="#通过自适应boosting提高弱学习机的性能" class="headerlink" title="通过自适应boosting提高弱学习机的性能"></a>通过自适应boosting提高弱学习机的性能</h2><p>在本节中，重点讨论boosting算法的一个常用例子：<strong>Adaboost</strong>（Adaptive Boosting）。</p>
+<p>在boosting中，集成分类器包含多个非常简单的成原分类器，这些成原分类器的性能仅仅好于随即猜测，常被称为弱学习机。原始的boosting过程如下：</p>
+<ol>
+<li>从训练集D中以无放回抽样方式随机抽取一个训练子集$ d_1 $，用于弱学习机$ C_1 $的训练</li>
+<li>从D中无放回抽样抽取一个训练子集$ d_2 $，并且将$ C_1 $中误分类样本的50%加入到训练集中，训练得到弱学习机$ C_2 $</li>
+<li>从训练集中抽取$ C_1 $和$ C_2 $分类结果不一致的样本生成训练样本$ d_3 $，以此训练第三个弱学习机$ C_3 $</li>
+<li>通过多数投票组合三个弱学习机$ C_1,C_2,C_3 $</li>
+</ol>
+<p>和bagging模型相比，boosting可以同时降低偏差和方差。在实践中，boosting算法对训练数据有过拟合的倾向。</p>
+<p>Adaboost和原始的boosting算法不同，它使用整个训练集来训练弱学习机，其中训练样本在每次迭代中都会重新被赋予一个权重，在上一弱学习机错误的基础上进行学习从而构建一个更加强大的分类器。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581052267970.png" class="lazyload" data-srcset="1581052267970.png" srcset="data:image/png;base64,666" alt="1581052267970"/></div><span class="image-caption">1581052267970</span></div>
+<p>如上图，从图1开始，所有的样本都被赋予相同的权重，基于次训练集，我们得到了一个分类器（决策曲线是图中虚线）；在下一轮中，我们为前面误分类的样本赋予更高的权重，此外我们降低被正确分类的样本的权重，如子图2所示，弱学习机错误划分了圆形类的三个样本，它们将在子图3中被赋予更大的权重…重复以上过程，最终组合三个学习机得到新的决策区域如图4。</p>
+<p>下面是AdaBoost算法的基本步骤：</p>
+<ol>
+<li>以等值的方式为权重向量$ w $赋值，其中$ \sum_iw_i=1 $</li>
+<li>在m轮boosting操作中，对第j轮做如下操作<ol>
+<li>训练一个加权的弱学习机：$ C_j = train(X, y, w) $</li>
+<li>预测样本类标：$ \hat{y} = =predict(C_j, X) $</li>
+<li>计算权重错误率：$ \epsilon  = w \cdot (\hat{y} == y)$</li>
+<li>计算相关系数：$ a_j = 0.5log\frac{1-\epsilon} {\epsilon}$</li>
+<li>更新权重：$ w = w \times exp(-a_j\times \hat{y} \times y) $</li>
+<li>归一化权重：$ w:=w/\sum_i{w_i} $</li>
+</ol>
+</li>
+<li>完成最终预测：$ \hat{y} = (\sum_{j=1}^{m}(a_j\times predict(C_j, X)) &gt; 0) $</li>
+</ol>
+<p>下面通过scikit-learn来训练一个AdaBoost集成分类器，我们仍然使用上一节中的葡萄酒数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> AdaBoostClassifier</span><br><span class="line">tree = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>, max_depth=<span class="number">1</span>)</span><br><span class="line">ada = AdaBoostClassifier(base_estimator=tree, n_estimators=<span class="number">500</span>, learning_rate=<span class="number">0.1</span>, random_state=<span class="number">0</span>)</span><br><span class="line">tree = tree.fit(X_train, y_train)</span><br><span class="line">y_train_pred = tree.predict(X_train)</span><br><span class="line">y_test_pred = tree.predict(X_test)</span><br><span class="line">tree_train = accuracy_score(y_train, y_train_pred)</span><br><span class="line">tree_test = accuracy_score(y_test, y_test_pred)</span><br><span class="line">print(tree_train, tree_test)</span><br><span class="line">&gt;&gt; <span class="number">0.8450704225352113</span> <span class="number">0.8541666666666666</span></span><br></pre></td></tr></table></figure>
+
+<p>和上一节中未剪枝决策树相比，单层决策树对于训练数据过拟合的成都更加严重一点，接下来看一下AdaBoost分类器的性能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ada = ada.fit(X_train, y_train)</span><br><span class="line">y_train_pred = ada.predict(X_train)</span><br><span class="line">y_test_pred = ada.predict(X_test)</span><br><span class="line">ada_train = accuracy_score(y_train, y_train_pred)</span><br><span class="line">ada_test = accuracy_score(y_test, y_test_pred)</span><br><span class="line">print(ada_train, ada_test)</span><br><span class="line">&gt;&gt; <span class="number">1.0</span> <span class="number">0.875</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现，A大Boost模型准确预测了所有的训练集类标，与单层决策树相比，它在测试集上的表现良好，不过，在代码中也可以看到，我们在降低模型偏差的同时使得方差额外的增加。</p>
+<p>最后看一下决策区域的形状：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">x_min = X_train[:, <span class="number">0</span>].min() - <span class="number">1</span></span><br><span class="line">x_max = X_train[:, <span class="number">0</span>].max() + <span class="number">1</span></span><br><span class="line">y_min = X_train[:, <span class="number">1</span>].min() - <span class="number">1</span></span><br><span class="line">y_max = X_train[:, <span class="number">1</span>].max() + <span class="number">1</span></span><br><span class="line">xx, yy = np.meshgrid(np.arange(x_min, x_max, <span class="number">0.1</span>), np.arange(y_min, y_max, <span class="number">0.1</span>))</span><br><span class="line">f, axarr = plt.subplots(nrows=<span class="number">1</span>, ncols=<span class="number">2</span>, sharex=<span class="string">&#x27;col&#x27;</span>, sharey=<span class="string">&#x27;row&#x27;</span>, figsize=(<span class="number">8</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> idx, clf, tt <span class="keyword">in</span> zip([<span class="number">0</span>, <span class="number">1</span>], [tree, ada], [<span class="string">&#x27;DT&#x27;</span>, <span class="string">&#x27;AdaBoost&#x27;</span>]):</span><br><span class="line">    clf.fit(X_train, y_train)</span><br><span class="line">    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])</span><br><span class="line">    Z = Z.reshape(xx.shape)</span><br><span class="line">    axarr[idx].contourf(xx, yy, Z, alpha=<span class="number">0.5</span>)</span><br><span class="line">    axarr[idx].scatter(X_train[y_train==<span class="number">0</span>, <span class="number">0</span>], X_train[y_train==<span class="number">0</span>, <span class="number">1</span>], c=<span class="string">&#x27;b&#x27;</span>, marker=<span class="string">&#x27;^&#x27;</span>)</span><br><span class="line">    axarr[idx].scatter(X_train[y_train==<span class="number">1</span>, <span class="number">0</span>], X_train[y_train==<span class="number">1</span>, <span class="number">1</span>], c=<span class="string">&#x27;r&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">    axarr[idx].set_title(tt)</span><br><span class="line">axarr[<span class="number">0</span>].set_ylabel(<span class="string">&#x27;Alcohol&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Fri,%2007%20Feb%202020%20140636.png" class="lazyload" data-srcset="Fri,%2007%20Feb%202020%20140636.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>从上图可知，AdaBoost的决策区域比单层决策树的决策区域复杂得多。</p>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/>http://blog.zsstrike.top/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/&title=集成学习之组合不同的模型 - zsStrike&summary=本章中，我们将会学习如何构建一组分类器的集合，使得整体分类效果优于其中任意一个单独的分类器。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/&title=集成学习之组合不同的模型 - zsStrike&summary=本章中，我们将会学习如何构建一组分类器的集合，使得整体分类效果优于其中任意一个单独的分类器。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/06/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BB%84%E5%90%88%E4%B8%8D%E5%90%8C%E7%9A%84%E6%A8%A1%E5%9E%8B/&title=集成学习之组合不同的模型 - zsStrike&summary=本章中，我们将会学习如何构建一组分类器的集合，使得整体分类效果优于其中任意一个单独的分类器。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/07/%E4%BD%BF%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%BF%9B%E8%A1%8C%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>使用机器学习进行情感分析</p>
+          <p class='content'>本章我们将深入研究自然语言处理（natural language processing，NLP）领域的一个分支—-情感分析（sentiment analysis），还将学习如何使用机器学习算法基...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/05/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98%E5%AE%9E%E6%88%98/'>
+          <p class='title'>模型评估与参数调优实战<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>本章中，我们将使用代码进行实践，通过对算法进行调优来构建性能良好的机器学习模型，并对模型的性能进行评估。
+
+
+基于流水线的工作流本节学习scikit-learn中的Pipeline类，它使得我们...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0"><span class="toc-text">集成学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%A4%9A%E6%95%B0%E6%8A%95%E7%A5%A8%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">实现一个简单的多数投票分类器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E4%B8%8E%E8%B0%83%E4%BC%98%E9%9B%86%E6%88%90%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">评估与调优集成分类器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bagging%E2%80%93%E9%80%9A%E8%BF%87bootstrap%E6%A0%B7%E6%9C%AC%E6%9E%84%E5%BB%BA%E9%9B%86%E6%88%90%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">bagging–通过bootstrap样本构建集成分类器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%87%AA%E9%80%82%E5%BA%94boosting%E6%8F%90%E9%AB%98%E5%BC%B1%E5%AD%A6%E4%B9%A0%E6%9C%BA%E7%9A%84%E6%80%A7%E8%83%BD"><span class="toc-text">通过自适应boosting提高弱学习机的性能</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="集成学习之组合不同的模型";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

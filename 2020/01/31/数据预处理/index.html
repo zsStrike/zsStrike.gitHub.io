@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>数据预处理 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        数据预处理
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年1月31日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：18分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="数据预处理" data-path="/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。</p>
+<a id="more"></a>
+
+<h2 id="缺失数据的处理"><a href="#缺失数据的处理" class="headerlink" title="缺失数据的处理"></a>缺失数据的处理</h2><p>在采集数据的时候，可能有的数据会有缺失的情况。通常我们见到的缺失值是数据表中的空值，或者是类似于NaN的占位符。</p>
+<p>首先构造一个含有缺失值的CSV文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"></span><br><span class="line">csv_data = <span class="string">&quot;&quot;&quot;A, B, C, D</span></span><br><span class="line"><span class="string">1.0, 2.0, 3.0, 4.0</span></span><br><span class="line"><span class="string">5.0, 6.0, , 8.0</span></span><br><span class="line"><span class="string">10.0, 11.0, 12.0, </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">df = pd.read_csv(StringIO(csv_data))</span><br><span class="line">print(df) </span><br><span class="line">&gt;&gt;       A     B      C     D</span><br><span class="line">&gt;&gt;  <span class="number">0</span>   <span class="number">1.0</span>   <span class="number">2.0</span>    <span class="number">3.0</span>   <span class="number">4.0</span></span><br><span class="line">&gt;&gt;  <span class="number">1</span>   <span class="number">5.0</span>   <span class="number">6.0</span>    NaN   <span class="number">8.0</span></span><br><span class="line">&gt;&gt;  <span class="number">2</span>  <span class="number">10.0</span>  <span class="number">11.0</span>   <span class="number">12.0</span>   NaN </span><br></pre></td></tr></table></figure>
+
+<p>上述代码中，我们通过<code>read_csv</code>将CSV格式的数据读取到pandas库的<code>DataFrame</code>中，可以看到有两个缺失值。</p>
+<p>对于大的DataFrame来说，我们可以使用内置的<code>isnull</code>方法来判断某单元中是否含有缺失值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df.isnull().sum()</span><br><span class="line">&gt;&gt; A    <span class="number">0</span></span><br><span class="line">&gt;&gt; B    <span class="number">0</span></span><br><span class="line">&gt;&gt; C    <span class="number">1</span></span><br><span class="line">&gt;&gt; D    <span class="number">1</span></span><br><span class="line">&gt;&gt; dtype: int64</span><br></pre></td></tr></table></figure>
+
+<p>通过这个方式我们可以得到每列中缺失值的数量。</p>
+<h3 id="将存在缺失值的特征或样本删除"><a href="#将存在缺失值的特征或样本删除" class="headerlink" title="将存在缺失值的特征或样本删除"></a>将存在缺失值的特征或样本删除</h3><p>这是最简单的数据处理方式：将含有缺失值的特征（列）或者样本（行）从数据中删除。</p>
+<p>可通过 <code>dropna</code>方法来删除包含缺失值的行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df.dropna()</span><br><span class="line">&gt;&gt;       A     B      C     D</span><br><span class="line">&gt;&gt;  <span class="number">0</span>   <span class="number">1.0</span>   <span class="number">2.0</span>    <span class="number">3.0</span>   <span class="number">4.0</span></span><br></pre></td></tr></table></figure>
+
+<p>类似地，我们可以通过将<code>axis</code>参数设置为1，以删除包含缺失值的列：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">df.dropna(axis=<span class="number">1</span>)</span><br><span class="line">&gt;&gt;       A     B     </span><br><span class="line">&gt;&gt;  <span class="number">0</span>   <span class="number">1.0</span>   <span class="number">2.0</span>    </span><br><span class="line">&gt;&gt;  <span class="number">1</span>   <span class="number">5.0</span>   <span class="number">6.0</span>    </span><br><span class="line">&gt;&gt;  <span class="number">2</span>  <span class="number">10.0</span>  <span class="number">11.0</span>   </span><br></pre></td></tr></table></figure>
+
+<p>同样地， <code>dropna</code>方法还有其他的参数，以应对各种缺失值的情况：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># only drop rows where all columns are NaN</span></span><br><span class="line">df.dropna(how=<span class="string">&#x27;any&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># drop rows that hava not at least 4 non-NaN value</span></span><br><span class="line">df.dropna(thresh=<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># only drop rows where NaN in specific columns(here is &#x27;C&#x27;)</span></span><br><span class="line">df.dropna(subset=[<span class="string">&#x27;C&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>删除数据是一种简单的方法，但是如果删除过多的样本，会导致分析结果可靠性不高。接下来学习另外一种最常用的处理缺失数据的方法：插值技术。</p>
+<h3 id="缺失数据填充"><a href="#缺失数据填充" class="headerlink" title="缺失数据填充"></a>缺失数据填充</h3><p>所谓插值技术是指通过数据集中的其他训练样本的数据来估计缺失值，最常用的插值技术是<strong>均值插值</strong>（meaneinputation），即使用相应的特征均值来替换缺失值。我们可以使用scikit-learn中的<code>Impute</code>类来实现此方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> Imputer</span><br><span class="line"></span><br><span class="line">imr = Imputer(missing_values=<span class="string">&#x27;NaN&#x27;</span>, strategy=<span class="string">&#x27;mean&#x27;</span>, axis=<span class="number">0</span>)</span><br><span class="line">imr = imr.fit(df)</span><br><span class="line">imputed_data = imr.transform(df.values)</span><br><span class="line">imputed_data</span><br><span class="line">&gt;&gt; array([[ <span class="number">1.</span> ,  <span class="number">2.</span> ,  <span class="number">3.</span> ,  <span class="number">4.</span> ],</span><br><span class="line">          [ <span class="number">5.</span> ,  <span class="number">6.</span> ,  <span class="number">7.5</span>,  <span class="number">8.</span> ],</span><br><span class="line">          [<span class="number">10.</span> , <span class="number">11.</span> , <span class="number">12.</span> ,  <span class="number">6.</span> ]]) </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先计算各个特征列的均值，然后将均值插入到NaN处。参数<code>axis</code>用来控制按列计算均值还是按行计算均值，参数<code>strategy</code>还有median和most_frequent可选值。</p>
+<h3 id="理解scikit-learn预估器的API"><a href="#理解scikit-learn预估器的API" class="headerlink" title="理解scikit-learn预估器的API"></a>理解scikit-learn预估器的API</h3><p>上一节中，我们使用的<code>Imputer</code>类来填充我们数据集中的缺失值，这个类属于<code>scikit-learn</code>中的转换器类，主要用于数据的转换。这些类中常用的两个方法是<code>fit</code>和<code>transform</code>。其中，fit方法用于对数据集中的参数进行识别并且构建相应的数据补齐模型，而transform方法则使用刚创建的数据补齐模型对数据集中的缺失值进行补齐。</p>
+<p>在前面的章节中，我们用到了分类器，它们在scikit-learn中属于预估器类别，其API的设计与转换器非常相似。预估器包含一个predict方法，同时也包含一个transform方法。</p>
+<h2 id="处理类别数据"><a href="#处理类别数据" class="headerlink" title="处理类别数据"></a>处理类别数据</h2><p>目前我们只学习了处理数值型数据的方法，但是在真实的数据集中，常常会出现类别数据。类别数据可以进一步划分为<strong>标称特征</strong>和<strong>有序特征</strong>。有序特征可以理解为类别的值是可以排序的，如T恤的尺寸；相反，标称数据不具备排序的特征，如T恤的颜色。</p>
+<p>首先构造一个数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame([</span><br><span class="line">    [<span class="string">&#x27;green&#x27;</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">10.1</span>, <span class="string">&#x27;class1&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;L&#x27;</span>, <span class="number">13.5</span>, <span class="string">&#x27;class2&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;XL&#x27;</span>, <span class="number">15.3</span>, <span class="string">&#x27;class1&#x27;</span>]</span><br><span class="line">])</span><br><span class="line">df.columns = [<span class="string">&#x27;color&#x27;</span>, <span class="string">&#x27;size&#x27;</span>, <span class="string">&#x27;price&#x27;</span>, <span class="string">&#x27;classlabel&#x27;</span>]</span><br><span class="line">df</span><br><span class="line">&gt;&gt;  	color	size	price	classlabel</span><br><span class="line">&gt;&gt; <span class="number">0</span>	green	M	 	<span class="number">10.1</span>	class1</span><br><span class="line">&gt;&gt; <span class="number">1</span>	red	    L	    <span class="number">13.5</span>	class2</span><br><span class="line">&gt;&gt; <span class="number">2</span>	blue	XL		<span class="number">15.3</span>	class1</span><br></pre></td></tr></table></figure>
+
+<p>我们构造的数据包括一个标称特征（颜色），一个有序特征（大小）以及一个数据特征（价格）。类标存储在最后一类。</p>
+<h3 id="有序特征的映射"><a href="#有序特征的映射" class="headerlink" title="有序特征的映射"></a>有序特征的映射</h3><p>对于有序特征，scikit-learn中没有实现相应的自动转换方法，因此，我们需要手动构造相应的映射。假设尺寸之间的关系是：XL = L + 1 = M + 2.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">size_mapping = &#123;<span class="string">&#x27;XL&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;L&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;M&#x27;</span>: <span class="number">1</span>&#125;</span><br><span class="line">df[<span class="string">&#x27;size&#x27;</span>] = df[<span class="string">&#x27;size&#x27;</span>].map(size_mapping)</span><br><span class="line">df</span><br><span class="line">&gt;&gt;  	color	size	price	classlabel</span><br><span class="line">&gt;&gt; <span class="number">0</span>	green	<span class="number">1</span>	 	<span class="number">10.1</span>	class1</span><br><span class="line">&gt;&gt; <span class="number">1</span>	red	    <span class="number">2</span>	    <span class="number">13.5</span>	class2</span><br><span class="line">&gt;&gt; <span class="number">2</span>	blue	<span class="number">3</span>		<span class="number">15.3</span>	class1</span><br></pre></td></tr></table></figure>
+
+<p>如果在后续的过程中需要将整数值还原为有序字符串，可以简单定义一个逆映射字典<code>inv_size_mapping = &#123;v : k for k, v in size_mapping.items()&#125;</code>，然后再使用pandas提供的map方法即可。</p>
+<h3 id="类标的编码"><a href="#类标的编码" class="headerlink" title="类标的编码"></a>类标的编码</h3><p>许多机器学习库中要求类标以整数值的方式进行编码。需要注意的一点是，类标不是有序的，因此，我们只需要简单的以枚举的方式从0开始设定类标：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">class_mapping = &#123;label: idx <span class="keyword">for</span> idx, label <span class="keyword">in</span> enumerate(np.unique(df[<span class="string">&#x27;classlabel&#x27;</span>]))&#125;</span><br><span class="line">class_mapping</span><br><span class="line">&gt;&gt; &#123;<span class="string">&#x27;class1&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;class2&#x27;</span>: <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来映射一下就行：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;classlabel&#x27;</span>] = df[<span class="string">&#x27;classlabel&#x27;</span>].map(class_mapping)</span><br><span class="line">df</span><br><span class="line">&gt;&gt;  	color	size	price	classlabel</span><br><span class="line">&gt;&gt; <span class="number">0</span>	green	<span class="number">1</span>	 	<span class="number">10.1</span>	<span class="number">0</span></span><br><span class="line">&gt;&gt; <span class="number">1</span>	red	    <span class="number">2</span>	    <span class="number">13.5</span>	<span class="number">1</span></span><br><span class="line">&gt;&gt; <span class="number">2</span>	blue	<span class="number">3</span>		<span class="number">15.3</span>	<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>同样可以构造一个逆映射来将类表还原为字符串。</p>
+<p>此外，可以使用scikit-learn中的LabelEncoder类可以更加方便完成对类标的编码工作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"></span><br><span class="line">class_le = LabelEncoder()</span><br><span class="line">y = class_le.fit_transform(df[<span class="string">&#x27;classlabel&#x27;</span>].values)</span><br><span class="line">y</span><br><span class="line">&gt;&gt; array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>], dtype=int64)</span><br></pre></td></tr></table></figure>
+
+<p>同样可以使用<code>inverse_transform</code>方法将类标转换为原始的字符串。</p>
+<h3 id="标称特征的独热编码"><a href="#标称特征的独热编码" class="headerlink" title="标称特征的独热编码"></a>标称特征的独热编码</h3><p>常见的思路如下，使用LabelEncoder类将字符串转换为整数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X = df[[<span class="string">&#x27;color&#x27;</span>, <span class="string">&#x27;size&#x27;</span>, <span class="string">&#x27;price&#x27;</span>]].values</span><br><span class="line">color_le = LabelEncoder()</span><br><span class="line">X[:, <span class="number">0</span>] = color_le.fit_transform(X[:, <span class="number">0</span>])</span><br><span class="line">X</span><br><span class="line">&gt;&gt; array([[<span class="number">1</span>, <span class="number">1</span>, <span class="number">10.1</span>],</span><br><span class="line">       	  [<span class="number">2</span>, <span class="number">2</span>, <span class="number">13.5</span>],</span><br><span class="line">          [<span class="number">0</span>, <span class="number">3</span>, <span class="number">15.3</span>]], dtype=object)</span><br></pre></td></tr></table></figure>
+
+<p>这样的数据处理是常见的错误处理方式，因为学习算法将会假定green大于blue，red大于green，这显然是不合理的。</p>
+<p>标称特征不能像有序特征一样简单赋予一个整数值，最常用的转换方法是<strong>独热编码</strong>技术。这个方法的思想就是创建一个新的虚拟特征，虚拟特征的每一列各代表标称数据的一个值。在此，我们将color特征转换为三个新的特征：blue，green和red。此时可以通过二进制值来标识样本的颜色。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> OneHotEncoder</span><br><span class="line"></span><br><span class="line">ohe = OneHotEncoder(categorical_features=[<span class="number">0</span>])</span><br><span class="line">ohe.fit_transform(X).toarray()</span><br><span class="line">&gt;&gt; array([[ <span class="number">0.</span> ,  <span class="number">1.</span> ,  <span class="number">0.</span> ,  <span class="number">1.</span> , <span class="number">10.1</span>],</span><br><span class="line">          [ <span class="number">0.</span> ,  <span class="number">0.</span> ,  <span class="number">1.</span> ,  <span class="number">2.</span> , <span class="number">13.5</span>],</span><br><span class="line">          [ <span class="number">1.</span> ,  <span class="number">0.</span> ,  <span class="number">0.</span> ,  <span class="number">3.</span> , <span class="number">15.3</span>]])</span><br></pre></td></tr></table></figure>
+
+<p>另外，我们可以通过pandas中的get_dummies方法，更加方便地实现虚拟特征。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pd.get_dummies(df[[<span class="string">&#x27;price&#x27;</span>, <span class="string">&#x27;color&#x27;</span>, <span class="string">&#x27;size&#x27;</span>]])</span><br><span class="line">&gt;&gt; 	price	size	color_blue	color_green	color_red</span><br><span class="line">&gt;&gt;<span class="number">0</span>	<span class="number">10.1</span>	<span class="number">1</span>		<span class="number">0</span>			<span class="number">1</span>			<span class="number">0</span>	</span><br><span class="line">&gt;&gt;<span class="number">1</span>	<span class="number">13.5</span>	<span class="number">2</span>		<span class="number">0</span>			<span class="number">0</span>			<span class="number">1</span></span><br><span class="line">&gt;&gt;<span class="number">2</span>	<span class="number">15.3</span>	<span class="number">3</span>		<span class="number">1</span>			<span class="number">0</span>			<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="将数据集划分为训练数据集和测试数据集"><a href="#将数据集划分为训练数据集和测试数据集" class="headerlink" title="将数据集划分为训练数据集和测试数据集"></a>将数据集划分为训练数据集和测试数据集</h2><p>接下来，我们将会使用葡萄酒数据集，可以通过UCI机器学习样本数据库来获得。通过pandas库，我们可以在线获取数据集：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">df_wine = pd.read_csv(<span class="string">&#x27;https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&#x27;</span>, header=<span class="literal">None</span>)</span><br><span class="line">df_wine.columns = [<span class="string">&#x27;Class label&#x27;</span>, <span class="string">&#x27;Alcohol&#x27;</span>, <span class="string">&#x27;Malic acid&#x27;</span>, <span class="string">&#x27;Ash&#x27;</span>, <span class="string">&#x27;Alcalinity of ash&#x27;</span>, <span class="string">&#x27;Magnesium&#x27;</span>, <span class="string">&#x27;Total phenols&#x27;</span>, <span class="string">&#x27;Flavanoids&#x27;</span>,</span><br><span class="line">                  <span class="string">&#x27;Nonflavanoid phenols&#x27;</span>, <span class="string">&#x27;Proanthocyanins&#x27;</span>, <span class="string">&#x27;Color intensity&#x27;</span>, <span class="string">&#x27;Hue&#x27;</span>, <span class="string">&#x27;diluted wines&#x27;</span>, <span class="string">&#x27;Proline&#x27;</span>]</span><br><span class="line">df_wine.head()</span><br></pre></td></tr></table></figure>
+
+<p>得到数据集如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1580709518611.png" class="lazyload" data-srcset="1580709518611.png" srcset="data:image/png;base64,666" alt="1580709518611"/></div><span class="image-caption">1580709518611</span></div>
+<p>葡萄酒样本库通过13个不同的特征，对178个葡萄酒样本划分为类标为1，2，3的三个不同的类别，想要将这些样本划分为训练数据集和测试数据集，可以使用scikit-learn中的<code>train_test_split</code>函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">X, y = df_wine.iloc[:, <span class="number">1</span>:].values, df_wine.iloc[:, <span class="number">0</span>].values</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.3</span>, random_state=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们就得到了$ 30% $的测试样本和$ 70% $的训练样本。</p>
+<h2 id="将特征的值缩放到相同的区间"><a href="#将特征的值缩放到相同的区间" class="headerlink" title="将特征的值缩放到相同的区间"></a>将特征的值缩放到相同的区间</h2><p> <strong>特征缩放</strong>(peature scaling)是数据预处理中至关重要的一步，除了决策树和随机森林不需要特征缩放，其他的机器学习算法几乎都需要这个处理使得算法准确度提高。</p>
+<p>特征缩放有两个常用的方法：归一化和标准化。归一化指的是将特征的值缩放到区间$ [0,1] $上，可以使用min-max缩放来实现：<br>$$<br>x_{norm}^i = \frac{x^i - x_{min}}{x^i - x_{max}}<br>$$<br>在scikit-learn中，已经实现了min-max缩放：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"></span><br><span class="line">mms = MinMaxScaler()</span><br><span class="line">X_train_norm = mms.fit_transform(X_train)</span><br><span class="line">X_test_norm = mms.fit_transform(X_test)</span><br></pre></td></tr></table></figure>
+
+<p>而标准化的过程可以使用如下方程：<br>$$<br>x_{std}^i = \frac{x^i - \mu_x}{\sigma_x}<br>$$<br>其中，$ \mu_x $和$ \sigma_x $分别表示某个特征列的均值和样本。同样地，可以使用scikit-learn中的方法实现标准化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">stdsc = StandardScaler()</span><br><span class="line">X_train_std = stdsc.fit_transform(X_train)</span><br><span class="line">X_test_std = stdsc.fit_transform(X_test)</span><br></pre></td></tr></table></figure>
+
+<h2 id="选择有意义的特征"><a href="#选择有意义的特征" class="headerlink" title="选择有意义的特征"></a>选择有意义的特征</h2><p>如果一个模型在训练数据集上面的表现比在测试数据集上面好很多，那么很可能产生了过拟合。在本节中，我们将会学习使用正则化和特征选择降维这两种常用的减少过拟合问题的方法。</p>
+<h3 id="使用L1正则化满足数据稀疏化"><a href="#使用L1正则化满足数据稀疏化" class="headerlink" title="使用L1正则化满足数据稀疏化"></a>使用L1正则化满足数据稀疏化</h3><p>在第三章节中，权重向量的L2范数如下：<br>$$<br>L2：||w||<em>2^2=\sum</em>{j=1}^{m}w_j^2<br>$$<br>而降低模型复杂度的L1正则化公式：<br>$$<br>L1：||w||<em>1 = \sum</em>{j=1}^m|w_j|<br>$$<br>对于scikit-learn来说，已经支持了 L1的正则化模型，可以将<code>penalty</code>参数设置为’l1’来进行简单的数据稀处理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"></span><br><span class="line">LogisticRegression(penalty=<span class="string">&#x27;l1&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们将L1正则化用于标准化处理的葡萄酒数据，经过L1正则化的逻辑斯蒂回归模型可以产生如下稀疏化结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lr = LogisticRegression(penalty=<span class="string">&#x27;l1&#x27;</span>, C=<span class="number">0.1</span>)</span><br><span class="line">lr.fit(X_train_std, y_train)</span><br><span class="line">print(<span class="string">&#x27;Training accuracy: &#x27;</span>, lr.score(X_train_std, y_train))</span><br><span class="line">print(<span class="string">&#x27;Test accuracy: &#x27;</span>, lr.score(X_test_std, y_test))</span><br><span class="line">&gt;&gt; Training accuracy:  <span class="number">0.9838709677419355</span></span><br><span class="line">&gt;&gt; Test accuracy:  <span class="number">0.9814814814814815</span></span><br></pre></td></tr></table></figure>
+
+<p>训练和测试的精确度显示此模型未出现过拟合，通过如下代码可以获得截距项：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lr.intercept_</span><br><span class="line">&gt;&gt; array([<span class="number">-0.38381104</span>, <span class="number">-0.1580416</span> , <span class="number">-0.70043119</span>])</span><br></pre></td></tr></table></figure>
+
+<p>由于我们lr对象默认使用了一对多(One vs Rest, OvR)的方法，因此，第一项截距是类别1相对于类别2和类别3的匹配结果。同样，我们可以查看系数矩阵：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">lr.coef_</span><br><span class="line">&gt;&gt; array([[ <span class="number">0.2801916</span> ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-0.02793952</span>,  <span class="number">0.</span>        ,</span><br><span class="line">&gt;&gt;         <span class="number">0.</span>        ,  <span class="number">0.71018709</span>,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,</span><br><span class="line">&gt;&gt;         <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">1.2362193</span> ],</span><br><span class="line">&gt;&gt;       [<span class="number">-0.64408995</span>, <span class="number">-0.06876656</span>, <span class="number">-0.05722202</span>,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,</span><br><span class="line">&gt;&gt;         <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        , <span class="number">-0.92643033</span>,</span><br><span class="line">&gt;&gt;         <span class="number">0.06037655</span>,  <span class="number">0.</span>        , <span class="number">-0.37111071</span>],</span><br><span class="line">&gt;&gt;       [ <span class="number">0.</span>        ,  <span class="number">0.06151885</span>,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,</span><br><span class="line">&gt;&gt;         <span class="number">0.</span>        , <span class="number">-0.6360538</span> ,  <span class="number">0.</span>        ,  <span class="number">0.</span>        ,  <span class="number">0.49810762</span>,</span><br><span class="line">&gt;&gt;        <span class="number">-0.35817768</span>, <span class="number">-0.57128442</span>,  <span class="number">0.</span>        ]])</span><br></pre></td></tr></table></figure>
+
+<p>可以发现，权重向量是稀疏的，这意味着只有少数几个特征被考虑进来，符合L1的作用效果。</p>
+<p>最后，对L1正则化来说，在强的正则化参数(C&lt;0.1)的作用下，罚项使得所有的特征权重趋于0。</p>
+<blockquote>
+<p>在前面已经介绍过，$ \lambda $是正则化参数，而C是正则化参数的倒数。</p>
+</blockquote>
+<h3 id="序列特征选择算法"><a href="#序列特征选择算法" class="headerlink" title="序列特征选择算法"></a>序列特征选择算法</h3><p>另外一种降低模型复杂度从而解决过拟合问题的方法是通过特征选择进行<strong>降维</strong>，该方法对未经正则化处理的模型特别有效。降维技术主要分为两个大类：<strong>特征选择</strong>和<strong>特征提取</strong>。通过特征选择，可以选择原始特征的一个子集；而在特征提取中，通过对现有的特征信息进行推演，构造出一个新的特征子空间。</p>
+<p>在本节中，我们着眼于一些经 </p>
+<p>序列特征选择算法是一种贪婪搜索方法，用于将原始的d维特征空间压缩到一个k维空间中，其中$ k &lt; d $。一个经典的序列特征选择算法是<strong>序列后向选择算法</strong>（SBS），其目的是在分类行性能衰弱最小的约束小，降低原始数据的维度，提高计算效率。</p>
+<p>SBS算法的理念很简单：SBS依次从特征集合中删除某些特征，直到新的特征子空间包含指定数量的特征。为了确定每一步需要删除的特征，为此我们需要定义一个最小化的标准衡量函数J。该函数的计算准则是：比较判定分类器在删除某个特征前后的差异，每次删除的特征，就是那些能够使得标准衡量函数值尽可能大的特征，或者说，每一步特征被删除后，所引起的模型性能损失最小。</p>
+<p>基于上述对SBS的定义，总结出以下四个步骤：</p>
+<ol>
+<li>设$ k = d $进行算法初始化，其中 d 是特征空间$ X_d $的维度。</li>
+<li>定义$ x^- $为满足标准$ x^- = argmaxJ(X_k - x) $最大化的特征，其中$ x \in X_k $。</li>
+<li>将特征$ x^- $从特征集中删除：$ X_{k-1}  = X_k - x^- , k = k -1$。</li>
+<li>如果k的值等于目标特征数量，算法终止，否则跳转到第2步。</li>
+</ol>
+<p>遗憾的是，scikit-learn并没有实现SBS算法，我们可以手动实现它：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.base <span class="keyword">import</span> clone</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> combinations</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SBS</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, estimator, k_features, scoring=accuracy_score, test_size=<span class="number">0.25</span>, random_state=<span class="number">1</span></span>):</span></span><br><span class="line">        self.scoring = scoring</span><br><span class="line">        self.estimator = clone(estimator)</span><br><span class="line">        self.k_features = k_features</span><br><span class="line">        self.test_size = test_size</span><br><span class="line">        slef.random_state = random_state</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span>(<span class="params">self, X, y</span>):</span></span><br><span class="line">        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)</span><br><span class="line">        dim = X_train.shape[<span class="number">1</span>]</span><br><span class="line">        self.indices_ = tuple(range(dim))</span><br><span class="line">        self.subsets_ = [self.indices_]</span><br><span class="line">        score = self._calc_score(X_train, y_train, X_test, y_test, self.indices_)</span><br><span class="line">        self.scores_ = [score]</span><br><span class="line">        <span class="keyword">while</span> dim &gt; self.k_features:</span><br><span class="line">            scores = []</span><br><span class="line">            subsets = []</span><br><span class="line">            <span class="keyword">for</span> p <span class="keyword">in</span> combinations(self.indices_, r=dim<span class="number">-1</span>):</span><br><span class="line">                score = self._calc_score(X_train, y_train, X_test, y_test, p)</span><br><span class="line">                scores.append(score)</span><br><span class="line">                subsets.append(p)</span><br><span class="line">            best = np.argmax(scores)</span><br><span class="line">            self.indices_ = subsets[best]</span><br><span class="line">            self.subsets_.append(self.indices_)</span><br><span class="line">            dim -= <span class="number">1</span></span><br><span class="line">            self.scores_.append(scores[best])</span><br><span class="line">        self.k_score_ = self.scores_[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span>(<span class="params">self, X</span>):</span></span><br><span class="line">        <span class="keyword">return</span> X[:, self.indices_]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_calc_score</span>(<span class="params">self, X_train, y_train, X_test, y_test, indices</span>):</span></span><br><span class="line">        self.estimator.fit(X_train[:, indices], y_train)</span><br><span class="line">        y_pred = self.estimator.predict(X_test[:, indices])</span><br><span class="line">        score = self.scoring(y_test, y_pred)</span><br><span class="line">        <span class="keyword">return</span> score</span><br><span class="line">            </span><br></pre></td></tr></table></figure>
+
+<p>我们使用k_features来指定需要返回的特征数量，并且最终特征子集的列标被赋值给self.indices_。注意，在fit方法中，我们没有在fit方法中明确地计算评价标准，只是简单的删除了那些没有包含在最优特征子集中的特征。</p>
+<p>接下来我们看一下SBS应用于KNN分类器的效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">knn = KNeighborsClassifier(n_neighbors=<span class="number">2</span>)</span><br><span class="line">sbs = SBS(knn, k_features=<span class="number">1</span>)</span><br><span class="line">sbs.fit(X_train_std, y_train)</span><br><span class="line">k_feat = [len(k) <span class="keyword">for</span> k <span class="keyword">in</span> sbs.subsets_]</span><br><span class="line">plt.plot(k_feat, sbs.scores_, marker=<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">plt.ylim([<span class="number">0.7</span>, <span class="number">1.1</span>])</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Number of features&#x27;</span>)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Mon,%2003%20Feb%202020%20201354.png" class="lazyload" data-srcset="Mon,%2003%20Feb%202020%20201354.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现，当k = {5, 6, 7, 8, 9, 10}时，算法可以达到百分百的准确率。</p>
+<p>接下来看一下是哪五个特征在验证数据集上有如此良好的表现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">k5 = list(sbs.subsets_[<span class="number">8</span>])</span><br><span class="line">print(df_wine.columns[<span class="number">1</span>:][k5])</span><br><span class="line">&gt;&gt; Index([<span class="string">&#x27;Alcohol&#x27;</span>, <span class="string">&#x27;Malic acid&#x27;</span>, <span class="string">&#x27;Alcalinity of ash&#x27;</span>, <span class="string">&#x27;Hue&#x27;</span>, <span class="string">&#x27;Proline&#x27;</span>], dtype=<span class="string">&#x27;object&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="通过随机森林判定特征的重要性"><a href="#通过随机森林判定特征的重要性" class="headerlink" title="通过随机森林判定特征的重要性"></a>通过随机森林判定特征的重要性</h2><p>接下来使用随机森林来从数据集中选择相关特征，下面的代码根据葡萄酒数据集特征重要程度对这13个特征给出重要性等级。但是注意：<strong>无需对基于树的模型做标准化或者归一化处理</strong>。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line">feat_labels = df_wine.columns[<span class="number">1</span>:]</span><br><span class="line">forest = RandomForestClassifier(n_estimators=<span class="number">10000</span>, random_state=<span class="number">0</span>, n_jobs=<span class="number">-1</span>)</span><br><span class="line">forest.fit(X_train, y_train)</span><br><span class="line">importances = forest.feature_importances_</span><br><span class="line">indices = np.argsort(importances)[::<span class="number">-1</span>]</span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> range(X_train.shape[<span class="number">1</span>]):</span><br><span class="line">    print(<span class="string">&quot;%2d) %-*s %f&quot;</span> % (f + <span class="number">1</span>, <span class="number">30</span>, feat_labels[f], importances[indices[f]]))</span><br></pre></td></tr></table></figure>
+
+<p>得到的输出数据如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> 1) Alcohol                        0.182483</span><br><span class="line"> 2) Malic acid                     0.158610</span><br><span class="line"> 3) Ash                            0.150948</span><br><span class="line"> 4) Alcalinity of ash              0.131987</span><br><span class="line"> 5) Magnesium                      0.106589</span><br><span class="line"> 6) Total phenols                  0.078243</span><br><span class="line"> 7) Flavanoids                     0.060718</span><br><span class="line"> 8) Nonflavanoid phenols           0.032033</span><br><span class="line"> 9) Proanthocyanins                0.025400</span><br><span class="line">10) Color intensity                0.022351</span><br><span class="line">11) Hue                            0.022078</span><br><span class="line">12) diluted wines                  0.014645</span><br><span class="line">13) Proline                        0.013916</span><br></pre></td></tr></table></figure>
+
+<p>从上述输出我们可以得到最具有判别效果的特征是‘Alcohol’。</p>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/>http://blog.zsstrike.top/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/&title=数据预处理 - zsStrike&summary=在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/&title=数据预处理 - zsStrike&summary=在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/01/31/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/&title=数据预处理 - zsStrike&summary=在本节中，我们将会学习主要的数据预处理技术，使用这些技术可以高效地构建好的机器学习模型。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/04/%E9%80%9A%E8%BF%87%E9%99%8D%E7%BB%B4%E5%8E%8B%E7%BC%A9%E6%95%B0%E6%8D%AE/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>通过降维压缩数据</p>
+          <p class='content'>在本章中，我们将会学习到三种特征提取的方法，它们都可以将原始数据集变换到一个维度更低的新的特征子空间。
+
+
+无监督数据降维技术之主成分分析主成分分析（PCA）是一种广泛应用于不同领域的无监督线性...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/01/30/%E4%BD%BF%E7%94%A8scikit-learn%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/'>
+          <p class='title'>使用scikit-learn实现分类算法<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>在本节中，我们将会介绍常用分类算法的概念，以及如何使用 scikit-learn 机器学习库和选择机器学习算法时需要注意的问题。
+
+
+分类算法的选择机器学习算法涉及到的五个步骤可以描述如下：
+
+...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E5%A4%B1%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-text">缺失数据的处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E5%AD%98%E5%9C%A8%E7%BC%BA%E5%A4%B1%E5%80%BC%E7%9A%84%E7%89%B9%E5%BE%81%E6%88%96%E6%A0%B7%E6%9C%AC%E5%88%A0%E9%99%A4"><span class="toc-text">将存在缺失值的特征或样本删除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%A1%AB%E5%85%85"><span class="toc-text">缺失数据填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3scikit-learn%E9%A2%84%E4%BC%B0%E5%99%A8%E7%9A%84API"><span class="toc-text">理解scikit-learn预估器的API</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E7%B1%BB%E5%88%AB%E6%95%B0%E6%8D%AE"><span class="toc-text">处理类别数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E7%89%B9%E5%BE%81%E7%9A%84%E6%98%A0%E5%B0%84"><span class="toc-text">有序特征的映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E6%A0%87%E7%9A%84%E7%BC%96%E7%A0%81"><span class="toc-text">类标的编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%A7%B0%E7%89%B9%E5%BE%81%E7%9A%84%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81"><span class="toc-text">标称特征的独热编码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E9%9B%86%E5%88%92%E5%88%86%E4%B8%BA%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE%E9%9B%86%E5%92%8C%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text">将数据集划分为训练数据集和测试数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E7%89%B9%E5%BE%81%E7%9A%84%E5%80%BC%E7%BC%A9%E6%94%BE%E5%88%B0%E7%9B%B8%E5%90%8C%E7%9A%84%E5%8C%BA%E9%97%B4"><span class="toc-text">将特征的值缩放到相同的区间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%9C%89%E6%84%8F%E4%B9%89%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-text">选择有意义的特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8L1%E6%AD%A3%E5%88%99%E5%8C%96%E6%BB%A1%E8%B6%B3%E6%95%B0%E6%8D%AE%E7%A8%80%E7%96%8F%E5%8C%96"><span class="toc-text">使用L1正则化满足数据稀疏化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E7%AE%97%E6%B3%95"><span class="toc-text">序列特征选择算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%88%A4%E5%AE%9A%E7%89%B9%E5%BE%81%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-text">通过随机森林判定特征的重要性</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="数据预处理";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

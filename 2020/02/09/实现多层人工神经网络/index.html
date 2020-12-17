@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="zh-CN,en,zh-HK,zh-TW,default">
+<head hexo-theme='https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>实现多层人工神经网络 - zsStrike</title>
+  
+    <meta name="keywords" content="机器学习">
+  
+
+  
+    <meta name="description" content="本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。">
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14/css/all.min.css">
+
+  
+  
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+  
+
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  <script id="loadcss"></script>
+
+</head>
+
+<body>
+  
+
+<header id="l_header" class="l_header auto shadow blur show" style='opacity: 0' >
+  <div class='container'>
+  <div id='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a id="s-comment" class="fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a id="s-toc" class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  <div id="l_body">
+    <div id="l_cover">
+  
+    
+        <div id="full" class='cover-wrapper post search' style="display: none;">
+          
+            <div class='cover-bg lazyload placeholder' data-bg="https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg"></div>
+          
+          <div class='cover-body'>
+  <div class='top'>
+    
+    
+      <p class="title">Volantis</p>
+    
+    
+  </div>
+  <div class='bottom'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="Search What You Want" />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <p>博客</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+          <div id="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+        </div>
+    
+  
+  </div>
+
+    <div id='safearea'>
+      <div class='body-wrapper' id="pjax-container">
+        
+
+<div class='l_main'>
+  <article class="article post white-box reveal md shadow article-type-post" id="post" itemscope itemprop="blogPost">
+  
+
+
+  
+  <div class="article-meta" id="top">
+    
+    
+    
+      <h1 class="title">
+        实现多层人工神经网络
+      </h1>
+      <div class='new-meta-box'>
+        
+          
+            
+<div class='new-meta-item author'>
+  <a class='author' target="_blank" href="https://github.com/zsStrike" rel="nofollow noopener">
+    <img no-lazy src="https://s1.ax1x.com/2020/09/08/wQFm7j.jpg">
+    <p>zsStrike</p>
+  </a>
+</div>
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月9日</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：17分钟</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  <div class="new-meta-item browse leancloud">
+    <a class='notlink'>
+      
+      <div id="lc-pv" data-title="实现多层人工神经网络" data-path="/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+        <i class="fas fa-eye fa-fw" aria-hidden="true"></i>
+        <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+        次浏览
+      </div>
+    </a>
+  </div>
+
+
+          
+        
+      </div>
+    
+  </div>
+
+
+  
+  <p>本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。</p>
+<a id="more"></a>
+
+<h2 id="使用人工神经网络对复杂函数建模"><a href="#使用人工神经网络对复杂函数建模" class="headerlink" title="使用人工神经网络对复杂函数建模"></a>使用人工神经网络对复杂函数建模</h2><p>我们在第二章中从人工神经元入手，开始了机器学习算法的探索。对于本章中将要讨论的多层人工神经网络来说，人工神经元是其构建的基石。</p>
+<h3 id="单层神经网络回顾"><a href="#单层神经网络回顾" class="headerlink" title="单层神经网络回顾"></a>单层神经网络回顾</h3><p>先来回顾一下自适应线性神经元（Adaline）算法：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581236309775.png" class="lazyload" data-srcset="1581236309775.png" srcset="data:image/png;base64,666" alt="1581236309775"/></div><span class="image-caption">1581236309775</span></div>
+<p>我们实现了二分类类别的Adaline算法，并通过<strong>梯度下降</strong>优化算法来学习模型的权重系数：<br>$$<br>w:=w+\Delta w,其中\Delta w = -\eta \nabla J(w)<br>$$<br>在梯度下降优化过程中，我们在每次迭代后同时更新所有权重。此外，将<strong>激励函数</strong>定义为：<br>$$<br>\phi(z)=z=a<br>$$<br>其中，净输入z时输入和权重的线性组合，使用激励函数来计算梯度更新时，我们定义了一个<strong>阈值函数</strong>将连续的输出值转换为二类别分类的预测类标：<br>$$<br>\hat{y}=\begin{cases}<br>1 &amp; 若g(z) \ge 0\<br>-1 &amp; 其他<br>\end{cases}<br>$$</p>
+<h3 id="多层神经网络架构简介"><a href="#多层神经网络架构简介" class="headerlink" title="多层神经网络架构简介"></a>多层神经网络架构简介</h3><p>本节中，我们将会看到如何将多个单独的神经元连接为一个<strong>多层前反馈神经网络</strong>。这种特殊的网络也被称作是<strong>多层感知器</strong>（MLP）。MLP的示例图如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581237705175.png" class="lazyload" data-srcset="1581237705175.png" srcset="data:image/png;base64,666" alt="1581237705175"/></div><span class="image-caption">1581237705175</span></div>
+<p>MLP包含一个输入层，一个隐层以及一个输出层。如果这样的网络中包含不只一个隐层，我们称其为<strong>深度神经网络</strong>。如图所示，我们将第l层中第i个激励单元记作$ a_i^l $，同时我们将激励单元$ a_0^{in} $和$ a_0^{h} $为偏置单元（bias unit），我们均设定为1。输入层各单元的激励为输入加上偏置单元：<br>$$<br>a^{in} = \begin{bmatrix}<br>a^{in}<em>0 \<br>a^{in}_1 \<br>\vdots \<br>a^{in}_m<br>\end{bmatrix}<br>$$<br>对于第l层的各单元，均通过一个权重系数连接到$ l+1 $层中的所有单元上。如连接第l层中第k个单元与第$ l+1 $层中第j个单元的连接可记为$ w</em>{j,k}^l $。下图是一个3-4-3多层感知器：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581239165942.png" class="lazyload" data-srcset="1581239165942.png" srcset="data:image/png;base64,666" alt="1581239165942"/></div><span class="image-caption">1581239165942</span></div>
+<h3 id="通过正向传播构造神经网络"><a href="#通过正向传播构造神经网络" class="headerlink" title="通过正向传播构造神经网络"></a>通过正向传播构造神经网络</h3><p>本节中，我们将使用<strong>正向传播</strong>来计算多层感知器（MLP）模型的输出。我们将多层感知器的学习过程总结为三个步骤：</p>
+<ol>
+<li>从输入层开始，通过网络向前传播（也就是正向传播）训练数据中的模式，以生成输出</li>
+<li>基于网络的输出，通过一个代价函数计算所需最小化的误差</li>
+<li>反向传播误差，计算其对于网络中每个权重的导数，并且更新模型</li>
+</ol>
+<p>最终通过多层感知器模型权重的多次迭代和学习，我们使用正向传播来计算输出，并使用阈值函数获得独热法所表示的预测类标。</p>
+<p>现在，我们根据正向传播算法逐步从训练数据的模式中生成一个输出。由于隐层每个节点均完全连接到所有输入层节点，我们首先通过以下公式计算$ a_1^2 $的激励：<br>$$<br>z_1^2 = a_0^1w_{1,0}^1+a_1^1w_{1,1}^1+\cdots+a_m^1w_{1,m}^1\<br>a_1^2 = \phi(z_1^2)<br>$$<br>激励函数可以使用sigmoid激励函数以解决图像分类等复杂问题。</p>
+<p>多层感知器是一个典型的前馈人工神经网络，此处的前馈指的是每一层的输出都直接作为下一层的输入。为了提高代码的执行效率和可读性，我们将使用线性代数中的基本概念：<br>$$<br>Z^2 = W^1[A^1]^T<br>$$<br>接下来我们可以将激励函数$ \phi(\cdot) $应用于净输入矩阵中的每个值，便于获取下一个激励矩阵$ A^2 $:<br>$$<br>A^2 = \phi(Z^2)<br>$$<br>类似地，我们以向量的形式重写输入层的激励：<br>$$<br>Z^3 = W^2A^2<br>$$<br>最后，通过sigmoid激励函数，我们可以得到神经网络的连续型输出：<br>$$<br>A^3 = \phi(Z^3)<br>$$</p>
+<h2 id="手写数字的识别"><a href="#手写数字的识别" class="headerlink" title="手写数字的识别"></a>手写数字的识别</h2><p>接下来我们看一下神经网络在实际中的应用，通过MNIST数据集上对手写数字的识别，来完成我们第一个多层神经网络的训练。MNIST是机器学习算法中常用的一个基准数据集。</p>
+<h3 id="获取MNIST数据集"><a href="#获取MNIST数据集" class="headerlink" title="获取MNIST数据集"></a>获取MNIST数据集</h3><p>MNIST数据集可以通过链接<a target="_blank" rel="noopener" href="http://yann.lecun.com/exdb/mnist/%E4%B8%8B%E8%BD%BD%EF%BC%8C%E5%8C%85%E5%90%AB%E4%B8%8B%E5%88%97%E5%9B%9B%E4%B8%AA%E9%83%A8%E5%88%86%EF%BC%9A">http://yann.lecun.com/exdb/mnist/下载，包含下列四个部分：</a></p>
+<ul>
+<li>训练集图像：train-images-idx3-ubyte.gz</li>
+<li>训练集类标：train-labels-idx1-ubyte.gz</li>
+<li>测试集图像：t10k-images-idx3-ubyte.gz</li>
+<li>测试集类标：t10k-labels-idx1-ubyte.gz</li>
+</ul>
+<p>下载完数据后并解压，接下来将其读入数组并且用于训练感知器模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_mnist</span>(<span class="params">path, kind=<span class="string">&#x27;train&#x27;</span></span>):</span></span><br><span class="line">    labels_path = os.path.join(path, <span class="string">&#x27;%s-labels-idx1-ubyte&#x27;</span> % kind)</span><br><span class="line">    images_path = os.path.join(path, <span class="string">&#x27;%s-images-idx3-ubyte&#x27;</span> % kind)</span><br><span class="line">    <span class="keyword">with</span> open(labels_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> lbpath:</span><br><span class="line">        magic, c = struct.unpack(<span class="string">&#x27;&gt;II&#x27;</span>, lbpath.read(<span class="number">8</span>))</span><br><span class="line">        labels = np.fromfile(lbpath, dtype=np.uint8)</span><br><span class="line">    <span class="keyword">with</span> open(images_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> imgpath:</span><br><span class="line">        magic, num, rows, cols = struct.unpack(<span class="string">&#x27;&gt;IIII&#x27;</span>, imgpath.read(<span class="number">16</span>))</span><br><span class="line">        images = np.fromfile(imgpath, dtype=np.uint8).reshape(len(labels), <span class="number">784</span>)</span><br><span class="line">    <span class="keyword">return</span> images, labels</span><br></pre></td></tr></table></figure>
+
+<p>load_mnist函数返回值返回两个数组，第一个是$ n\times m $维NumPy数组（存储图像），返回的第二个数组（类标）包含对应的目标变量，也即手写数字对应的类标，struct.unpack函数中的fmt参数的实参值：<code>&gt;II</code>。<code>&gt;</code>这是表示大端字节序，<code>I</code>表示一个无符号整数。</p>
+<p>接下来我们读取数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">X_train, y_train = load_mnist(<span class="string">&#x27;mnist&#x27;</span>, kind=<span class="string">&#x27;train&#x27;</span>)</span><br><span class="line">print(<span class="string">&#x27;Rows: %d, columns: %d&#x27;</span> % (X_train.shape[<span class="number">0</span>], X_train.shape[<span class="number">1</span>]))</span><br><span class="line">X_test, y_test = load_mnist(<span class="string">&#x27;mnist&#x27;</span>, kind=<span class="string">&#x27;t10k&#x27;</span>)</span><br><span class="line">print(<span class="string">&#x27;Rows: %d, columns: %d&#x27;</span> % (X_test.shape[<span class="number">0</span>], X_test.shape[<span class="number">1</span>]))</span><br><span class="line">&gt;&gt; Rows: <span class="number">60000</span>, columns: <span class="number">784</span></span><br><span class="line">&gt;&gt; Rows: <span class="number">10000</span>, columns: <span class="number">784</span></span><br></pre></td></tr></table></figure>
+
+<p>为了解MNIST数据集中图像的样子，我们可以将特征矩阵中的784像素向量还原为$ 28 \times 28 $图像：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">fig, ax = plt.subplots(nrows=<span class="number">2</span>, ncols=<span class="number">5</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>)</span><br><span class="line">ax = ax.flatten()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    img = X_train[y_train==i][<span class="number">0</span>].reshape(<span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">    ax[i].imshow(img, cmap=<span class="string">&#x27;Greys&#x27;</span>, interpolation=<span class="string">&#x27;nearest&#x27;</span>)</span><br><span class="line">ax[<span class="number">0</span>].set_xticks([])</span><br><span class="line">ax[<span class="number">0</span>].set_yticks([])</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20184326.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20184326.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>此外，我们绘制一下相同数字的多个示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fig, ax = plt.subplots(nrows=<span class="number">5</span>, ncols=<span class="number">5</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>)</span><br><span class="line">ax = ax.flatten()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">25</span>):</span><br><span class="line">    img = X_train[y_train==<span class="number">7</span>][i].reshape(<span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">    ax[i].imshow(img, cmap=<span class="string">&#x27;Greys&#x27;</span>, interpolation=<span class="string">&#x27;nearest&#x27;</span>)</span><br><span class="line">ax[<span class="number">0</span>].set_xticks([])</span><br><span class="line">ax[<span class="number">0</span>].set_yticks([])</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20184540.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20184540.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<h3 id="实现一个多层感知器"><a href="#实现一个多层感知器" class="headerlink" title="实现一个多层感知器"></a>实现一个多层感知器</h3><p>接下来，我们实现一个包含一个输入层，一个隐层和一个输出层的多层感知器，并且将其用来识别MNIST数据集中的图像，整体代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NeuralNetMLP</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, n_hidden=<span class="number">30</span>, l2=<span class="number">0.</span>, epochs=<span class="number">100</span>, eta=<span class="number">0.001</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                shuffle=True, minibatch_size=<span class="number">1</span>, seed=None</span>):</span></span><br><span class="line">        self.random = np.random.RandomState(seed)</span><br><span class="line">        self.n_hidden = n_hidden</span><br><span class="line">        self.l2 = l2</span><br><span class="line">        self.epochs = epochs</span><br><span class="line">        self.eta = eta</span><br><span class="line">        self.shuffle = shuffle</span><br><span class="line">        self.minibatch_size = minibatch_size</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_onehot</span>(<span class="params">self, y, n_classes</span>):</span></span><br><span class="line">        onehot = np.zeros((n_classes, y.shape[<span class="number">0</span>]))</span><br><span class="line">        <span class="keyword">for</span> idx, val <span class="keyword">in</span> enumerate(y.astype(int)):</span><br><span class="line">            onehot[val, idx] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> onehot.T</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_sigmoid</span>(<span class="params">self, Z</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1.</span> / (<span class="number">1.</span> + np.exp(-np.clip(z, <span class="number">-250</span>, <span class="number">250</span>)))</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_forward</span>(<span class="params">self, X</span>):</span></span><br><span class="line">        <span class="comment"># step 1: net input of hidden layer</span></span><br><span class="line">        z_h = np.dot(X, self.w_h) + self.b_h</span><br><span class="line">        <span class="comment"># step 2: activation of hidden layer</span></span><br><span class="line">        a_h = self._sigmoid(z_h)</span><br><span class="line">        <span class="comment"># step 3: net input of output layer</span></span><br><span class="line">        z_out = np.dot(a_h, self.w_out) + self.b_out</span><br><span class="line">        <span class="comment"># step 4: activation output layer</span></span><br><span class="line">        a_out = self._sigmoid(z_out)</span><br><span class="line">        <span class="keyword">return</span> z_h, a_h, z_out, a_out</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_compute_cost</span>(<span class="params">self, y_enc, output</span>):</span></span><br><span class="line">        L2_term = (self.l2 * (np.sum(self.w_h ** <span class="number">2.</span>) + np.sum(self.w_out ** <span class="number">2.</span>)))</span><br><span class="line">        term1 = -y_enc * (np.log(output))</span><br><span class="line">        term2 = (<span class="number">1.</span> - y_enc) * np.log(<span class="number">1.</span> - output)</span><br><span class="line">        cost = np.sum(term1 - term2) + L2_term</span><br><span class="line">        <span class="keyword">return</span> cost</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">self, X</span>):</span></span><br><span class="line">        z_h, a_h, z_out, a_out = self._forward(X)</span><br><span class="line">        y_pred = np.argmax(z_out, axis=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> y_pred</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span>(<span class="params">self, X_train, y_train, X_valid, y_valid</span>):</span></span><br><span class="line">        n_output = np.unique(y_train).shape[<span class="number">0</span>]</span><br><span class="line">        n_features = X_train.shape[<span class="number">1</span>]</span><br><span class="line">        <span class="comment"># weight initialization</span></span><br><span class="line">        <span class="comment"># weights for input -&gt; hidden</span></span><br><span class="line">        self.b_h = np.zeros(self.n_hidden)</span><br><span class="line">        self.w_h = self.random.normal(loc=<span class="number">0.0</span>, scale=<span class="number">0.1</span>, size=(n_features, self.n_hidden))</span><br><span class="line">        <span class="comment"># weights for hidden -&gt; output</span></span><br><span class="line">        self.b_out = np.zeros(n_output)</span><br><span class="line">        self.w_out = self.random.normal(loc=<span class="number">0.0</span>, scale=<span class="number">0.1</span>, size=(self.n_hidden, n_output))</span><br><span class="line">        epoch_strlen = len(str(self.epochs))</span><br><span class="line">        self.eval_ = &#123;<span class="string">&#x27;cost&#x27;</span>: [], <span class="string">&#x27;train_acc&#x27;</span>: [], <span class="string">&#x27;valid_acc&#x27;</span>: []&#125;</span><br><span class="line">        y_train_enc = self._onehot(y_train, n_output)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># iteration over training epochs</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.epochs):</span><br><span class="line">            indices = np.arange(X_train.shape[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> self.shuffle:</span><br><span class="line">                self.random.shuffle(indices)</span><br><span class="line">            <span class="keyword">for</span> start_idx <span class="keyword">in</span> range(<span class="number">0</span>, indices.shape[<span class="number">0</span>] - self.minibatch_size + <span class="number">1</span>, self.minibatch_size):</span><br><span class="line">                batch_idx = indices[start_idx:start_idx + self.minibatch_size]</span><br><span class="line">                z_h, a_h, z_out, a_out = self._forward(X_train[batch_idx])</span><br><span class="line">                <span class="comment"># Backpropagation</span></span><br><span class="line">                sigma_out = a_out - y_train_enc[batch_idx]</span><br><span class="line">                sigmoid_derivative_h = a_h * (<span class="number">1.</span> - a_h)</span><br><span class="line">                sigma_h = (np.dot(sigma_out, self.w_out.T) * sigmoid_derivative_h)</span><br><span class="line">                grad_w_h = np.dot(a_h.T, sigma_out)</span><br><span class="line">                grad_b_out = np.sum(sigma_out, axis=<span class="number">0</span>)</span><br><span class="line">                delta_w_h = (grad_w_h + self.l2*self.w_h)</span><br><span class="line">                delta_b_h = grad_b_h <span class="comment"># bias is not regularized</span></span><br><span class="line">                self.w_h -= self.eta * delta_w_h</span><br><span class="line">                self.b_h -= self.eta * delta_b_h</span><br><span class="line">                delta_w_out = (grad_w_out + self.l2*self.w_out)</span><br><span class="line">                delta_b_out = grad_b_out <span class="comment"># bias is not regularized</span></span><br><span class="line">                self.w_out -= self.eta * delta_w_out</span><br><span class="line">                self.b_out -= self.eta * delta_b_out</span><br><span class="line">            <span class="comment"># evaluation</span></span><br><span class="line">            z_h, a_h, z_out, a_out = self._forward(X_train)</span><br><span class="line">            cost = self._compute_cost(y_enc=y_train_enc, output=a_out)</span><br><span class="line">            y_train_pred = self.predict(X_train)</span><br><span class="line">            y_valid_pred = self.predict(X_valid)</span><br><span class="line">            train_acc = ((np.sum(y_train ==y_train_pred)).astype(np.float) / X_train.shape[<span class="number">0</span>])</span><br><span class="line">            valid_acc = ((np.sum(y_valid == y_valid_pred)).astype(np.float) / X_valid.shape[<span class="number">0</span>])</span><br><span class="line">            sys.stderr.write(<span class="string">&#x27;\r%0*d/%d | Cost: %.2f &#x27;</span><span class="string">&#x27;| Train/Valid Acc.: %.2f%%/%.2f%% &#x27;</span> %</span><br><span class="line">                            (epoch_strlen, i+<span class="number">1</span>, self.epochs, cost, train_acc*<span class="number">100</span>, valid_acc*<span class="number">100</span>))</span><br><span class="line">            sys.stderr.flush()</span><br><span class="line">            self.eval_[<span class="string">&#x27;cost&#x27;</span>].append(cost)</span><br><span class="line">            self.eval_[<span class="string">&#x27;train_acc&#x27;</span>].append(train_acc)</span><br><span class="line">            self.eval_[<span class="string">&#x27;valid_acc&#x27;</span>].append(valid_acc)</span><br><span class="line">        <span class="keyword">return</span> self</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们初始化一下784-100-10的MLP：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nn = NeuralNetMLP(n_hidden=<span class="number">100</span>, l2=<span class="number">0.01</span>, epochs=<span class="number">200</span>, eta=<span class="number">0.0005</span>,</span><br><span class="line">                 minibatch_size=<span class="number">100</span>, shuffle=<span class="literal">True</span>, seed=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>首先看一下参数的含义：</p>
+<ul>
+<li>l2:：l2正则化系数$ \lambda $</li>
+<li>epochs：遍历训练集的次数（遍历次数）</li>
+<li>eta：学习速率$ \eta $</li>
+<li>shuffle：每次迭代前打乱训练集的数据</li>
+<li>seed：打乱数据和权重初始化的随机种子</li>
+<li>minibatch_size：在每个小批次中训练样本的数目</li>
+</ul>
+<p>梯度每个批次分别计算，而不是在整个训练数据集上进行计算，这样做是为了加快学习的速率。</p>
+<p>接下来进行训练：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nn.fit(X_train=X_train[:<span class="number">55000</span>], y_train=y_train[:<span class="number">55000</span>],</span><br><span class="line">      X_valid=X_train[<span class="number">55000</span>:], y_valid=y_train[<span class="number">55000</span>:])</span><br><span class="line">&gt;&gt; <span class="number">200</span>/<span class="number">200</span> | Cost: <span class="number">15345.39</span> | Train/Valid Acc.: <span class="number">96.10</span>%/<span class="number">96.40</span>% </span><br></pre></td></tr></table></figure>
+
+<p>我们在上述实现中，我们也定义了<code>eval_</code>用来保存每次迭代后的代价值，我们将其绘制出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.plot(range(nn.epochs), nn.eval_[<span class="string">&#x27;cost&#x27;</span>])</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Cost&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Epochs&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20211630.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20211630.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以得到前100次cost的值下降得很快，之后随着迭代次数增加，cost值下降不明显。</p>
+<p>接下来看一下训练和验证率得变化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plt.plot(range(nn.epochs), nn.eval_[<span class="string">&#x27;train_acc&#x27;</span>], label=<span class="string">&#x27;training&#x27;</span>)</span><br><span class="line">plt.plot(range(nn.epochs), nn.eval_[<span class="string">&#x27;valid_acc&#x27;</span>], label=<span class="string">&#x27;validation&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Epochs&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20211951.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20211951.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>可以发现在迭代次数175之前，拟合模型有点欠拟合。最后我们看一下预测准确率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">y_test_pred = nn.predict(X_test)</span><br><span class="line">acc = (np.sum(y_test == y_test_pred)).astype(np.float) / X_test.shape[<span class="number">0</span>]</span><br><span class="line">print(<span class="string">&#x27;Acc: %.3f&#x27;</span> % acc)</span><br><span class="line">&gt;&gt; Acc: <span class="number">0.959</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现我们的模型在测试集上准确率差不多是96%，在数值上接近训练集中验证的准确率，表明模型拟合程度较好。</p>
+<p>最后，看一下一些图片和我们MLP预测结果的示例图：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">miscl_img = X_test[y_test != y_test_pred][<span class="number">125</span>:<span class="number">150</span>]</span><br><span class="line">correct_lab = y_test[y_test != y_test_pred][<span class="number">125</span>:<span class="number">150</span>]</span><br><span class="line">miscl_lab = y_test_pred[y_test != y_test_pred][<span class="number">25</span>:<span class="number">50</span>]</span><br><span class="line">fig, ax = plt.subplots(nrows=<span class="number">5</span>, ncols=<span class="number">5</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>)</span><br><span class="line">ax = ax.flatten()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">25</span>):</span><br><span class="line">    img = miscl_img[i].reshape(<span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">    ax[i].imshow(img, cmap=<span class="string">&#x27;Greys&#x27;</span>, interpolation=<span class="string">&#x27;nearest&#x27;</span>)</span><br><span class="line">    ax[i].set_title(<span class="string">&#x27;%d) t: %d p: %d&#x27;</span> % (i+<span class="number">1</span>, correct_lab[i], miscl_lab[i]))</span><br><span class="line">ax[<span class="number">0</span>].set_xticks([])</span><br><span class="line">ax[<span class="number">0</span>].set_yticks([])</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>得到的图像如下：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="Sun,%2009%20Feb%202020%20213712.png" class="lazyload" data-srcset="Sun,%2009%20Feb%202020%20213712.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<p>图片上的第二个数字表示的是正确的类标（true class），第三个数字表示的是预测的类标（predicted class）。可以发现，某些图像即便让人工分类也存在一定的困难度。</p>
+<h2 id="训练人工神经网络"><a href="#训练人工神经网络" class="headerlink" title="训练人工神经网络"></a>训练人工神经网络</h2><p>接下来我们看一下人工神经网络的一些深层的概念，如用于权值更新过程中的<strong>逻辑斯蒂代价函数</strong>和<strong>反向传播算法</strong>。</p>
+<h3 id="计算逻辑斯蒂代价函数"><a href="#计算逻辑斯蒂代价函数" class="headerlink" title="计算逻辑斯蒂代价函数"></a>计算逻辑斯蒂代价函数</h3><p>在<code>_compute_cost</code>方法中实现的逻辑斯蒂代价函数如下：<br>$$<br>J(w) = -\sum_{i=1}^{n}y^ilog(a^i)+(1-y^i)log(1-a^i)<br>$$<br>其中，$ a^i $是前向传播过程中，用来计算第i个单元的sigmoid激励函数：<br>$$<br>a^i = \phi(z^i)<br>$$<br>接下来，我们添加一个正则化项，它可以降低过拟合的程度，L2正则化定义如下：<br>$$<br>L2：=\lambda ||w||^2_2 = \lambda\sum_{j=1}^{m}w_j^2<br>$$<br>通过在逻辑斯蒂代价函数中加入L2正则化项，得到：<br>$$<br>J(w) = -\sum_{i=1}^{n}y^ilog(a^i)+(1-y^i)log(1-a^i) =\lambda ||w||^2_2<br>$$<br>我们已经实现了一个用于多分类的MLP，它返回一个包含t个元素的输出向量，我们需要将这个输出向量和使用独热编码表示的 $ t \times 1 $维目标向量进行比较。例如，对于一个样本，它在第三层的激励和目标类别（此处是2）可能如下：<br>$$<br>a^3 = \begin{bmatrix}<br>0.1 \<br>0.9 \<br>\vdots \<br>0.3<br>\end{bmatrix}<br>,<br>y = \begin{bmatrix}<br>0 \<br>1 \<br>\vdots \<br>0<br>\end{bmatrix}<br>$$<br>由此，我们需要逻辑斯蒂函数应用到网络中的所有激励单元j中。因此代价函数（未增加正则化项）：<br>$$<br>J(w) = -\sum_{i=1}^{n}\sum_{j=1}^{t}y^i_jlog(a^i_j)+(1-y^i_j)log(1-a^i_j)<br>$$<br>这里，上标i表示的是第在训练集中的第i个样本。加入正则化项的公式如下：<br>$$<br>J(w) = -\left[\sum_{i=1}^{n}\sum_{j=1}^{t}y^i_jlog(a^i_j)+(1-y^i_j)log(1-a^i_j)\right]</p>
+<ul>
+<li>\frac{\lambda}{2}\sum_{l=1}^{L-1}\sum_{i=1}^{u_l}\sum_{j=1}^{u_l+1}(w_{j,i}^l)^2<br>$$<br>在这里，$ u_l $表示第$ l $层的数目。我们的目标是最小化$ j(W) $代价函数，因此我们需要计算出网络中各层权重的偏导：<br>$$<br>\frac{\partial}{\partial{w_{j,i}^l}}J(W)<br>$$<br>注意$ W $包含多个矩阵，在一个仅仅包含一个隐层单元的MLP中，$ W^h $连接输入层和隐层，$ W^{out} $连接隐层和输出层。下图对$ W $进行可视化：</li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581315911089.png" class="lazyload" data-srcset="1581315911089.png" srcset="data:image/png;base64,666" alt="1581315911089"/></div><span class="image-caption">1581315911089</span></div>
+<h3 id="通过反向传播来训练神经网络"><a href="#通过反向传播来训练神经网络" class="headerlink" title="通过反向传播来训练神经网络"></a>通过反向传播来训练神经网络</h3><p>回忆本章中介绍的内容，我们需要通过正向传播来获得输出层的激励：<br>$$<br>Z^h = A^{in}W^h (隐层的净输入)\<br>A^h = \phi(Z^h) (隐层的激励)\<br>Z^{out} = A^hW^{out} (输出层的净输出)\<br>A^{out} = \phi(Z^{out})(输出层的激励)<br>$$<br>简单说，我们按照下图处理输入：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581317066461.png" class="lazyload" data-srcset="1581317066461.png" srcset="data:image/png;base64,666" alt="1581317066461"/></div><span class="image-caption">1581317066461</span></div>
+<p>后向传播中，我们将误差从右向左传递。首先计算输出层的误差向量：<br>$$<br>\delta^{out} = a^{out} - y<br>$$<br>其中，$ y $是真实类标的向量。接下来，我们计算隐层的误差项：<br>$$<br>\delta^{h} = \delta^{out}(W^{out})^T \odot \frac{\partial\phi(z^h)}{\partial z^h}<br>$$<br>这里，$ \frac{\partial\phi(z^h)}{\partial z^h} $计算公式如下：<br>$$<br>\frac{\partial\phi(z^h)}{\partial z^h} = \left(<br>a^h \odot (1-a^h)<br>\right)<br>$$<br>在这里，$ \odot $表示的是<strong>数组元素依次相乘</strong>符号。</p>
+<p>相应的，$ \delta^h $计算公式如下：<br>$$<br>\delta^{h} = \delta^{out}(W^{out})^T \odot \left(<br>a^h \odot (1-a^h)<br>\right)<br>$$<br>在得到$ \delta $后，我们可以将代价函数的偏导记作：<br>$$<br>\frac{\partial}{\partial w_{i, j}^{out}}J(W) = a_j^h\delta_i^{out}\<br>\frac{\partial}{\partial w_{i, j}^h}J(W) = a_j^{in}\delta_i^h<br>$$<br>综上，我们通过下图进行反向传播总结：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581317962693.png" class="lazyload" data-srcset="1581317962693.png" srcset="data:image/png;base64,666" alt="1581317962693"/></div><span class="image-caption">1581317962693</span></div>
+<h2 id="神经网络的收敛性"><a href="#神经网络的收敛性" class="headerlink" title="神经网络的收敛性"></a>神经网络的收敛性</h2><p>在前面实现的训练手写数字的神经网络过程中，没有使用传统的梯度下降，而是使用小批次样本学习来替代。随机梯度下降每次仅使用一个样本（k=1）更新权重来进行，虽然这是一种随机的方法，但相较于传统梯度下降，它通常嗯能得到精度极高的训练结果，并且收敛速度更快。子批次学习是随机梯度下降的一个特例：从包含n个样本的训练数据中随机抽取k个用于训练，其中1&lt;k&lt;n。</p>
+<p>神经网络的输出函数的曲线并不平滑，而且容易陷入局部最优值，如下图：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581318745918.png" class="lazyload" data-srcset="1581318745918.png" srcset="data:image/png;base64,666" alt="1581318745918"/></div><span class="image-caption">1581318745918</span></div>
+
+  
+  
+    
+    <div class='footer'>
+      
+      
+      
+        <div class='copyright'>
+          <blockquote>
+            
+              
+                <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+              
+            
+              
+                <p>本文永久链接是：<a href=http://blog.zsstrike.top/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/>http://blog.zsstrike.top/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</a></p>
+              
+            
+          </blockquote>
+        </div>
+      
+      
+    </div>
+  
+  
+    
+
+
+  <div class='article-meta' id="bottom">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-17T18:23:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年12月17日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>机器学习</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.zsstrike.top/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/&title=实现多层人工神经网络 - zsStrike&summary=本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://blog.zsstrike.top/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/&title=实现多层人工神经网络 - zsStrike&summary=本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer noopener"
+          
+          target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.zsstrike.top/2020/02/09/%E5%AE%9E%E7%8E%B0%E5%A4%9A%E5%B1%82%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/&title=实现多层人工神经网络 - zsStrike&summary=本章中，我们将会学习人工神经网络的基本概念以帮助我们学习后面几章中的内容。"
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" class="lazyload" data-srcset="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png" srcset="data:image/png;base64,666">
+          
+        </a>
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </div>
+
+
+  
+  
+
+  
+    <div class="prev-next">
+      
+        <a class='prev' href='/2020/02/11/SSR%E6%9B%B4%E6%96%B0PAC%E6%96%87%E4%BB%B6/'>
+          <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>SSR更新PAC文件</p>
+          <p class='content'>SSR项目已经不再维护，它的PAC文件更新功能已经失效，本文我们将gfwlist.txt转换为pac.txt给SSR软件使用。
+
+
+虽然原来的PAC地址已经失效了，但是gfwlist项目组维护了...</p>
+        </a>
+      
+      
+        <a class='next' href='/2020/02/09/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E4%B9%8B%E5%A4%84%E7%90%86%E6%97%A0%E7%B1%BB%E6%A0%87%E6%95%B0%E6%8D%AE/'>
+          <p class='title'>聚类分析之处理无类标数据<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+          <p class='content'>前面几章中，我们使用的数据都是事先已经直到预测结果的，即训练数据中已提供了数据的类标。在本章中，我们转而研究聚类分析，它是一种无监督学习技术，可以在事先不知道正确结果的情况下，发现数据本身所蕴含...</p>
+        </a>
+      
+    </div>
+  
+</article>
+
+
+  
+
+  
+
+
+
+
+
+  <script>
+  // https://github.com/theme-next/hexo-theme-next/blob/master/layout/_third-party/math/mathjax.swig
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.0/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    // 文章章节标题不能为 “MathJax” ，否则会报错。
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+</div>
+<aside class='l_side'>
+  
+  
+    
+    
+
+<section class="widget blogger shadow desktop mobile">
+  <div class='content'>
+    
+      
+        <a class='avatar flat-box circle' href='/about/'>
+          <img no-lazy src='https://s1.ax1x.com/2020/09/08/wQFm7j.jpg'/>
+        </a>
+      
+    
+    
+      <div class='text'>
+        
+        
+        
+          <p><span id="jinrishici-sentence">zsStrike</span></p>
+          <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+        
+      </div>
+    
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+  
+
+  <section class="widget tagcloud shadow desktop mobile">
+    
+  <header>
+    
+      <a href='/blog/tags/'><i class="fas fa-tags fa-fw" aria-hidden="true"></i><span class='name'>热门标签</span></a>
+    
+  </header>
+
+
+    <div class='content'>
+      <a href="/tags/CI-CD/" style="font-size: 14px; color: #999">CI/CD</a> <a href="/tags/Hexo/" style="font-size: 14px; color: #999">Hexo</a> <a href="/tags/Java/" style="font-size: 21.5px; color: #666">Java</a> <a href="/tags/Linux/" style="font-size: 14px; color: #999">Linux</a> <a href="/tags/MySQL/" style="font-size: 16.5px; color: #888">MySQL</a> <a href="/tags/Nginx/" style="font-size: 14px; color: #999">Nginx</a> <a href="/tags/Nodejs/" style="font-size: 14px; color: #999">Nodejs</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/Redis/" style="font-size: 14px; color: #999">Redis</a> <a href="/tags/SSR/" style="font-size: 14px; color: #999">SSR</a> <a href="/tags/TensorFlow/" style="font-size: 19px; color: #777">TensorFlow</a> <a href="/tags/Typora/" style="font-size: 14px; color: #999">Typora</a> <a href="/tags/Vim/" style="font-size: 14px; color: #999">Vim</a> <a href="/tags/git/" style="font-size: 14px; color: #999">git</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 24px; color: #555">机器学习</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a>
+    </div>
+  </section>
+
+
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AF%B9%E5%A4%8D%E6%9D%82%E5%87%BD%E6%95%B0%E5%BB%BA%E6%A8%A1"><span class="toc-text">使用人工神经网络对复杂函数建模</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9B%9E%E9%A1%BE"><span class="toc-text">单层神经网络回顾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="toc-text">多层神经网络架构简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%AD%A3%E5%90%91%E4%BC%A0%E6%92%AD%E6%9E%84%E9%80%A0%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">通过正向传播构造神经网络</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E7%9A%84%E8%AF%86%E5%88%AB"><span class="toc-text">手写数字的识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96MNIST%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text">获取MNIST数据集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E5%99%A8"><span class="toc-text">实现一个多层感知器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">训练人工神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E9%80%BB%E8%BE%91%E6%96%AF%E8%92%82%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="toc-text">计算逻辑斯蒂代价函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%9D%A5%E8%AE%AD%E7%BB%83%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">通过反向传播来训练神经网络</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%94%B6%E6%95%9B%E6%80%A7"><span class="toc-text">神经网络的收敛性</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+        
+        
+          <!--此文件用来存放一些不方便取值的变量-->
+<!--思路大概是将值藏到重加载的区域内-->
+
+<script>
+  window.pdata={}
+  pdata.ispage=true;
+  pdata.postTitle="实现多层人工神经网络";
+  pdata.commentPath="";
+  pdata.commentPlaceholder="";
+
+  var l_header=document.getElementById("l_header");
+  
+  l_header.classList.add("show");
+  
+</script>
+
+        
+      </div>
+      
+  
+  <footer class="footer clearfix">
+    <br><br>
+    
+      
+        <div class="aplayer-container">
+          
+
+
+        </div>
+      
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="mailto:zslovezj@mail.ustc.edu.cn"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+            
+              <a href="https://github.com/zsStrike"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+                
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        
+          <div><p><span id="lc-sv">本站总访问量为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 次</span> <span id="lc-uv">访客数为 <span id='number'><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span> 人</span></p>
+</div>
+        
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/tree/4.1.2" target="_blank" class="codename">Volantis</a>
+        作为主题
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+      <a id="s-top" class="fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+    </div>
+  </div>
+  <div>
+    <script>
+window.volantis={};
+/********************脚本懒加载函数********************************/
+function loadScript(src, cb) {
+var HEAD = document.getElementsByTagName('head')[0] || document.documentElement;
+var script = document.createElement('script');
+script.setAttribute('type','text/javascript');
+if (cb) script.onload = cb;
+script.setAttribute('src', src);
+HEAD.appendChild(script);
+}
+//https://github.com/filamentgroup/loadCSS
+var loadCSS = function( href, before, media, attributes ){
+	var doc = window.document;
+	var ss = doc.createElement( "link" );
+	var ref;
+	if( before ){
+		ref = before;
+	}
+	else {
+		var refs = ( doc.body || doc.getElementsByTagName( "head" )[ 0 ] ).childNodes;
+		ref = refs[ refs.length - 1];
+	}
+	var sheets = doc.styleSheets;
+	if( attributes ){
+		for( var attributeName in attributes ){
+			if( attributes.hasOwnProperty( attributeName ) ){
+				ss.setAttribute( attributeName, attributes[attributeName] );
+			}
+		}
+	}
+	ss.rel = "stylesheet";
+	ss.href = href;
+	ss.media = "only x";
+	function ready( cb ){
+		if( doc.body ){
+			return cb();
+		}
+		setTimeout(function(){
+			ready( cb );
+		});
+	}
+	ready( function(){
+		ref.parentNode.insertBefore( ss, ( before ? ref : ref.nextSibling ) );
+	});
+	var onloadcssdefined = function( cb ){
+		var resolvedHref = ss.href;
+		var i = sheets.length;
+		while( i-- ){
+			if( sheets[ i ].href === resolvedHref ){
+				return cb();
+			}
+		}
+		setTimeout(function() {
+			onloadcssdefined( cb );
+		});
+	};
+	function loadCB(){
+		if( ss.addEventListener ){
+			ss.removeEventListener( "load", loadCB );
+		}
+		ss.media = media || "all";
+	}
+	if( ss.addEventListener ){
+		ss.addEventListener( "load", loadCB);
+	}
+	ss.onloadcssdefined = onloadcssdefined;
+	onloadcssdefined( loadCB );
+	return ss;
+};
+</script>
+<!-- required -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+<script>
+  function pjax_fancybox() {
+    $(".md .gallery").find("img").each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".md .gallery").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  function SCload_fancybox() {
+    if ($(".md .gallery").find("img").length == 0) return;
+    loadCSS("https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css", document.getElementById("loadcss"));
+    setTimeout(function() {
+      loadScript('https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js', pjax_fancybox)
+    }, 1);
+  };
+  $(function () {
+    SCload_fancybox();
+  });
+</script>
+
+
+<!-- internal -->
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.1.0/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazyload",
+    threshold: 0
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    lazyLoadInstance.update();
+  });
+  document.addEventListener('pjax:complete', function () {
+    lazyLoadInstance.update();
+  });
+</script>
+
+
+
+
+  
+  
+    <script>
+      window.FPConfig = {
+        delay: 0,
+        ignoreKeywords: [],
+        maxRPS: 5,
+        hoverDelay: 25
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+		if($(".highlight .code pre").length+$(".article pre code").length==0)return;
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2.6.4/js/search.js"></script>
+
+  
+
+
+<!-- optional -->
+
+  <script>
+const SearchServiceimagePath="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@master/img/";
+const ROOT =  ("/" || "/").endsWith('/') ? ("/" || "/") : ("//" || "/" );
+(function ($) {
+  
+    customSearch = new HexoSearch({
+      imagePath: SearchServiceimagePath
+    });
+  
+})(jQuery);
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  <script defer>
+
+  const LCCounter = {
+    app_id: 'u9j57bwJod4EDmXWdxrwuqQT-MdYXbMMI',
+    app_key: 'jfHtEKVE24j0IVCGHbvuFClp',
+    custom_api_server: '',
+
+    // 查询存储的记录
+    getRecord(Counter, url, title) {
+      return new Promise(function (resolve, reject) {
+        Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({url})))
+          .then(resp => resp.json())
+          .then(({results, code, error}) => {
+            if (code === 401) {
+              throw error;
+            }
+            if (results && results.length > 0) {
+              var record = results[0];
+              resolve(record);
+            } else {
+              Counter('post', '/classes/Counter', {url, title: title, times: 0})
+                .then(resp => resp.json())
+                .then((record, error) => {
+                  if (error) {
+                    throw error;
+                  }
+                  resolve(record);
+                }).catch(error => {
+                console.error('Failed to create', error);
+                reject(error);
+              });
+            }
+          }).catch((error) => {
+          console.error('LeanCloud Counter Error:', error);
+          reject(error);
+        });
+      })
+    },
+
+    // 发起自增请求
+    increment(Counter, incrArr) {
+      return new Promise(function (resolve, reject) {
+        Counter('post', '/batch', {
+          "requests": incrArr
+        }).then((res) => {
+          res = res.json();
+          if (res.error) {
+            throw res.error;
+          }
+          resolve(res);
+        }).catch((error) => {
+          console.error('Failed to save visitor count', error);
+          reject(error);
+        });
+      });
+    },
+
+    // 构建自增请求体
+    buildIncrement(objectId) {
+      return {
+        "method": "PUT",
+        "path": `/1.1/classes/Counter/${ objectId }`,
+        "body": {
+          "times": {
+            '__op': 'Increment',
+            'amount': 1
+          }
+        }
+      }
+    },
+
+    // 校验是否为有效的 UV
+    validUV() {
+      var key = 'LeanCloudUVTimestamp';
+      var flag = localStorage.getItem(key);
+      if (flag) {
+        // 距离标记小于 24 小时则不计为 UV
+        if (new Date().getTime() - parseInt(flag) <= 86400000) {
+          return false;
+        }
+      }
+      localStorage.setItem(key, new Date().getTime().toString());
+      return true;
+    },
+
+    addCount(Counter) {
+      var enableIncr = '' === 'true' && window.location.hostname !== 'localhost';
+      enableIncr = true;
+      var getterArr = [];
+      var incrArr = [];
+      // 请求 PV 并自增
+      var pvCtn = document.querySelector('#lc-sv');
+      if (pvCtn || enableIncr) {
+        var pvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-sv', 'Visits').then((record) => {
+          incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-sv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + 1;
+              if (pvCtn) {
+                pvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(pvGetter);
+      }
+
+      // 请求 UV 并自增
+      var uvCtn = document.querySelector('#lc-uv');
+      if (uvCtn || enableIncr) {
+        var uvGetter = this.getRecord(Counter, 'http://blog.zsstrike.top' + '/#lc-uv', 'Visitors').then((record) => {
+          var vuv = this.validUV();
+          vuv && incrArr.push(this.buildIncrement(record.objectId))
+          var eles = document.querySelectorAll('#lc-uv #number');
+          if (eles.length > 0) {
+            eles.forEach((el,index,array)=>{
+              el.innerText = record.times + (vuv ? 1 : 0);
+              if (uvCtn) {
+                uvCtn.style.display = 'inline';
+              }
+            })
+          }
+        });
+        getterArr.push(uvGetter);
+      }
+
+      // 请求文章的浏览数，如果是当前页面就自增
+      var allPV = document.querySelectorAll('#lc-pv');
+      if (allPV.length > 0 || enableIncr) {
+        for (i = 0; i < allPV.length; i++) {
+          let pv = allPV[i];
+          let title = pv.getAttribute('data-title');
+          var url = 'http://blog.zsstrike.top' + pv.getAttribute('data-path');
+          if (url) {
+            var viewGetter = this.getRecord(Counter, url, title).then((record) => {
+              // 是当前页面就自增
+              let curPath = window.location.pathname;
+              if (curPath.includes('index.html')) {
+                curPath = curPath.substring(0, curPath.lastIndexOf('index.html'));
+              }
+              if (pv.getAttribute('data-path') == curPath) {
+                incrArr.push(this.buildIncrement(record.objectId));
+              }
+              if (pv) {
+                var ele = pv.querySelector('#lc-pv #number');
+                if (ele) {
+                  if (pv.getAttribute('data-path') == curPath) {
+                    ele.innerText = (record.times || 0) + 1;
+                  } else {
+                    ele.innerText = record.times || 0;
+                  }
+                  pv.style.display = 'inline';
+                }
+              }
+            });
+            getterArr.push(viewGetter);
+          }
+        }
+      }
+
+      // 如果启动计数自增，批量发起自增请求
+      if (enableIncr) {
+        Promise.all(getterArr).then(() => {
+          incrArr.length > 0 && this.increment(Counter, incrArr);
+        })
+      }
+
+    },
+
+
+    fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${ api_server }/1.1${ url }`, {
+          method,
+          headers: {
+            'X-LC-Id': this.app_id,
+            'X-LC-Key': this.app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      this.addCount(Counter);
+    },
+
+    refreshCounter() {
+      var api_server = this.app_id.slice(-9) !== '-MdYXbMMI' ? this.custom_api_server : `https://${ this.app_id.slice(0, 8).toLowerCase() }.api.lncldglobal.com`;
+      if (api_server) {
+        this.fetchData(api_server);
+      } else {
+        fetch('https://app-router.leancloud.cn/2/route?appId=' + this.app_id)
+          .then(resp => resp.json())
+          .then(({api_server}) => {
+            this.fetchData('https://' + api_server);
+          });
+      }
+    }
+
+  };
+
+  LCCounter.refreshCounter();
+
+  document.addEventListener('pjax:complete', function () {
+    LCCounter.refreshCounter();
+  });
+</script>
+
+
+
+
+  <script>
+const rootElement = document.documentElement;
+const darkModeStorageKey = "user-color-scheme";
+const rootElementDarkModeAttributeName = "data-user-color-scheme";
+
+const setLS = (k, v) => {
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const removeLS = (k) => {
+  try {
+    localStorage.removeItem(k);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const getLS = (k) => {
+  try {
+    return localStorage.getItem(k);
+  } catch (e) {
+    console.log(e.message);
+    return null;
+  }
+};
+
+const getModeFromCSSMediaQuery = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+const resetRootDarkModeAttributeAndLS = () => {
+  rootElement.removeAttribute(rootElementDarkModeAttributeName);
+  removeLS(darkModeStorageKey);
+};
+
+const validColorModeKeys = {
+  dark: true,
+  light: true,
+};
+
+const applyCustomDarkModeSettings = (mode) => {
+  const currentSetting = mode || getLS(darkModeStorageKey);
+
+  if (currentSetting === getModeFromCSSMediaQuery()) {
+    resetRootDarkModeAttributeAndLS();
+  } else if (validColorModeKeys[currentSetting]) {
+    rootElement.setAttribute(rootElementDarkModeAttributeName, currentSetting);
+  } else {
+    resetRootDarkModeAttributeAndLS();
+  }
+};
+
+const invertDarkModeObj = {
+  dark: "light",
+  light: "dark",
+};
+
+/**
+ * get target mode
+ */
+const toggleCustomDarkMode = () => {
+  let currentSetting = getLS(darkModeStorageKey);
+
+  if (validColorModeKeys[currentSetting]) {
+    currentSetting = invertDarkModeObj[currentSetting];
+  } else if (currentSetting === null) {
+    currentSetting = invertDarkModeObj[getModeFromCSSMediaQuery()];
+  } else {
+    return;
+  }
+  setLS(darkModeStorageKey, currentSetting);
+  return currentSetting;
+};
+
+/**
+ * bind click event for toggle button
+ */
+function bindToggleButton() {
+	var btn=$("#wrapper .toggle-mode-btn");
+    btn.on('click',(e) => {
+      const mode = toggleCustomDarkMode();
+      applyCustomDarkModeSettings(mode);
+    });
+}
+
+applyCustomDarkModeSettings();
+document.addEventListener("DOMContentLoaded", bindToggleButton);
+document.addEventListener("pjax:success", bindToggleButton);
+var now = new Date();
+var hour = now.getHours();
+if (hour < 7 && hour >= 19) {
+	var mode = toggleCustomDarkMode();
+	if (mode === "dark") {
+	  applyCustomDarkModeSettings(mode);
+	}
+}
+</script>
+
+
+
+
+
+
+<script>
+function listennSidebarTOC() {
+  const navItems = document.querySelectorAll(".toc li");
+  if (!navItems.length) return;
+  const sections = [...navItems].map((element) => {
+    const link = element.querySelector(".toc-link");
+    const target = document.getElementById(
+      decodeURI(link.getAttribute("href")).replace("#", "")
+    );
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({
+		top: target.offsetTop + 100,
+		
+		behavior: "smooth"
+		
+	  });
+    });
+    return target;
+  });
+
+  function activateNavByIndex(target) {
+    if (target.classList.contains("active-current")) return;
+
+    document.querySelectorAll(".toc .active").forEach((element) => {
+      element.classList.remove("active", "active-current");
+    });
+    target.classList.add("active", "active-current");
+    let parent = target.parentNode;
+    while (!parent.matches(".toc")) {
+      if (parent.matches("li")) parent.classList.add("active");
+      parent = parent.parentNode;
+    }
+  }
+
+  function findIndex(entries) {
+    let index = 0;
+    let entry = entries[index];
+    if (entry.boundingClientRect.top > 0) {
+      index = sections.indexOf(entry.target);
+      return index === 0 ? 0 : index - 1;
+    }
+    for (; index < entries.length; index++) {
+      if (entries[index].boundingClientRect.top <= 0) {
+        entry = entries[index];
+      } else {
+        return sections.indexOf(entry.target);
+      }
+    }
+    return sections.indexOf(entry.target);
+  }
+
+  function createIntersectionObserver(marginTop) {
+    marginTop = Math.floor(marginTop + 10000);
+    let intersectionObserver = new IntersectionObserver(
+      (entries, observe) => {
+        let scrollHeight = document.documentElement.scrollHeight + 100;
+        if (scrollHeight > marginTop) {
+          observe.disconnect();
+          createIntersectionObserver(scrollHeight);
+          return;
+        }
+        let index = findIndex(entries);
+        activateNavByIndex(navItems[index]);
+      },
+      {
+        rootMargin: marginTop + "px 0px -100% 0px",
+        threshold: 0,
+      }
+    );
+    sections.forEach((element) => {
+      element && intersectionObserver.observe(element);
+    });
+  }
+  createIntersectionObserver(document.documentElement.scrollHeight);
+}
+
+document.addEventListener("DOMContentLoaded", listennSidebarTOC);
+document.addEventListener("pjax:success", listennSidebarTOC);
+</script>
+
+<!-- more -->
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#l_cover",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      //window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      if (typeof $.fancybox != "undefined") {
+        $.fancybox.close();    // 关闭弹窗
+      }
+      volantis.$switcher.removeClass('active'); // 关闭移动端激活的搜索框
+      volantis.$header.removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      volantis.$wrapper.removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      volantis.$topBtn.unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+      try{
+          if (typeof $.fancybox == "undefined") {
+            SCload_fancybox();
+          } else {
+            pjax_fancybox();
+          }
+        
+        
+        
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
