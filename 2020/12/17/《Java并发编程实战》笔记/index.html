@@ -366,13 +366,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：5.2k字</p>
+      <p>字数：6.9k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：18分钟</p>
+      <p>时长：24分钟</p>
     </a>
   </div>
 
@@ -605,6 +605,77 @@
 <li>静态分析工具</li>
 <li>分析与检测工具</li>
 </ul>
+<h2 id="第十三章-显式锁"><a href="#第十三章-显式锁" class="headerlink" title="第十三章 显式锁"></a>第十三章 显式锁</h2><p>Lock 与 ReentrantLock：Lock 接口提供了一种无条件的，可轮询的，定时的以及可中断的锁获取操作。ReentrantLock 则实现了 Lock 接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>轮询锁与定时锁：由 tryLock 方法实现，同时具有完善的错误恢复机制，使用这两种锁可以避免死锁的发生。</li>
+<li>可中断的锁获取操作：lockInterruptibly 方法能够在获得锁的同时保持对中断的响应。</li>
+<li>非块结构的加锁：内置锁中，锁的获取和释放操作都是基于代码块的。而分段锁技术则不是块结构的锁。</li>
+</ul>
+<p>性能考虑因素：在 Java5 中，当线程数增大的时候，内置锁的性能急剧下降，而 ReentrantLock 的性能下降更加平缓。在 Java6 中，两者的可伸缩性基本相同。</p>
+<p>公平性：ReentrantLock 的构造函数中提供了两种公平性的选择：创建一个非公平的锁（默认）或者一个公平的锁。在公平的锁上，线程将按照他们发出请求的顺序来获得锁，但是在非公平的锁上，则允许插队。大多数的情况下，非公平锁的性能高于公平锁的性能。</p>
+<p>在 synchronized 和 ReentrantLock 之间进行选择：ReentrantLock 在加锁和内存上提供的语义与内置锁相同，另外，它还实现了其他功能，如定时的锁等待，公平性以及非块结构的加锁。内置锁则更加简洁，同时能在线程转储中给出哪些栈帧获得了哪些锁。</p>
+<p>读写锁：ReentrantLock 实现了一种标准的互斥锁，互斥通常是一种过硬的加锁规则，因此限制了并发性。可以使用读写锁来改善：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadWriteLock</span> </span>&#123;</span><br><span class="line">	<span class="function">Lock <span class="title">readLock</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function">Lock <span class="title">writeLock</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在读写锁的加锁策略中，允许多个操作同时执行，但每次最多只允许一个写操作。ReentrantReadWriteLock 实现了上述接口，提供可重入的语义，同时构造的时候可以选择是否公平锁。</p>
+<h2 id="第十四章-构建自定义的同步工具"><a href="#第十四章-构建自定义的同步工具" class="headerlink" title="第十四章 构建自定义的同步工具"></a>第十四章 构建自定义的同步工具</h2><p>状态依赖性的管理：如 BlockingQueue 中的 put 和 take 操作的前提分别时队列不为空或者满的状态，当前提没有满足的时候，可以抛出异常，或者保持阻塞直到条件被满足。</p>
+<ul>
+<li>条件队列：使得一组线程（等待线程集合）能够通过某种方式来等待特定的条件变成真。Object 中的 wait，notify 和 notifyAll 方法就构成了内部条件队列的 API。Object.wait 会自动释放锁，并且请求操作系统挂起当前线程。当被挂起的线程醒来的时候，它将在返回之前重新获取锁。</li>
+</ul>
+<p>使用条件队列：</p>
+<ul>
+<li>条件谓词：指的是操作正常执行的前提条件，如队列不为空</li>
+<li>过早唤醒：wait 方法的返回并不意味着线程正在等待的条件谓词已经变成真的了。因为可能被其他线程通过 notifyAll 唤醒，但是它的条件为此可能并未变为真的，此时就需要再次进行条件判断。</li>
+<li>丢失的信号：也是一种活跃性故障。指的是线程必须等待一个已经为真的条件，但在开始等待之前没有检查条件谓词。</li>
+<li>通知：在 put 方法成功执行后，将会调用 notifyAll，向任何等待“不为空”条件的线程发出通知。只使用 notify 可能会造成信号丢失的情况。</li>
+</ul>
+<p>显式的 Condition 对象：正如 Lock 是一种广义的内置锁，Condition 也是一种广义的内置条件队列。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Condition</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">await</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">long</span> <span class="title">awaitNanos</span><span class="params">(<span class="keyword">long</span> nanosTimeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">awaitUninterruptibly</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">awaitUntil</span><span class="params">(Date deadline)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">signal</span><span class="params">()</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">signalAll</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>内置锁的缺陷在于每个内置锁都只能有一个相关联的条件队列。而 Condition 和 Lock 一起使用就可以消除该问题。和内置条件队列不同的是，对于每个 Lock，可以有任意数量的 Condition 对象。在 Condition 中相应的方法是 await，signal 和 signalAll。</p>
+<p>Synchronizer 剖析：在 ReentrantLock 和 Semaphore 两个接口存在许多共同点，如都可以用作阀门，即每次只允许一定数量的线程通过；都支持可中断；都支持公平和非公平的队列操作。事实上，它们的实现都使用了一个共同的基类，AbstractQueuedSynchronizer（AQS）。AQS 是一个用于构建锁和同步器的框架，CountDownLatch，ReentrantReadWriteLock 和 FutureTask 都是基于 AQS 实现。</p>
+<p>同步容器中的 AQS：</p>
+<ul>
+<li>ReentrantLock：支持独占，实现了 tryAcquire，tryRelease 和 isHeldExclusively。将同步状态用于保存锁获取操作的次数，还维护一些 owner 的变量保存当前所有者线程的标识符。</li>
+<li>Semaphore 和 CountDownLatch：前者将同步状态用于保存当前可用许可的数量，后者保存当前的计数值。</li>
+<li>FutureTask：同步状态用来保存任务的状态。</li>
+</ul>
+<h2 id="第十五章-原子变量与非阻塞同步机制"><a href="#第十五章-原子变量与非阻塞同步机制" class="headerlink" title="第十五章 原子变量与非阻塞同步机制"></a>第十五章 原子变量与非阻塞同步机制</h2><p>锁的劣势：重量级的同步方式，使用 volatile 变量可以同步，但是不支持原子操作，另外，当一个线程正在等待锁的时候，不能做任何有用的事情。</p>
+<p>原子变量类：</p>
+<ul>
+<li>原子变量是一种更好的 volatile：原子变量不但支持同步操作，还提供部分原子操作支持。</li>
+<li>锁与原子变量的性能比较：在高度竞争的情况下，锁的性能超过原子变量的性能；而在适度竞争情况下，原子变量的性能超过锁的性能。</li>
+</ul>
+<p>非阻塞算法：如果在某个算法中，一个线程的失败挥着挂起不会造成其他线程的失败或挂起，俺么该算法就是非阻塞算法。</p>
+<ul>
+<li>非阻塞的栈</li>
+<li>非阻塞的链表</li>
+<li>原子的域更新器：compareAndSet 保证了操作的原子性</li>
+</ul>
+<h2 id="第十六章-Java-内存模型"><a href="#第十六章-Java-内存模型" class="headerlink" title="第十六章 Java 内存模型"></a>第十六章 Java 内存模型</h2><p>内存模型：</p>
+<ul>
+<li><p>在共享内存的多处理器体系结构中，每个处理器有自己的缓存，并且定期的与主内存进行协调。在需要进行内存同步的时候，就可以执行内存栅栏指令，来保证数据的一致性。JVM 通过在合适的位置上插入内存栅栏来屏蔽 JMM 与底层平台内存模型的差异。</p>
+</li>
+<li><p>重排序</p>
+</li>
+<li><p>Java 内存模型：如果两个操作之间缺乏 Happens-Before 关系，那么 JVM 就可以对他们进行任意重排序。</p>
+<blockquote>
+<p>Happens-Before 的规则包括：</p>
+<ul>
+<li>程序顺序规则</li>
+<li>监视器锁规则</li>
+<li>volatile 变量规则</li>
+<li>线程启动规则</li>
+<li>线程结束规则</li>
+<li>中断规则</li>
+<li>终结期规则</li>
+<li>传递性</li>
+</ul>
+</blockquote>
+</li>
+</ul>
 
   
   
@@ -639,7 +710,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-19T13:05:47+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-12-19T19:50:06+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2020年12月19日</p>
@@ -812,7 +883,7 @@
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">第二章 线程安全性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%B1%E4%BA%AB"><span class="toc-text">第三章 对象的共享</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BB%84%E5%90%88"><span class="toc-text">第四章 对象的组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%9F%BA%E7%A1%80%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9D%97"><span class="toc-text">第五章 基础构建模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C"><span class="toc-text">第六章 任务执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8F%96%E6%B6%88%E4%B8%8E%E5%85%B3%E9%97%AD"><span class="toc-text">第七章 取消与关闭</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第八章 线程池的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%81%BF%E5%85%8D%E6%B4%BB%E8%B7%83%E6%80%A7%E5%8D%B1%E9%99%A9"><span class="toc-text">第十章 避免活跃性危险</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%80%A7%E8%83%BD%E4%B8%8E%E5%8F%AF%E4%BC%B8%E7%BC%A9%E6%80%A7"><span class="toc-text">第十一章 性能与可伸缩性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B9%B6%E5%8F%91%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">第十二章 并发程序的测试</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">第二章 线程安全性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%B1%E4%BA%AB"><span class="toc-text">第三章 对象的共享</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%BB%84%E5%90%88"><span class="toc-text">第四章 对象的组合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%9F%BA%E7%A1%80%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%9D%97"><span class="toc-text">第五章 基础构建模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C"><span class="toc-text">第六章 任务执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%8F%96%E6%B6%88%E4%B8%8E%E5%85%B3%E9%97%AD"><span class="toc-text">第七章 取消与关闭</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第八章 线程池的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E9%81%BF%E5%85%8D%E6%B4%BB%E8%B7%83%E6%80%A7%E5%8D%B1%E9%99%A9"><span class="toc-text">第十章 避免活跃性危险</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%80%A7%E8%83%BD%E4%B8%8E%E5%8F%AF%E4%BC%B8%E7%BC%A9%E6%80%A7"><span class="toc-text">第十一章 性能与可伸缩性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%B9%B6%E5%8F%91%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="toc-text">第十二章 并发程序的测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%98%BE%E5%BC%8F%E9%94%81"><span class="toc-text">第十三章 显式锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E6%9E%84%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7"><span class="toc-text">第十四章 构建自定义的同步工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text">第十五章 原子变量与非阻塞同步机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Java-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="toc-text">第十六章 Java 内存模型</span></a></li></ol>
     </div>
   </section>
 
