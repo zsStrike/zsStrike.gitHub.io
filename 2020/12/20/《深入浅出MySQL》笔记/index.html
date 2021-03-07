@@ -364,13 +364,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：6.1k字</p>
+      <p>字数：7.4k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：24分钟</p>
+      <p>时长：29分钟</p>
     </a>
   </div>
 
@@ -1314,63 +1314,86 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </li>
 </ul>
+<h2 id="第十八章-SQL优化"><a href="#第十八章-SQL优化" class="headerlink" title="第十八章 SQL优化"></a>第十八章 SQL优化</h2><p>优化 SQL 语句的一般步骤：</p>
+<ul>
+<li>通过使用<code>SHOW [SESSION | GLOBAL] STATUS</code>命令了解各种 SQL 的执行频率</li>
+<li>定位执行效率较低的 SQL 语句：使用<code>--log-slow-queries=[file_name]</code>启动，或者使用<code>show processlist</code>查看进程列表</li>
+<li>通过 EXPLANIN 分析低效 SQL 的执行计划</li>
+<li>通过 <code>show profile</code>分析 SQL</li>
+<li>通过<code>trace</code>分析优化器如何选择执行计划</li>
+<li>确定问题并且采取相应的优化措施</li>
+</ul>
+<p>索引问题：</p>
+<ul>
+<li><p>索引的存储分类：索引是在存储引擎层中实现的，MySQL 暂时提供以下四种类型的索引：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210306193145571.png" class="lazyload" data-srcset="image-20210306193145571.png" srcset="data:image/png;base64,666" alt="image-20210306193145571"/></div><span class="image-caption">image-20210306193145571</span></div>
+</li>
+<li><p>使用索引的场景：</p>
+<ul>
+<li>匹配全值</li>
+<li>匹配值的范围查询</li>
+<li>匹配最左前缀：比如在 col1 + col2 + col3 字段上的联合索引能够被包含 col1、(col1 + col2)、(col1 + col2 + col3)的等值查询利用到</li>
+<li>仅仅对索引进行查询</li>
+<li>匹配列前缀：仅仅使用索引中的第一列,并且只包含索引第一列的开头一部分进行查找</li>
+<li>能够实现索引匹配部分精确而其他部分进行范围匹配</li>
+<li>如果列名是索引,那么使用 <code>column_name is null</code> 就会使用索引</li>
+</ul>
+</li>
+<li><p>.存在索引但不能使用索引的典型场景：</p>
+<ul>
+<li>以%开头的 LIKE 查询不能够利用 B-Tree 索引</li>
+<li>数据类型出现隐式转换的时候也不会使用索引</li>
+<li>复合索引的情况下，不满足最左原则</li>
+<li>用 or 分割开的条件，如果 or 前的条件中的列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到</li>
+</ul>
+</li>
+<li><p>查看索引使用情况：show status like ‘Handler_read%’;</p>
+</li>
+</ul>
+<p>简单的优化方法：</p>
+<ul>
+<li>定期分析表和检查表：ANALYZE [LOCAL | NO_WRITE_TO_BINLOG] TABLE tbl_name 和 CHECK TABLE tbl_name [, tbl_name] … [option] </li>
+<li>定期优化表：OPTIMIZE [LOCAL | NO_WRITE_TO_BINLOG] TABLE tbl_name。</li>
+</ul>
+<p>常用的 SQL 优化：</p>
+<ul>
+<li><p>大批量数据插入：使用 load 命令，通过简单设置可提高导入速度：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; MyISAM 存储引擎的表</span><br><span class="line">ALTER TABLE tbl_name DISABLE KEYS;</span><br><span class="line">loading the data</span><br><span class="line">ALTER TABLE tbl_name ENABLE KEYS;</span><br><span class="line">&#x2F;&#x2F; InnoDB 存储引擎的表</span><br><span class="line">SET UNIQUE_CHECKS&#x3D;0</span><br><span class="line">loading the data</span><br><span class="line">SET UNIQUE_CHECKS&#x3D;1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优化 INSERT 语句：同一个客户插入很多行，尽量使用多个值表的 INSERT 语句</p>
+</li>
+<li><p>优化 ORDER BY 语句：MySQL 排序方式有使用有序索引，第二种是对返回数据排序（FileSort）。对于 FIleSort 算法，MySQL 有两种方式：两次扫描算法和一次扫描算法，通过增加 max_length_for_sort_data 的大小使得尽可能使用一次扫描算法。</p>
+</li>
+<li><p>优化 GROUP BY 语句：默认情况下，MySQL 对 GROUP BY 字段进行排序，如果想要不排序，可以追加使用 ORDER BY NULL 禁止排序。</p>
+</li>
+<li><p>优化嵌套查询：有些情况下，子查询可以被更有效率的 JOIN 替代</p>
+</li>
+<li><p>优化 OR 条件：对于含有 OR 的查询子句，如果要利用索引，则 OR 之间的每个条件列都必须用到索引；如果没有索引，则应该考虑增加索引。</p>
+</li>
+<li><p>优化分页查询：考虑分页场景<code>limit 1000,20</code>，此时 MySQL 排序出前 1020 条记录后仅仅需要返回第 1001-1020 条记录，而前 1000 条记录则会被抛弃。优化方案有：</p>
+<ul>
+<li>在索引上完成排序分页的操作，最后根据主键关联回原表查询所需要的其他列内容。</li>
+<li>把 LIMIIT 查询转换成某个位置的查询，如根据上次的查询的最大 id 计算下一次的最大的值。</li>
+</ul>
+</li>
+</ul>
+<p>常用 SQL 技巧：</p>
+<ul>
+<li>正则表达式的使用</li>
+<li>使用 RAND() 提取随机行：<code>select * from category order by rand()</code></li>
+<li>使用 BIT GROUP FUNCTION 做统计</li>
+<li>使用外键需要注意的问题：在 MySQL 中，InnoDB 存储系统支持对外键约束条件的检查，而对于其他类型存储引擎的表则没有这种检查</li>
+</ul>
+<h2 id="第十九章-优化数据库对象"><a href="#第十九章-优化数据库对象" class="headerlink" title="第十九章 优化数据库对象"></a>第十九章 优化数据库对象</h2><p>优化表的数据类型：在设计表的时候需要考虑字段的长度留有一定的冗余，但是不推荐让很多字段留有大量的冗余，这会造成磁盘空间的浪费，可以使用<code>PROCEDURE ANALYSE()</code>对表进行分析。</p>
+<p>通过拆分提高表的访问效率：</p>
+<ul>
+<li>垂直拆分：一个表中的某些列常用，某些列不常用的情况，缺点是查询所有数据的时候需要联合数据</li>
+<li>水平拆分：表很大，分割后可以降低查询时需要读的数据和索引的页数；表中的数据本来就具有某些独立性，如时间段，缺点在于查询所有数据的时候需要联合数据</li>
+</ul>
+<p>逆规范化：数据的规范化程度并不是越高越好，规范化程度越高，产生的关系就越多，从而导致表之间的连接操作越频繁，而导致性能下降。常用的方法有增加冗余列、增加派生列、重新组表和分割表。</p>
+<p>使用中间表提高统计查询速度：如查询最近一周的消费情况，就可以在原来的消费表上建立起来，优点在于中间表复制源表部分数据，并且与源表相“隔离”，另外，中间表上可以灵活地添加索引或增加临时用的新字段。</p>
 
   
   
@@ -1405,10 +1428,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-05T20:47:31+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-07T20:13:30+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年3月5日</p>
+    <p>更新于：2021年3月7日</p>
   </a>
 </div>
 
@@ -1578,7 +1601,7 @@
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-SQL%E5%9F%BA%E7%A1%80"><span class="toc-text">第二章 SQL基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-MySQL%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第三章 MySQL支持的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">第四章 MySQL中的运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">第五章 常用函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第六章 图形化工具的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%EF%BC%88%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%89%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">第七章 存储引擎（表类型）的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第八章 选择合适的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">第九章 字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">第十章 索引的设计和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%A7%86%E5%9B%BE"><span class="toc-text">第十一章 视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">第十二章 存储过程和函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-text">第十三章 触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6%E5%92%8C%E9%94%81%E5%AE%9A%E8%AF%AD%E5%8F%A5"><span class="toc-text">第十四章 事务控制和锁定语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-SQL%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-text">第十五章 SQL中的安全问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-SQL-Mode%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-text">第十六章 SQL Mode及其相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-MySQL%E5%88%86%E5%8C%BA"><span class="toc-text">第十七章 MySQL分区</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-SQL%E5%9F%BA%E7%A1%80"><span class="toc-text">第二章 SQL基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-MySQL%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第三章 MySQL支持的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">第四章 MySQL中的运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">第五章 常用函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第六章 图形化工具的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%EF%BC%88%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%89%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">第七章 存储引擎（表类型）的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第八章 选择合适的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">第九章 字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">第十章 索引的设计和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%A7%86%E5%9B%BE"><span class="toc-text">第十一章 视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">第十二章 存储过程和函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-text">第十三章 触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6%E5%92%8C%E9%94%81%E5%AE%9A%E8%AF%AD%E5%8F%A5"><span class="toc-text">第十四章 事务控制和锁定语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-SQL%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-text">第十五章 SQL中的安全问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-SQL-Mode%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-text">第十六章 SQL Mode及其相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-MySQL%E5%88%86%E5%8C%BA"><span class="toc-text">第十七章 MySQL分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-SQL%E4%BC%98%E5%8C%96"><span class="toc-text">第十八章 SQL优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E4%BC%98%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">第十九章 优化数据库对象</span></a></li></ol>
     </div>
   </section>
 
