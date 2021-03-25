@@ -407,7 +407,7 @@
 <h2 id="第二章-简单动态字符串"><a href="#第二章-简单动态字符串" class="headerlink" title="第二章 简单动态字符串"></a>第二章 简单动态字符串</h2><ul>
 <li>SDS 定义：</li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012191209564.png" class="lazyload" data-srcset="image-20201012191209564.png" srcset="data:image/png;base64,666" alt="image-20201012191209564"/></div><span class="image-caption">image-20201012191209564</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201012191209564.png" class="lazyload" data-srcset="image-20201012191209564.png" srcset="data:image/png;base64,666" alt="image-20201012191209564"/></div><span class="image-caption">image-20201012191209564</span></div>
 <ul>
 <li>SDS 与 C 字符串的区别：<ul>
 <li>常数复杂度获取字符串的长度</li>
@@ -427,15 +427,15 @@
 <li>带链表长度计数器</li>
 <li>多态：链表节点使用void*指针来保存节点值, 并且可以通过 list 结构的dup, free, match三个属性为节点值设置类型特定函数,所以链表可以用于保存各种不同类型的值 </li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012192406288.png" class="lazyload" data-srcset="image-20201012192406288.png" srcset="data:image/png;base64,666" alt="image-20201012192406288"/></div><span class="image-caption">image-20201012192406288</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201012192406288.png" class="lazyload" data-srcset="image-20201012192406288.png" srcset="data:image/png;base64,666" alt="image-20201012192406288"/></div><span class="image-caption">image-20201012192406288</span></div>
 </li>
 </ul>
 <h2 id="第三章-字典"><a href="#第三章-字典" class="headerlink" title="第三章 字典"></a>第三章 字典</h2><ul>
 <li><p>Redis 普通状态下的字典：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012194731429.png" class="lazyload" data-srcset="image-20201012194731429.png" srcset="data:image/png;base64,666" alt="image-20201012194731429"/></div><span class="image-caption">image-20201012194731429</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201012194731429.png" class="lazyload" data-srcset="image-20201012194731429.png" srcset="data:image/png;base64,666" alt="image-20201012194731429"/></div><span class="image-caption">image-20201012194731429</span></div>
 </li>
 <li><p>哈希算法：首先计算哈希值，然后计算出索引值</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201012194922912.png" class="lazyload" data-srcset="image-20201012194922912.png" srcset="data:image/png;base64,666" alt="image-20201012194922912"/></div><span class="image-caption">image-20201012194922912</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201012194922912.png" class="lazyload" data-srcset="image-20201012194922912.png" srcset="data:image/png;base64,666" alt="image-20201012194922912"/></div><span class="image-caption">image-20201012194922912</span></div>
 <blockquote>
 <p>Redis 使用的 MurmurHash 算法计算建的哈希值，该算法的优点在于即使输入的键时有规律的，算法仍然能给出一个很好的随机分布性。</p>
 </blockquote>
@@ -451,7 +451,7 @@
 <li><p>跳跃表：有序的数据结构，通过在节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。支持 平均O(logn)，最坏O(N)复杂度的节点查找。</p>
 </li>
 <li><p>跳跃表结构示意图：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013191437427.png" class="lazyload" data-srcset="image-20201013191437427.png" srcset="data:image/png;base64,666" alt="image-20201013191437427"/></div><span class="image-caption">image-20201013191437427</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013191437427.png" class="lazyload" data-srcset="image-20201013191437427.png" srcset="data:image/png;base64,666" alt="image-20201013191437427"/></div><span class="image-caption">image-20201013191437427</span></div>
 <p>header和tail分别表示表头节点和表尾节点，level表示的层数，length时跳跃表的长度。BW表示的是回退指针，指向上一个跳跃表节点。箭头线上面的数字是跨度，表示跨过了几个节点。</p>
 </li>
 <li><p>在Redis中，每个节点的层高是1到32之间的随机数，在同一个跳跃表中，多个节点可以包含相同的分值，但是每个节点的额成员对象必须唯一，另外，跳跃表中的节点按照分值大小排序，如果分值大小相同，则按照成员对象的大小排序。</p>
@@ -459,7 +459,7 @@
 </ul>
 <h2 id="第六章-整数集合"><a href="#第六章-整数集合" class="headerlink" title="第六章 整数集合"></a>第六章 整数集合</h2><ul>
 <li><p>整数集合实现：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013192842489.png" class="lazyload" data-srcset="image-20201013192842489.png" srcset="data:image/png;base64,666" alt="image-20201013192842489"/></div><span class="image-caption">image-20201013192842489</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013192842489.png" class="lazyload" data-srcset="image-20201013192842489.png" srcset="data:image/png;base64,666" alt="image-20201013192842489"/></div><span class="image-caption">image-20201013192842489</span></div>
 <p>虽然contents是int8_t类型的数组，但实际上数组并不保存任何int8_t类型的值，该数组的真正类型取决于encoding属性的值。</p>
 </li>
 <li><p>升级：每当我们要将一个新元素添加到整数集合里面，并且新元素的类型比整数集合现有所有元素的类型都要长时,整数集合需要先进行升级(upgrade)，然后才能将新元素添加到整数集合里面。首先根据新元素的类型，扩展整数集合底层数组的空间大小，并且为新元素分配相应的空间；将底层数组现有的所有元素都转换成与新元素相同的类型，并且将其放到正确的位置上，保持有序性不变；将新元素添加到底层数组里面（新元素要么在最后位置，要么在首位置）。</p>
@@ -471,27 +471,27 @@
 </ul>
 <h2 id="第七章-压缩列表"><a href="#第七章-压缩列表" class="headerlink" title="第七章 压缩列表"></a>第七章 压缩列表</h2><ul>
 <li><p>压缩列表的构成：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013194653014.png" class="lazyload" data-srcset="image-20201013194653014.png" srcset="data:image/png;base64,666" alt="image-20201013194653014"/></div><span class="image-caption">image-20201013194653014</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013194653014.png" class="lazyload" data-srcset="image-20201013194653014.png" srcset="data:image/png;base64,666" alt="image-20201013194653014"/></div><span class="image-caption">image-20201013194653014</span></div>
 <p>zlbytes记录整个压缩列表占用的内存字节数，zltail记录列表表位距离压缩列表的起始地址有多少字节，zllen记录节点个数，zlend特殊值0xFF，标记为压缩列表的末端。</p>
 </li>
 <li><p>压缩列表节点的构成：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013195122854.png" class="lazyload" data-srcset="image-20201013195122854.png" srcset="data:image/png;base64,666" alt="image-20201013195122854"/></div><span class="image-caption">image-20201013195122854</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013195122854.png" class="lazyload" data-srcset="image-20201013195122854.png" srcset="data:image/png;base64,666" alt="image-20201013195122854"/></div><span class="image-caption">image-20201013195122854</span></div>
 <p>根据previous_entry_length可以计算出上一个节点的地址，根据encoding可以知道存放的数据类型和长度，content则是一个字节数组或者整数。</p>
 </li>
 <li><p>连锁更新：当压缩列表的原来的节点的数值在250-254之间的时候，此时如果新增或者（删除）一个节点，会导致原来的首节点previous_entry_length大小从1字节转换为五个字节，从而引发连锁更新：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013200603337.png" class="lazyload" data-srcset="image-20201013200603337.png" srcset="data:image/png;base64,666" alt="image-20201013200603337"/></div><span class="image-caption">image-20201013200603337</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013200603337.png" class="lazyload" data-srcset="image-20201013200603337.png" srcset="data:image/png;base64,666" alt="image-20201013200603337"/></div><span class="image-caption">image-20201013200603337</span></div>
 <p>尽管连锁更新的复杂度较高，但是真正造成性能问题的几率还是很低的。</p>
 </li>
 </ul>
 <h2 id="第八章-对象"><a href="#第八章-对象" class="headerlink" title="第八章 对象"></a>第八章 对象</h2><ul>
 <li><p>对象的类型和编码：Redis中的对象的结构如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201146386.png" class="lazyload" data-srcset="image-20201013201146386.png" srcset="data:image/png;base64,666" alt="image-20201013201146386"/></div><span class="image-caption">image-20201013201146386</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013201146386.png" class="lazyload" data-srcset="image-20201013201146386.png" srcset="data:image/png;base64,666" alt="image-20201013201146386"/></div><span class="image-caption">image-20201013201146386</span></div>
 <p>其中，type表示对象的类型：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201321101.png" class="lazyload" data-srcset="image-20201013201321101.png" srcset="data:image/png;base64,666" alt="image-20201013201321101"/></div><span class="image-caption">image-20201013201321101</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013201321101.png" class="lazyload" data-srcset="image-20201013201321101.png" srcset="data:image/png;base64,666" alt="image-20201013201321101"/></div><span class="image-caption">image-20201013201321101</span></div>
 <p>对象的ptr指向对象的底层实现数据结构，而这些数据结构有对象的encoding属性决定：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201519317.png" class="lazyload" data-srcset="image-20201013201519317.png" srcset="data:image/png;base64,666" alt="image-20201013201519317"/></div><span class="image-caption">image-20201013201519317</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013201519317.png" class="lazyload" data-srcset="image-20201013201519317.png" srcset="data:image/png;base64,666" alt="image-20201013201519317"/></div><span class="image-caption">image-20201013201519317</span></div>
 <p>每种类型的对象至少使用了两种不同的编码：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013201632078.png" class="lazyload" data-srcset="image-20201013201632078.png" srcset="data:image/png;base64,666" alt="image-20201013201632078"/></div><span class="image-caption">image-20201013201632078</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013201632078.png" class="lazyload" data-srcset="image-20201013201632078.png" srcset="data:image/png;base64,666" alt="image-20201013201632078"/></div><span class="image-caption">image-20201013201632078</span></div>
 <p>通过encoding来设定对象的编码，极大提高了Redis的灵活性和效率。</p>
 </li>
 <li><p>字符串对象：编码可以是int，raw或者embstr。</p>
@@ -505,7 +505,7 @@
 <li><p>有序集合对象：编码可以是ziplist或者skiplist。有序集合同时使用跳跃表可字典来实现的原因是能够让有序集合的查找和范围型的操作都尽可能快的执行，减少时间复杂度。</p>
 </li>
 <li><p>类型检查和命令多态：类型检查的实现是通过键中的类型来进行的，命令的多态则是根据值对象的编码方式进行的。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201013203249016.png" class="lazyload" data-srcset="image-20201013203249016.png" srcset="data:image/png;base64,666" alt="image-20201013203249016"/></div><span class="image-caption">image-20201013203249016</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201013203249016.png" class="lazyload" data-srcset="image-20201013203249016.png" srcset="data:image/png;base64,666" alt="image-20201013203249016"/></div><span class="image-caption">image-20201013203249016</span></div>
 </li>
 <li><p>内存回收：采用引用计数的方式实现垃圾回收。</p>
 </li>
@@ -519,16 +519,16 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">	<span class="comment">// 数据库</span></span><br><span class="line">	redisDb *db;</span><br><span class="line">	<span class="comment">// 数据库的数量</span></span><br><span class="line">	<span class="keyword">int</span> dbnum;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>切换数据库：通过SELECT命令实现，实际上是通过修改客户端的db指针来实现的</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018131936321.png" class="lazyload" data-srcset="image-20201018131936321.png" srcset="data:image/png;base64,666" alt="image-20201018131936321"/></div><span class="image-caption">image-20201018131936321</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018131936321.png" class="lazyload" data-srcset="image-20201018131936321.png" srcset="data:image/png;base64,666" alt="image-20201018131936321"/></div><span class="image-caption">image-20201018131936321</span></div>
 </li>
 <li><p>数据库键空间：每个数据库由RedisDb保存，其中RedisDb.dict保存了数据库中的所有键值对。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018132511374.png" class="lazyload" data-srcset="image-20201018132511374.png" srcset="data:image/png;base64,666" alt="image-20201018132511374"/></div><span class="image-caption">image-20201018132511374</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018132511374.png" class="lazyload" data-srcset="image-20201018132511374.png" srcset="data:image/png;base64,666" alt="image-20201018132511374"/></div><span class="image-caption">image-20201018132511374</span></div>
 <p>增删查改都是在dict结构上进行的，另外，在读写键空间的时候，还会执行一些其他的额外操作，比如更新LRU时间，提前判断键是否过期，标记键为dirty等等维护数据库一致性的操作。</p>
 </li>
 <li><p>设置键的生存时间或过期时间：在Redis中有四个不同的命令来设置键的生存时间或者过期时间，分别是EXPIRE, PEXPIRE, EXPIREAT, PEXPIREAT命令，前三个命令都是转换为PEXPIREAT命令执行，转换图如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018133226586.png" class="lazyload" data-srcset="image-20201018133226586.png" srcset="data:image/png;base64,666" alt="image-20201018133226586"/></div><span class="image-caption">image-20201018133226586</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018133226586.png" class="lazyload" data-srcset="image-20201018133226586.png" srcset="data:image/png;base64,666" alt="image-20201018133226586"/></div><span class="image-caption">image-20201018133226586</span></div>
 <p>RedisDb结构中的expires字典保存着数据库中所有过期键的过期时间，称该字典是过期字典，其中键是一个指针，指向某个键空间的某个键对象，过期字典的值保存着long long类型的整数，保存着过期时间。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018133620122.png" class="lazyload" data-srcset="image-20201018133620122.png" srcset="data:image/png;base64,666" alt="image-20201018133620122"/></div><span class="image-caption">image-20201018133620122</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018133620122.png" class="lazyload" data-srcset="image-20201018133620122.png" srcset="data:image/png;base64,666" alt="image-20201018133620122"/></div><span class="image-caption">image-20201018133620122</span></div>
 <p>由此，查看某个键对应的值之前需要先判断一下是否在过期字典中，同时检测其是否过期。</p>
 </li>
 <li><p>过期键删除策略：定时删除，惰性删除，定期删除。定时删除策略对内存是最友好的:通过使用定时器,定时除策略可以保证过期键会尽 可能快地被删除,并释放过期键所占用的内存。惰性删除策略对CPU时间来说是最友好的:程序只会在取出键时才对键进行过期检查，这可以保证删除过期键的操作只会在非做不可的情况下进行,并且删除的目标仅限于当前处理的键,这个策略不会在删除其他无关的过期键上花费任何CPU时间。定期删除策略每隔一段时间执行一次删除过期键操作,并通过限制删除操作执行的时长和频率来减少删除操作对CPU时间的影响 。</p>
@@ -547,7 +547,7 @@
 </ul>
 <h2 id="第十章-RDB持久化"><a href="#第十章-RDB持久化" class="headerlink" title="第十章 RDB持久化"></a>第十章 RDB持久化</h2><ul>
 <li><p>RDB文件的创建和载入：有两个命令可以用于生成RDB文件，一个是SAVE，另外一个是BGSAVE，后者是非阻塞的。另外由于AOF文件的更新频率比RDB文件的更新频率高一些，会首选AOF文件来恢复数据库状态。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018141926970.png" class="lazyload" data-srcset="image-20201018141926970.png" srcset="data:image/png;base64,666" alt="image-20201018141926970"/></div><span class="image-caption">image-20201018141926970</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018141926970.png" class="lazyload" data-srcset="image-20201018141926970.png" srcset="data:image/png;base64,666" alt="image-20201018141926970"/></div><span class="image-caption">image-20201018141926970</span></div>
 <p>虽然BGSAVE执行的时候仍然可以继续处理客户端的请求，但是SAVE，BGSAVE和BGREWRITEAOF命令却不能再次执行。在服务器载入RDB文件的时候，会一直处于阻塞状态，直到载入工作完成为止。</p>
 </li>
 <li><p>自动间隔性保存：当服务器满足一定的条件的时候，就会自动执行相应BGSAVE命令，来及时保存数据库的状态。默认保存条件如下：</p>
@@ -557,19 +557,19 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">saveparam</span> *<span class="title">saveparams</span>;</span></span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> dirty;</span><br><span class="line">	<span class="keyword">time_t</span> lastsave;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>RDB文件结构如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143358528.png" class="lazyload" data-srcset="image-20201018143358528.png" srcset="data:image/png;base64,666" alt="image-20201018143358528"/></div><span class="image-caption">image-20201018143358528</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143504979.png" class="lazyload" data-srcset="image-20201018143504979.png" srcset="data:image/png;base64,666" alt="image-20201018143504979"/></div><span class="image-caption">image-20201018143504979</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018143600755.png" class="lazyload" data-srcset="image-20201018143600755.png" srcset="data:image/png;base64,666" alt="image-20201018143600755"/></div><span class="image-caption">image-20201018143600755</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018143358528.png" class="lazyload" data-srcset="image-20201018143358528.png" srcset="data:image/png;base64,666" alt="image-20201018143358528"/></div><span class="image-caption">image-20201018143358528</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018143504979.png" class="lazyload" data-srcset="image-20201018143504979.png" srcset="data:image/png;base64,666" alt="image-20201018143504979"/></div><span class="image-caption">image-20201018143504979</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018143600755.png" class="lazyload" data-srcset="image-20201018143600755.png" srcset="data:image/png;base64,666" alt="image-20201018143600755"/></div><span class="image-caption">image-20201018143600755</span></div>
 </li>
 </ul>
 <h2 id="第十一章-AOF持久化"><a href="#第十一章-AOF持久化" class="headerlink" title="第十一章 AOF持久化"></a>第十一章 AOF持久化</h2><ul>
 <li><p>AOF持久化的实现：当AOF的功能打开的时候，服务器在完成一个命令的之后，会将其保存在redisServer的aof_buf缓冲区的末尾。Redis的服务器就是一个时间循环，这个循环中负责接受客户端的命令请求，以及向客户端发送命令回复，而时间事件则负责执行serverCron这样需要定时运行的函数。每次结束一个事件循环的时候，需要考虑是否需要将缓冲区的内容写入到AOF文件中。</p>
 </li>
 <li><p>由于AOF文件包含了重建数据库的所有写命令，所以数据库只需要读入并执行一遍AOF里面的命令就可以恢复数据库关闭前的状态。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018150745174.png" class="lazyload" data-srcset="image-20201018150745174.png" srcset="data:image/png;base64,666" alt="image-20201018150745174"/></div><span class="image-caption">image-20201018150745174</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018150745174.png" class="lazyload" data-srcset="image-20201018150745174.png" srcset="data:image/png;base64,666" alt="image-20201018150745174"/></div><span class="image-caption">image-20201018150745174</span></div>
 </li>
 <li><p>AOF重写：随着时间的流逝，AOF文件的内容会越来越多，不加以控制的话，会很容易超过体积最大限制造成影响。为了解决这个问题，Redis提供了AOF文件重写的功能。重写功能是通过读取当前数据库的状态来实现的。另外为了提高服务器的可用性，一般执行AOF重写的时候采用的是后台重写，以此防止阻塞的问题。但是使用子进程进行AOF文件的重写的时候，服务器会接受客户端的命令，而新的命令可能会造成数据库状态的修改，从而使得当前数据库状态和重写后的AOF文件保存的数据库状态不一致。为了解决这种数据不一致问题, Redis服务器设置了一个AOF重写缓冲区,这个缓冲区在服务器创建子进程之后开始使用,当 Redis服务器执行完一个写命令之后,它会同时将这个写命令发送给AOF缓冲区和AOF重写缓冲区,如图11-4所示。 </p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018151801586.png" class="lazyload" data-srcset="image-20201018151801586.png" srcset="data:image/png;base64,666" alt="image-20201018151801586"/></div><span class="image-caption">image-20201018151801586</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018151801586.png" class="lazyload" data-srcset="image-20201018151801586.png" srcset="data:image/png;base64,666" alt="image-20201018151801586"/></div><span class="image-caption">image-20201018151801586</span></div>
 <p>当子进程完成重写操作的时候，会向父进程发送信号，父进程此时会将AOF重写缓冲区的内容写入到新的AOF文件中，最后执行改名覆盖现有的AOF文件，实现新旧两个AOF文件的替换。</p>
 </li>
 </ul>
@@ -577,19 +577,19 @@
 <li><p>Redis服务器是一个事件驱动程序，服务器需要处理两类事件：文件事件，时间事件。文件事件是服务器对套接字的抽象，时间事件则是定时操作的抽象。</p>
 </li>
 <li><p>文件事件：Redis基于<code>Reactor</code>模式开发出了自己的网络事件处理器，这个处理器被称作为文件事件处理器，组成如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018153202366.png" class="lazyload" data-srcset="image-20201018153202366.png" srcset="data:image/png;base64,666" alt="image-20201018153202366"/></div><span class="image-caption">image-20201018153202366</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018153202366.png" class="lazyload" data-srcset="image-20201018153202366.png" srcset="data:image/png;base64,666" alt="image-20201018153202366"/></div><span class="image-caption">image-20201018153202366</span></div>
 <p>IO多路复用程序的实现，通过包装常见的select，epoll，evport和kqueue来实现的。</p>
 </li>
 <li><p>时间事件：分为定时事件和周期性事件。目前Redis中只是用了周期性事件，没有使用定时事件。服务器将所有时间事件都放在一个无序链表中,每当时间事件执行器运行时,它就<strong>遍历</strong>整个链表,査找所有已到达的时间事件,并调用相应的事件处理器。 持续运行的Redis服务器需要对自身的资源和状态进行检查和调整，从而可以确保服务器可以长期稳定的运行，这些定期操作被封装到redis.c/serverCron函数中执行。</p>
 </li>
 <li><p>事件的调度与执行：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018154101415.png" class="lazyload" data-srcset="image-20201018154101415.png" srcset="data:image/png;base64,666" alt="image-20201018154101415"/></div><span class="image-caption">image-20201018154101415</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018154101415.png" class="lazyload" data-srcset="image-20201018154101415.png" srcset="data:image/png;base64,666" alt="image-20201018154101415"/></div><span class="image-caption">image-20201018154101415</span></div>
 <p>由于时间事件在文件事件之后执行，并且事件之间不会出现抢占，所以时间事件的实际处理时间，通常会比时间事件设定的到达事件稍晚一些。</p>
 </li>
 </ul>
 <h2 id="第十三章-客户端"><a href="#第十三章-客户端" class="headerlink" title="第十三章 客户端"></a>第十三章 客户端</h2><ul>
 <li><p>Redis服务器会为每个客户端创建一个redis.h/redisClient结构，用于保存客户端的信息，Redis服务器中还会保存着一个clients的链表，用于保存所有和服务器相连接的客户端。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201018162408381.png" class="lazyload" data-srcset="image-20201018162408381.png" srcset="data:image/png;base64,666" alt="image-20201018162408381"/></div><span class="image-caption">image-20201018162408381</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201018162408381.png" class="lazyload" data-srcset="image-20201018162408381.png" srcset="data:image/png;base64,666" alt="image-20201018162408381"/></div><span class="image-caption">image-20201018162408381</span></div>
 </li>
 <li><p>客户端属性：通用属性和特定属性。有以下几种属性：</p>
 <ul>
@@ -645,7 +645,7 @@
 <li>RDB生成后，将其发送给从服务器，从服务器加载RDB文件</li>
 <li>从服务器加载完成后，主服务器将缓冲区里面的所有写命令发送给从服务器，保持一致性</li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023194004571.png" class="lazyload" data-srcset="image-20201023194004571.png" srcset="data:image/png;base64,666" alt="image-20201023194004571"/></div><span class="image-caption">image-20201023194004571</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023194004571.png" class="lazyload" data-srcset="image-20201023194004571.png" srcset="data:image/png;base64,666" alt="image-20201023194004571"/></div><span class="image-caption">image-20201023194004571</span></div>
 </li>
 <li><p>命令传播：当主服务的数据库状态被修改的时候，此时造成数据库状态的不一致性，通过命令传播让主从服务器状态重新回到一致状态。</p>
 </li>
@@ -654,7 +654,7 @@
 <li><p>旧版复制功能的缺陷：复制可以分为初次复制和断线后重复制，旧版复制功能并没有很好解决断线后重复制时间长的问题：只需要将断线后的命令发送给从服务器就行，不需要全部复制一遍。</p>
 </li>
 <li><p>新版复制功能的实现：新版复制功能使用PSYNC命令代替SYNC命令来执行同步操作。PSYNC命令有完整重同步和部分重同步两种模式，前者用于处理初次复制的情况，后者用于处理断线后重复制情况。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023194735822.png" class="lazyload" data-srcset="image-20201023194735822.png" srcset="data:image/png;base64,666" alt="image-20201023194735822"/></div><span class="image-caption">image-20201023194735822</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023194735822.png" class="lazyload" data-srcset="image-20201023194735822.png" srcset="data:image/png;base64,666" alt="image-20201023194735822"/></div><span class="image-caption">image-20201023194735822</span></div>
 </li>
 <li><p>部分重同步的实现：</p>
 <ul>
@@ -664,7 +664,7 @@
 </ul>
 </li>
 <li><p>PSYNC命令的实现：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023201400872.png" class="lazyload" data-srcset="image-20201023201400872.png" srcset="data:image/png;base64,666" alt="image-20201023201400872"/></div><span class="image-caption">image-20201023201400872</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023201400872.png" class="lazyload" data-srcset="image-20201023201400872.png" srcset="data:image/png;base64,666" alt="image-20201023201400872"/></div><span class="image-caption">image-20201023201400872</span></div>
 </li>
 <li><p>复制的实现：</p>
 <ul>
@@ -684,7 +684,7 @@
 <li><p>辅助实现min-slaves选项：可以防止主服务器在不安全的情况下执行写命令，如配置min-slaves-to-write为3，那么在从服务器的数量小于3时，拒接执行写命令</p>
 </li>
 <li><p>检测命令丢失：如果丢包的话，通过offset实现一致性</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023202834446.png" class="lazyload" data-srcset="image-20201023202834446.png" srcset="data:image/png;base64,666" alt="image-20201023202834446"/></div><span class="image-caption">image-20201023202834446</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023202834446.png" class="lazyload" data-srcset="image-20201023202834446.png" srcset="data:image/png;base64,666" alt="image-20201023202834446"/></div><span class="image-caption">image-20201023202834446</span></div>
 </li>
 </ul>
 </li>
@@ -703,7 +703,7 @@
 <li><p>初始化Sentinel的masters属性：键是被监视主服务器的名字，值是被监视主服务器对应的sentinelRedisInstance结构，每个这样的结构代表一个被Sentinel监视的实例，可以是主服务器，从服务器，或者另外一个Sentinel</p>
 </li>
 <li><p>创建连向主服务器的网络连接：会创建两个连接，一个是命令链接，另外一个是订阅连接</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023205141243.png" class="lazyload" data-srcset="image-20201023205141243.png" srcset="data:image/png;base64,666" alt="image-20201023205141243"/></div><span class="image-caption">image-20201023205141243</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023205141243.png" class="lazyload" data-srcset="image-20201023205141243.png" srcset="data:image/png;base64,666" alt="image-20201023205141243"/></div><span class="image-caption">image-20201023205141243</span></div>
 </li>
 </ul>
 </li>
@@ -712,15 +712,15 @@
 <li><p>获取从服务器信息：Sentinel没十秒一次的频率，向被监视的从服务器发送INFO命令，获取当前信息。会对从服务器实例进行更新</p>
 </li>
 <li><p>向主服务器和从服务器发送信息：默认情况下，PUBLISH信息到主从服务器：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210209159.png" class="lazyload" data-srcset="image-20201023210209159.png" srcset="data:image/png;base64,666" alt="image-20201023210209159"/></div><span class="image-caption">image-20201023210209159</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023210209159.png" class="lazyload" data-srcset="image-20201023210209159.png" srcset="data:image/png;base64,666" alt="image-20201023210209159"/></div><span class="image-caption">image-20201023210209159</span></div>
 </li>
 <li><p>接收来自主从服务器的频道信息：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210251707.png" class="lazyload" data-srcset="image-20201023210251707.png" srcset="data:image/png;base64,666" alt="image-20201023210251707"/></div><span class="image-caption">image-20201023210251707</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023210251707.png" class="lazyload" data-srcset="image-20201023210251707.png" srcset="data:image/png;base64,666" alt="image-20201023210251707"/></div><span class="image-caption">image-20201023210251707</span></div>
 <ul>
 <li>更新sentinels字典</li>
 <li>创建连接其他Sentinel的命令连接</li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201023210330916.png" class="lazyload" data-srcset="image-20201023210330916.png" srcset="data:image/png;base64,666" alt="image-20201023210330916"/></div><span class="image-caption">image-20201023210330916</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201023210330916.png" class="lazyload" data-srcset="image-20201023210330916.png" srcset="data:image/png;base64,666" alt="image-20201023210330916"/></div><span class="image-caption">image-20201023210330916</span></div>
 </li>
 <li><p>检测主观下线行为：默认情况下，Sentinel每秒向其创建了命令连接的实例发送PING命令，通过PONG回复检测是否在线。如果一个实例在down-after-millseconds毫秒内，连续向Sentinel返回无效回复，那么Sentinel会修改这个实例的结构，将flags属性中的SRI_S_DOWN标示，表示其主观下线。</p>
 </li>
@@ -747,31 +747,31 @@
 <li><p>启动节点：节点实际上就是一个运行在集群模式下的 Redis 服务器，通过 cluster-enabled 选项进行配置。</p>
 </li>
 <li><p>集群数据结构：clusterNode 结构保存了一个节点的当前状态，CLusterState 结构记录了在当前节点的视角下，集群目前所处的状态</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025134655648.png" class="lazyload" data-srcset="image-20201025134655648.png" srcset="data:image/png;base64,666" alt="image-20201025134655648"/></div><span class="image-caption">image-20201025134655648</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025134655648.png" class="lazyload" data-srcset="image-20201025134655648.png" srcset="data:image/png;base64,666" alt="image-20201025134655648"/></div><span class="image-caption">image-20201025134655648</span></div>
 </li>
 <li><p>CLUSTER MEET命令实现：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025134751665.png" class="lazyload" data-srcset="image-20201025134751665.png" srcset="data:image/png;base64,666" alt="image-20201025134751665"/></div><span class="image-caption">image-20201025134751665</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025134751665.png" class="lazyload" data-srcset="image-20201025134751665.png" srcset="data:image/png;base64,666" alt="image-20201025134751665"/></div><span class="image-caption">image-20201025134751665</span></div>
 </li>
 </ul>
 </li>
 <li><p>槽指派：Redis 集群通过分片的方式来保存数据库中的键值对：集群的整个数据库被分为16384个槽(slot)，数据库中的每个键都属于这16384个槽的其中一个，集群中的每个节点可以处理0个或最多16384个槽。当数据库中的16384个槽都有节点在处理时，集群处于上线状态(ok)；相反地，如果数据库中有任何一个槽没有得到处理，那么集群处于下线状态(fail)。</p>
 <ul>
 <li><p>记录节点的槽指派信息：clusterNode 结构中的slots属性记录了节点当前负责处理那些槽：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135100354.png" class="lazyload" data-srcset="image-20201025135100354.png" srcset="data:image/png;base64,666" alt="image-20201025135100354"/></div><span class="image-caption">image-20201025135100354</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025135100354.png" class="lazyload" data-srcset="image-20201025135100354.png" srcset="data:image/png;base64,666" alt="image-20201025135100354"/></div><span class="image-caption">image-20201025135100354</span></div>
 <p>slots数组是一个二进制数组，为 1 则该节点负责该槽，否则不负责该槽。</p>
 </li>
 <li><p>传播节点的槽指派信息：当节点 A 通过消息从节点 B 那里接收到节点 B 的 s1ots 数组时,节点 A 会在自已的 clusterState.nodes字典中査找节点 B 对应的 clusterNode 结构,并对结构中的 slots 数组进行保存或者更新</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135431790.png" class="lazyload" data-srcset="image-20201025135431790.png" srcset="data:image/png;base64,666" alt="image-20201025135431790"/></div><span class="image-caption">image-20201025135431790</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025135431790.png" class="lazyload" data-srcset="image-20201025135431790.png" srcset="data:image/png;base64,666" alt="image-20201025135431790"/></div><span class="image-caption">image-20201025135431790</span></div>
 </li>
 <li><p>记录集群所有槽的指派信息：clusterState 结构中的 slots 数组记录了集群中所有的 16384 个槽的指派信息</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025135633822.png" class="lazyload" data-srcset="image-20201025135633822.png" srcset="data:image/png;base64,666" alt="image-20201025135633822"/></div><span class="image-caption">image-20201025135633822</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025135633822.png" class="lazyload" data-srcset="image-20201025135633822.png" srcset="data:image/png;base64,666" alt="image-20201025135633822"/></div><span class="image-caption">image-20201025135633822</span></div>
 </li>
 <li><p>CLUSTER ADDSLOTS命令的实现：首先改动 clusterState.slots 指针，将对应槽指向自己，然后修改clusterNode.slots 数组，将对应的 slots 置位。</p>
 </li>
 </ul>
 </li>
 <li><p>在集群中执行命令：当集群的16384个槽都指派后，集群就会进入上线状态，这时客户端就可以向集群中的节点发送命令了。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025140106534.png" class="lazyload" data-srcset="image-20201025140106534.png" srcset="data:image/png;base64,666" alt="image-20201025140106534"/></div><span class="image-caption">image-20201025140106534</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025140106534.png" class="lazyload" data-srcset="image-20201025140106534.png" srcset="data:image/png;base64,666" alt="image-20201025140106534"/></div><span class="image-caption">image-20201025140106534</span></div>
 <ul>
 <li>计算键输入哪个槽：<code>CRC16(key) &amp; 16383</code></li>
 <li>判断槽是否由当前节点负责处理：clusterState.slots[i] == clusterState.myself</li>
@@ -780,21 +780,21 @@
 </ul>
 </li>
 <li><p>重新分片：Redis 集群的重新分片操作可以将任意数量已经指派给某个节点(源节点)的槽改为指派给另一个节点(目标节点)，并且相关槽所属的键值对也会从源节点被移动到目标节点。重新分片操作可以在线(online)进行,在重新分片的过程中，集群不需要下线，并且源节点和目标节点都可以继续处理命令请求。以下是对单个槽slot流程：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025141051856.png" class="lazyload" data-srcset="image-20201025141051856.png" srcset="data:image/png;base64,666" alt="image-20201025141051856"/></div><span class="image-caption">image-20201025141051856</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025141051856.png" class="lazyload" data-srcset="image-20201025141051856.png" srcset="data:image/png;base64,666" alt="image-20201025141051856"/></div><span class="image-caption">image-20201025141051856</span></div>
 </li>
 <li><p>ASK错误：当执行分片期间，可能会存在这样一种情况：输入被迁移槽的一部分节点键值对保存在源节点里面，另外一部分保存在目标节点里面。此时响应客户端的命令如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025141341148.png" class="lazyload" data-srcset="image-20201025141341148.png" srcset="data:image/png;base64,666" alt="image-20201025141341148"/></div><span class="image-caption">image-20201025141341148</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025141341148.png" class="lazyload" data-srcset="image-20201025141341148.png" srcset="data:image/png;base64,666" alt="image-20201025141341148"/></div><span class="image-caption">image-20201025141341148</span></div>
 <ul>
 <li><p><code>CLSUTER SETSLOT IMPORTING</code>命令的实现：clusterState.importing_slots_from 记录了当前节点正在从其他节点导入的槽。</p>
 </li>
 <li><p><code>CLUSTER SETSLOT MIGRATING</code>命令的实现：clusterState.migrating_slots_to 数组记录当前节点正在迁移至其他节点的槽。</p>
 </li>
 <li><p>ASK错误：如果槽正在迁移，会发送<code>ASK &lt;SLOT&gt; &lt;ip&gt;:&lt;port&gt;</code></p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142210744.png" class="lazyload" data-srcset="image-20201025142210744.png" srcset="data:image/png;base64,666" alt="image-20201025142210744"/></div><span class="image-caption">image-20201025142210744</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142157014.png" class="lazyload" data-srcset="image-20201025142157014.png" srcset="data:image/png;base64,666" alt="image-20201025142157014"/></div><span class="image-caption">image-20201025142157014</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025142210744.png" class="lazyload" data-srcset="image-20201025142210744.png" srcset="data:image/png;base64,666" alt="image-20201025142210744"/></div><span class="image-caption">image-20201025142210744</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025142157014.png" class="lazyload" data-srcset="image-20201025142157014.png" srcset="data:image/png;base64,666" alt="image-20201025142157014"/></div><span class="image-caption">image-20201025142157014</span></div>
 </li>
 <li><p>ASKING命令：打开发送该命令的客户端的 REDIS_ASKING 标示，该标示是一个一次性标示，当成功执行完一次命令的时候，此时该标示就会被移除。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201025142144327.png" class="lazyload" data-srcset="image-20201025142144327.png" srcset="data:image/png;base64,666" alt="image-20201025142144327"/></div><span class="image-caption">image-20201025142144327</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201025142144327.png" class="lazyload" data-srcset="image-20201025142144327.png" srcset="data:image/png;base64,666" alt="image-20201025142144327"/></div><span class="image-caption">image-20201025142144327</span></div>
 </li>
 <li><p>ASK错误和MOVED错误：前者发生在节点间迁移槽的时候，是一种临时措施，后者发生在槽的负责权已经从一个节点迁移到了另外一个节点。</p>
 </li>
@@ -815,14 +815,14 @@
 <li><p>Redis 的发布与订阅的功能由 PUBLISH，SUBSCRIBE，PSUBSCRIB 等命令组成，每当有其他客户端向被订阅的频道发送消息时，频道的所有订阅者都会收到这个消息。</p>
 </li>
 <li><p>频道的订阅与退订：Redis 将所有订阅关系保存在RedisServer.pubsub_channels 字典里面，键是某个被订阅的频道，键值则是一个链表，保存着所有订阅这个频道的客户端。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201019225402536.png" class="lazyload" data-srcset="image-20201019225402536.png" srcset="data:image/png;base64,666" alt="image-20201019225402536"/></div><span class="image-caption">image-20201019225402536</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201019225402536.png" class="lazyload" data-srcset="image-20201019225402536.png" srcset="data:image/png;base64,666" alt="image-20201019225402536"/></div><span class="image-caption">image-20201019225402536</span></div>
 <ul>
 <li>订阅频道：如果有频道已经在字典中，直接尾部插入订阅者，否则创建字典项，键为频道，键值为该客户端</li>
 <li>退订频道：根据被退订的频道名字，从订阅者链表中删去客户端，如果此时订阅者链表为空，则删除对应的字典项</li>
 </ul>
 </li>
 <li><p>模式的订阅与退订：Redis 将所有模式的订阅关系保存在RedisServer.pubsub_patterns 属性里面。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201019225859198.png" class="lazyload" data-srcset="image-20201019225859198.png" srcset="data:image/png;base64,666" alt="image-20201019225859198"/></div><span class="image-caption">image-20201019225859198</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201019225859198.png" class="lazyload" data-srcset="image-20201019225859198.png" srcset="data:image/png;base64,666" alt="image-20201019225859198"/></div><span class="image-caption">image-20201019225859198</span></div>
 <ul>
 <li>订阅模式：新建一个pubsubPattern结构，设置好client和pattern属性，然后将其加入到pubsub_patterns 链表的表尾。</li>
 <li>退订模式：从pubsub_patterns中查找对应的被退订的pubsubPattern结构，然后将其删除。</li>
@@ -850,7 +850,7 @@
 <li><p>事务开始：MULTI命令的执行标志者事务的开始，会将执行该命令的客户端从非事务状态转换为事务状态</p>
 </li>
 <li><p>命令入队：当客户端处于事务状态之后，如果客户端发送的指令是EXEC，DISCARD，WATCH，MULTI命令之一，那么立即执行，否则的话将其放入事务队列之中，然后返回QUEUED回复。每个Redis客户端都有自己的事务状态 mstate，里面包含一个事务队列：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201020233625705.png" class="lazyload" data-srcset="image-20201020233625705.png" srcset="data:image/png;base64,666" alt="image-20201020233625705"/></div><span class="image-caption">image-20201020233625705</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201020233625705.png" class="lazyload" data-srcset="image-20201020233625705.png" srcset="data:image/png;base64,666" alt="image-20201020233625705"/></div><span class="image-caption">image-20201020233625705</span></div>
 </li>
 <li><p>执行事务：当发送EXEC命令的时候，此时就开始执行遍历这个客户端的事务队列，执行其中的所有命令，然后将得到的回复返回给客户端。</p>
 </li>
@@ -864,7 +864,7 @@
 <li><p>监视机制的触发：所有对数据库进行修改的命令，在执行之后会调用touchWatchKey函数对监视字典进行检查，如果某个键被修改，会将对应的客户端REDIS_DIRTY_CAS标示打开，表示客户端的安全性已经被破坏。</p>
 </li>
 <li><p>判断事务是否安全：服务器根据客户端的REDIS_DIRTY_CAS标识来决定是否执行事务：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021120010867.png" class="lazyload" data-srcset="image-20201021120010867.png" srcset="data:image/png;base64,666" alt="image-20201021120010867"/></div><span class="image-caption">image-20201021120010867</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021120010867.png" class="lazyload" data-srcset="image-20201021120010867.png" srcset="data:image/png;base64,666" alt="image-20201021120010867"/></div><span class="image-caption">image-20201021120010867</span></div>
 </li>
 </ul>
 </li>
@@ -896,9 +896,9 @@
 <li><p>根据u.score中的值，进行升序排序</p>
 </li>
 <li><p>遍历数组，将各个数组项的obj指针指向的列表项返回给客户端</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021165824509.png" class="lazyload" data-srcset="image-20201021165824509.png" srcset="data:image/png;base64,666" alt="image-20201021165824509"/></div><span class="image-caption">image-20201021165824509</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021165824509.png" class="lazyload" data-srcset="image-20201021165824509.png" srcset="data:image/png;base64,666" alt="image-20201021165824509"/></div><span class="image-caption">image-20201021165824509</span></div>
 <p>redisSortObject结构如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021165903649.png" class="lazyload" data-srcset="image-20201021165903649.png" srcset="data:image/png;base64,666" alt="image-20201021165903649"/></div><span class="image-caption">image-20201021165903649</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021165903649.png" class="lazyload" data-srcset="image-20201021165903649.png" srcset="data:image/png;base64,666" alt="image-20201021165903649"/></div><span class="image-caption">image-20201021165903649</span></div>
 </li>
 </ul>
 </li>
@@ -917,7 +917,7 @@
 <li><p>STORE选项的实现：STORE选项可以保存排序结果在指定的键里面</p>
 </li>
 <li><p>多个选项的执行顺序：排序，限制长度，获取外部键，保存排序结果集。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021171157237.png" class="lazyload" data-srcset="image-20201021171157237.png" srcset="data:image/png;base64,666" alt="image-20201021171157237"/></div><span class="image-caption">image-20201021171157237</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021171157237.png" class="lazyload" data-srcset="image-20201021171157237.png" srcset="data:image/png;base64,666" alt="image-20201021171157237"/></div><span class="image-caption">image-20201021171157237</span></div>
 <p>除了GET选项外，改变选项的摆放顺序不会影响SORT命令执行这些选项的顺序。</p>
 </li>
 </ul>
@@ -929,9 +929,9 @@
 </ul>
 </li>
 <li><p>慢查询日志记录的保存：服务器状态中有几个和慢查询日志有关的属性：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021171836148.png" class="lazyload" data-srcset="image-20201021171836148.png" srcset="data:image/png;base64,666" alt="image-20201021171836148"/></div><span class="image-caption">image-20201021171836148</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021171836148.png" class="lazyload" data-srcset="image-20201021171836148.png" srcset="data:image/png;base64,666" alt="image-20201021171836148"/></div><span class="image-caption">image-20201021171836148</span></div>
 <p>其中slowlog链表保存所有的慢查询日志。每个节点是一个slowlogEntry：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021172036568.png" class="lazyload" data-srcset="image-20201021172036568.png" srcset="data:image/png;base64,666" alt="image-20201021172036568"/></div><span class="image-caption">image-20201021172036568</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021172036568.png" class="lazyload" data-srcset="image-20201021172036568.png" srcset="data:image/png;base64,666" alt="image-20201021172036568"/></div><span class="image-caption">image-20201021172036568</span></div>
 </li>
 <li><p>慢查询日志的阅览和删除：遍历查询和遍历删除</p>
 </li>
@@ -942,7 +942,7 @@
 <li><p>通过执行MONITOR命令，客户端可以将自己变为一个监视器，实时接收并打印服务器当前处理的命令请求。</p>
 </li>
 <li><p>成为监视器：执行MONITOR命令后。客户端的REDIS_MONITOR标志会被打开，并且这个客户端会被添加到monitors链表的表尾。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021172607447.png" class="lazyload" data-srcset="image-20201021172607447.png" srcset="data:image/png;base64,666" alt="image-20201021172607447"/></div><span class="image-caption">image-20201021172607447</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021172607447.png" class="lazyload" data-srcset="image-20201021172607447.png" srcset="data:image/png;base64,666" alt="image-20201021172607447"/></div><span class="image-caption">image-20201021172607447</span></div>
 </li>
 <li><p>向监视器发送命令信息：服务器每次执行命令之前，都会调用replicationFeedMonitor函数，由这个函数将命令请求信息发送给各个监视器。</p>
 </li>

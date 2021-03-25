@@ -410,7 +410,7 @@
 <li>可用性（Availability）：在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求。</li>
 <li>分区容错性（Partition Tolerance）：一个分布式系统里面，节点组成的网络本来应该是连通的。然而可能因为一些故障，使得有些节点之间不连通了，整个网络就分成了几块区域。数据就散布在了这些不连通的区域中。这就叫分区。当你一个数据项只在一个节点中保存，那么分区出现后，和这个节点不连通的部分就访问不到这个数据了。这时分区就是无法容忍的。提高分区容忍性的办法就是一个数据项复制到多个节点上，那么出现分区之后，这一数据项就可能分布到各个区里。容忍性就提高了。</li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125163500285.png" class="lazyload" data-srcset="image-20201125163500285.png" srcset="data:image/png;base64,666" alt="image-20201125163500285"/></div><span class="image-caption">image-20201125163500285</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125163500285.png" class="lazyload" data-srcset="image-20201125163500285.png" srcset="data:image/png;base64,666" alt="image-20201125163500285"/></div><span class="image-caption">image-20201125163500285</span></div>
 <p>一致性模型：</p>
 <ul>
 <li>弱一致性：如果能容忍后续的部分或者全部访问不到，则是弱一致性。<ul>
@@ -432,7 +432,7 @@
 </li>
 <li><p>多数派：每次写都保证写入大于N/2个节点，每次读保证从大于N/2个节点中读。</p>
 <p>问题：并发环境下，无法保证系统正确性，顺序很重要</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125165428310.png" class="lazyload" data-srcset="image-20201125165428310.png" srcset="data:image/png;base64,666" alt="image-20201125165428310"/></div><span class="image-caption">image-20201125165428310</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125165428310.png" class="lazyload" data-srcset="image-20201125165428310.png" srcset="data:image/png;base64,666" alt="image-20201125165428310"/></div><span class="image-caption">image-20201125165428310</span></div>
 </li>
 <li><p>Paxos：分为 Basic Paxos，Multi Paxos 和 Fast Paxos。</p>
 </li>
@@ -454,16 +454,16 @@
 <li>Phase 2a：Accept：如果达到多数派，此时 proposer 发出accept 请求，请求包含编号N，以及提案内容。</li>
 <li>Phase 2b：Accepted：如果 N 大于此 acceptor 之前接受的提案编号，则接受，否则拒绝。</li>
 </ol>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125182135831.png" class="lazyload" data-srcset="image-20201125182135831.png" srcset="data:image/png;base64,666" alt="image-20201125182135831"/></div><span class="image-caption">image-20201125182135831</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125182135831.png" class="lazyload" data-srcset="image-20201125182135831.png" srcset="data:image/png;base64,666" alt="image-20201125182135831"/></div><span class="image-caption">image-20201125182135831</span></div>
 </li>
 <li><p>问题：部分节点失败，但是达到了 Quoroms</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125182308674.png" class="lazyload" data-srcset="image-20201125182308674.png" srcset="data:image/png;base64,666" alt="image-20201125182308674"/></div><span class="image-caption">image-20201125182308674</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125182308674.png" class="lazyload" data-srcset="image-20201125182308674.png" srcset="data:image/png;base64,666" alt="image-20201125182308674"/></div><span class="image-caption">image-20201125182308674</span></div>
 </li>
 <li><p>问题：Proposer 失败</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125182517810.png" class="lazyload" data-srcset="image-20201125182517810.png" srcset="data:image/png;base64,666" alt="image-20201125182517810"/></div><span class="image-caption">image-20201125182517810</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125182517810.png" class="lazyload" data-srcset="image-20201125182517810.png" srcset="data:image/png;base64,666" alt="image-20201125182517810"/></div><span class="image-caption">image-20201125182517810</span></div>
 </li>
 <li><p>问题：活锁，指的是两个 Proposer 互相间隔发出提案，要求进行投票</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125182646023.png" class="lazyload" data-srcset="image-20201125182646023.png" srcset="data:image/png;base64,666" alt="image-20201125182646023"/></div><span class="image-caption">image-20201125182646023</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125182646023.png" class="lazyload" data-srcset="image-20201125182646023.png" srcset="data:image/png;base64,666" alt="image-20201125182646023"/></div><span class="image-caption">image-20201125182646023</span></div>
 <blockquote>
 <p>上图中的提案编号应该依次是 1,2,3,4…</p>
 </blockquote>
@@ -480,10 +480,10 @@
 </ul>
 </li>
 <li><p>流程：首先执行 Leader 竞选（Basic Paxos 阶段1），选择之后直接执行 Basic Paxos 阶段2即可</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125183931856.png" class="lazyload" data-srcset="image-20201125183931856.png" srcset="data:image/png;base64,666" alt="image-20201125183931856"/></div><span class="image-caption">image-20201125183931856</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125183931856.png" class="lazyload" data-srcset="image-20201125183931856.png" srcset="data:image/png;base64,666" alt="image-20201125183931856"/></div><span class="image-caption">image-20201125183931856</span></div>
 </li>
 <li><p>简化：减少角色，Server 之一同时充当 Proposer 和 Acceptor</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125184130384.png" class="lazyload" data-srcset="image-20201125184130384.png" srcset="data:image/png;base64,666" alt="image-20201125184130384"/></div><span class="image-caption">image-20201125184130384</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125184130384.png" class="lazyload" data-srcset="image-20201125184130384.png" srcset="data:image/png;base64,666" alt="image-20201125184130384"/></div><span class="image-caption">image-20201125184130384</span></div>
 <p>第一阶段也是进行 Leader 选举，然后再 Propose 提案。</p>
 </li>
 </ul>
@@ -492,23 +492,23 @@
 <li><p>三个问题：</p>
 <ul>
 <li><p>Leader Election：通过 Election Timeout 来转变为 Candidate，进行选举，选举成功后，Leader 会发送 heartbeat timeout，来表示自己存在与网络当中</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125185427865.png" class="lazyload" data-srcset="image-20201125185427865.png" srcset="data:image/png;base64,666" alt="image-20201125185427865"/></div><span class="image-caption">image-20201125185427865</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125185427865.png" class="lazyload" data-srcset="image-20201125185427865.png" srcset="data:image/png;base64,666" alt="image-20201125185427865"/></div><span class="image-caption">image-20201125185427865</span></div>
 <ul>
 <li>问题：Leader 宕机了，剩余节点继续执行 Leader Election</li>
 <li>问题：如果两个节点同时成为 Candidate，则通过 Random Timeout 来恢复</li>
 </ul>
 </li>
 <li><p>Log Replication：首先将 log entry 发送给 follower，之后如果获取到大多数投票后，就进行数据持久化，同时发送消息给客户端，最后发送信号给 follower，进行持久化</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125190201928.png" class="lazyload" data-srcset="image-20201125190201928.png" srcset="data:image/png;base64,666" alt="image-20201125190201928"/></div><span class="image-caption">image-20201125190201928</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125190201928.png" class="lazyload" data-srcset="image-20201125190201928.png" srcset="data:image/png;base64,666" alt="image-20201125190201928"/></div><span class="image-caption">image-20201125190201928</span></div>
 </li>
 </ul>
 </li>
 </ul>
 <ul>
 <li><p>Safety：发生故障时或者网络发生分区后，如何进行数据恢复。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125190443066.png" class="lazyload" data-srcset="image-20201125190443066.png" srcset="data:image/png;base64,666" alt="image-20201125190443066"/></div><span class="image-caption">image-20201125190443066</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125190443066.png" class="lazyload" data-srcset="image-20201125190443066.png" srcset="data:image/png;base64,666" alt="image-20201125190443066"/></div><span class="image-caption">image-20201125190443066</span></div>
 <p>在下面的网络分区由于没有达到多数派，数据不会被持久化，但是上面的分区却可以进行数据持久化，这也是为什么一般集群中节点的数量是奇数的原因。当网络被修复之后，由于上面一部分的 Term 大于下面一部分，下面一部分就会更改 Leader，同事新的 Leader 会发送数据包进行数据持久化操作。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201125190848884.png" class="lazyload" data-srcset="image-20201125190848884.png" srcset="data:image/png;base64,666" alt="image-20201125190848884"/></div><span class="image-caption">image-20201125190848884</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201125190848884.png" class="lazyload" data-srcset="image-20201125190848884.png" srcset="data:image/png;base64,666" alt="image-20201125190848884"/></div><span class="image-caption">image-20201125190848884</span></div>
 </li>
 </ul>
 <ul>
