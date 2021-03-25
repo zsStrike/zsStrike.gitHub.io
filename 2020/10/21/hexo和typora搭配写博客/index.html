@@ -405,7 +405,7 @@
 <a id="more"></a>
 
 <h2 id="解决Hexo图片路径问题"><a href="#解决Hexo图片路径问题" class="headerlink" title="解决Hexo图片路径问题"></a>解决Hexo图片路径问题</h2><p>在使用Typora的时候，首先进入到Typora的设置里面，将图片插入格式改为如下设置：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201021142301183.png" class="lazyload" data-srcset="image-20201021142301183.png" srcset="data:image/png;base64,666" alt="image-20201021142301183"/></div><span class="image-caption">image-20201021142301183</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201021142301183.png" class="lazyload" data-srcset="image-20201021142301183.png" srcset="data:image/png;base64,666" alt="image-20201021142301183"/></div><span class="image-caption">image-20201021142301183</span></div>
 <p>这样的话，在写作的时候，我们就可以实时预览到自己插入的图片了。</p>
 <p>接着，在博客仓库的<code>_config.yml</code>中设置<code>post_asset_folder: true</code>。</p>
 <p>但是这样设置的话会产生一个问题，就是在执行<code>hexo g</code>的时候，得到的博客文章路径会多一个<code>&#123;&#123;title&#125;&#125;</code>,导致图片在发布的时候渲染不出来。为了解决这个问题，可以使用<code>hexo-typora-img</code>，</p>

@@ -364,13 +364,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：12.1k字</p>
+      <p>字数：12.5k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：46分钟</p>
+      <p>时长：47分钟</p>
     </a>
   </div>
 
@@ -1154,7 +1154,7 @@
 </ul>
 <h2 id="第七章-存储引擎（表类型）的选择"><a href="#第七章-存储引擎（表类型）的选择" class="headerlink" title="第七章 存储引擎（表类型）的选择"></a>第七章 存储引擎（表类型）的选择</h2><p>存储引擎概述：根据不同领域的需要选择合适的存储引擎，可以更好地提高数据库的效率。在诸多的引擎中，支持事务安全的只有 InnoDB 和 BDB。默认的存储引擎可以通过 default-table-type 配置。使用  <code>SHOW ENGINES</code> 可以查看当前数据库支持的引擎。</p>
 <p>各种存储引擎的特性：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201220142420583.png" class="lazyload" data-srcset="image-20201220142420583.png" srcset="data:image/png;base64,666" alt="image-20201220142420583"/></div><span class="image-caption">image-20201220142420583</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201220142420583.png" class="lazyload" data-srcset="image-20201220142420583.png" srcset="data:image/png;base64,666" alt="image-20201220142420583"/></div><span class="image-caption">image-20201220142420583</span></div>
 <ul>
 <li>MyISAM：不支持事务、也不支持外键，其优势是访问的速度快，对事务完整性没有要求或者以 SELECT、INSERT 为主的应用基本上都可以使用这个引擎创建表。</li>
 <li>InnoDB：提供了具有提交、回滚和崩溃恢复能力的事务安全。但是对比MyISAM的存储引擎，InnoDB写的处理效率差一些，并且会占用更多的磁盘空间以保留数据和索引。</li>
@@ -1163,7 +1163,7 @@
 <li>TokuDB：第三方引擎，是一个高性能、支持事务处理的MySQL和MariaDB的存储引擎，具有高扩展性、高压缩率、高效的写入性能，支持大多数在线DDL操作。</li>
 </ul>
 <h2 id="第八章-选择合适的数据类型"><a href="#第八章-选择合适的数据类型" class="headerlink" title="第八章 选择合适的数据类型"></a>第八章 选择合适的数据类型</h2><p>CHAR 与 VARCHAR：下表是它们之间的对比，最后一行只适用于 MySQL 运行在非严格模式下面。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201220145107981.png" class="lazyload" data-srcset="image-20201220145107981.png" srcset="data:image/png;base64,666" alt="image-20201220145107981"/></div><span class="image-caption">image-20201220145107981</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201220145107981.png" class="lazyload" data-srcset="image-20201220145107981.png" srcset="data:image/png;base64,666" alt="image-20201220145107981"/></div><span class="image-caption">image-20201220145107981</span></div>
 <p>CHAR 长度固定，处理速度快，但是浪费空间存储。对于 MyISAM 和 MEMORY 来说，首选 CHAR，而对于 InnoDB 来说，建议使用VARCHAR类型。</p>
 <p>TEXT 与 BLOB：在保存较大文本时，通常会选择使用TEXT或者BLOB。二者之间的主要差别是BLOB能用来保存二进制数据，比如照片；而TEXT只能保存字符数据，比如一篇文章或者日记。</p>
 <ul>
@@ -1175,7 +1175,7 @@
 <p>浮点数与定点数：浮点数不是精确的，定点数更加精确。float，doble 都是浮点数，decimal 则是定点数。</p>
 <p>日期类型选择：根据实际需要选择能够满足应用的最小存储的日期类型。如果记录的日期需要让不同时区的用户使用，那么最好使用 TIMESTAMP，因为日期类型中只有它能够和实际时区相对应。</p>
 <h2 id="第九章-字符集"><a href="#第九章-字符集" class="headerlink" title="第九章 字符集"></a>第九章 字符集</h2><p>常用字符集比较：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201220170248401.png" class="lazyload" data-srcset="image-20201220170248401.png" srcset="data:image/png;base64,666" alt="image-20201220170248401"/></div><span class="image-caption">image-20201220170248401</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201220170248401.png" class="lazyload" data-srcset="image-20201220170248401.png" srcset="data:image/png;base64,666" alt="image-20201220170248401"/></div><span class="image-caption">image-20201220170248401</span></div>
 <p>选择字符集标准：</p>
 <ul>
 <li>如果应用要处理各种各样的文字，首选 utf-8</li>
@@ -1285,7 +1285,7 @@
 <li>启用 PIPES_AS_CONCAT 模式，将<code>|</code>视作字符串的链接操作符</li>
 </ul>
 <p>常见的 SQL Mode：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210305190614244.png" class="lazyload" data-srcset="image-20210305190614244.png" srcset="data:image/png;base64,666" alt="image-20210305190614244"/></div><span class="image-caption">image-20210305190614244</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210305190614244.png" class="lazyload" data-srcset="image-20210305190614244.png" srcset="data:image/png;base64,666" alt="image-20210305190614244"/></div><span class="image-caption">image-20210305190614244</span></div>
 <p>SQL Mode 在迁移中使用方式：可以通过组合不同的 sql_mode 来构成适合于其他数据库的数据格式，这样就可以使得导出的数据更容易导入到对应的数据库。</p>
 <h2 id="第十七章-MySQL分区"><a href="#第十七章-MySQL分区" class="headerlink" title="第十七章 MySQL分区"></a>第十七章 MySQL分区</h2><p>概述：分区有利于管理非常大的表，采用分而治之的思想，将表分成一系列的分区，分区对于应用来说是完全透明的，具体而言，使用分区的好处有：</p>
 <ul>
@@ -1328,7 +1328,7 @@
 <p>索引问题：</p>
 <ul>
 <li><p>索引的存储分类：索引是在存储引擎层中实现的，MySQL 暂时提供以下四种类型的索引：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210306193145571.png" class="lazyload" data-srcset="image-20210306193145571.png" srcset="data:image/png;base64,666" alt="image-20210306193145571"/></div><span class="image-caption">image-20210306193145571</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210306193145571.png" class="lazyload" data-srcset="image-20210306193145571.png" srcset="data:image/png;base64,666" alt="image-20210306193145571"/></div><span class="image-caption">image-20210306193145571</span></div>
 </li>
 <li><p>使用索引的场景：</p>
 <ul>
@@ -1446,7 +1446,7 @@
 </li>
 </ul>
 <h2 id="第二十一章-优化MySQL-Server"><a href="#第二十一章-优化MySQL-Server" class="headerlink" title="第二十一章 优化MySQL Server"></a>第二十一章 优化MySQL Server</h2><p>MySQL 体系结构概览：体系结构图如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210309145331858.png" class="lazyload" data-srcset="image-20210309145331858.png" srcset="data:image/png;base64,666" alt="image-20210309145331858"/></div><span class="image-caption">image-20210309145331858</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210309145331858.png" class="lazyload" data-srcset="image-20210309145331858.png" srcset="data:image/png;base64,666" alt="image-20210309145331858"/></div><span class="image-caption">image-20210309145331858</span></div>
 <p>主要包含有以下几类线程：</p>
 <ul>
 <li>master thread：主要负责将脏缓存页刷新到数据文件，执行 purge操作，触发检查点，合并插入缓冲区等</li>
@@ -1492,7 +1492,7 @@
 <li>innod block wait timeout 的设置</li>
 </ul>
 <h2 id="第二十二章-磁盘IO问题"><a href="#第二十二章-磁盘IO问题" class="headerlink" title="第二十二章 磁盘IO问题"></a>第二十二章 磁盘IO问题</h2><p>使用磁盘阵列：RAID 将数据分布到若干物理磁盘上，确保了数据存储的可靠性，同时提供并发读写的能力，常见的级别如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210311145856797.png" class="lazyload" data-srcset="image-20210311145856797.png" srcset="data:image/png;base64,666" alt="image-20210311145856797"/></div><span class="image-caption">image-20210311145856797</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210311145856797.png" class="lazyload" data-srcset="image-20210311145856797.png" srcset="data:image/png;base64,666" alt="image-20210311145856797"/></div><span class="image-caption">image-20210311145856797</span></div>
 <p>虚拟文件卷或软 RAID：相较于单个磁盘，性能有所改善</p>
 <p>使用 Symbolic Links 分布 IO：默认情况下，数据库名和表名对应的就是文件系统的目录名和文件名，但是这样不利于多磁盘并发读写的能力，可以使用符号链接将不同的数据库指向不同的物理磁盘，达到分布磁盘 IO 的目的。</p>
 <p>禁止操作系统更新文件的 atime 属性：LINUX 系统下，每次读取一个文件，操作系统就会将读操作的时间写回到磁盘上，这可能会影响 IO 性能。</p>
@@ -1586,7 +1586,7 @@
 <li><p>工作原理：首先对连接的用户进行身份认证，然后对通过的用户赋予对应权限</p>
 </li>
 <li><p>权限表：系统会用到 <code>mysql</code> 数据库下面的 user，host 和 db 这三个权限表</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210314234141680.png" class="lazyload" data-srcset="image-20210314234141680.png" srcset="data:image/png;base64,666" alt="image-20210314234141680"/></div><span class="image-caption">image-20210314234141680</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210314234141680.png" class="lazyload" data-srcset="image-20210314234141680.png" srcset="data:image/png;base64,666" alt="image-20210314234141680"/></div><span class="image-caption">image-20210314234141680</span></div>
 </li>
 <li><p>帐号管理：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建帐号，赋予权限</span><br><span class="line">GRANT pri_type ON &#123;tbl_name | db_name.*&#125; TO user [IDENTIFIED BY [PASSWORD] &#39;password&#39;]]</span><br><span class="line">&#x2F;&#x2F; 查看帐号权限</span><br><span class="line">show grants for user@host;</span><br><span class="line">&#x2F;&#x2F; 撤销权限</span><br><span class="line">REVOKE pri_type ON &#123;tbl_name | db_name.*&#125; FROM user.</span><br><span class="line">&#x2F;&#x2F; 修改账户密码</span><br><span class="line">SET PASSWORD FOR &#39;jeffrey&#39;@&#39;%&#39; &#x3D; PASSWORD(&#39;biscuit&#39;);</span><br><span class="line">&#x2F;&#x2F; 删除帐号</span><br><span class="line">DROP USER user</span><br></pre></td></tr></table></figure>
@@ -1635,7 +1635,7 @@
 <li>可以在从库上执行备份，以避免备份期间影响主库的服务</li>
 </ul>
 <p>复制概述：首先，MySQL 主库会在数据变更的时候将其记录在 Binlog 中，主库推送 binlog 中的事件到从库的中继日志 Relay Log，之后从库根据 Relay Log 重做数据变更操作，通过逻辑复制以此达到数据一致。复制流程如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325183741481.png" class="lazyload" data-srcset="image-20210325183741481.png" srcset="data:image/png;base64,666" alt="image-20210325183741481"/></div><span class="image-caption">image-20210325183741481</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325183741481.png" class="lazyload" data-srcset="image-20210325183741481.png" srcset="data:image/png;base64,666" alt="image-20210325183741481"/></div><span class="image-caption">image-20210325183741481</span></div>
 <ul>
 <li><p>复制中的各类文件：binlog 会把所有的数据修改操作以二进制的形式记录到文件中，binlog 支持三种格式：    </p>
 <ul>
@@ -1647,13 +1647,13 @@
 <li><p>复制的三种常见架构：</p>
 <ul>
 <li><p>一主多从复制架构：对实时性要求不是特别高的读请求通过负载均衡分布到多个从库上，降低主库的读取压力</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325185811765.png" class="lazyload" data-srcset="image-20210325185811765.png" srcset="data:image/png;base64,666" alt="image-20210325185811765"/></div><span class="image-caption">image-20210325185811765</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325185811765.png" class="lazyload" data-srcset="image-20210325185811765.png" srcset="data:image/png;base64,666" alt="image-20210325185811765"/></div><span class="image-caption">image-20210325185811765</span></div>
 </li>
 <li><p>多级复制架构：解决了一主多从场景下，主库的 I/O 负载和网络压力，当然也有缺点：MySQL 的复制是异步复制，多级复制场景下主库的数据是经历两次复制才到达从库</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325185912264.png" class="lazyload" data-srcset="image-20210325185912264.png" srcset="data:image/png;base64,666" alt="image-20210325185912264"/></div><span class="image-caption">image-20210325185912264</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325185912264.png" class="lazyload" data-srcset="image-20210325185912264.png" srcset="data:image/png;base64,666" alt="image-20210325185912264"/></div><span class="image-caption">image-20210325185912264</span></div>
 </li>
 <li><p>双主复制：主库 Master1 和 Master2 互为主从，所有 Web Client 客户端的写请求都访问主库 Master1，而读请求可以选择访问主库 Master1 或 Master2</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325190023002.png" class="lazyload" data-srcset="image-20210325190023002.png" srcset="data:image/png;base64,666" alt="image-20210325190023002"/></div><span class="image-caption">image-20210325190023002</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325190023002.png" class="lazyload" data-srcset="image-20210325190023002.png" srcset="data:image/png;base64,666" alt="image-20210325190023002"/></div><span class="image-caption">image-20210325190023002</span></div>
 </li>
 </ul>
 </li>
@@ -1661,14 +1661,26 @@
 <p>复制搭建过程：</p>
 <ul>
 <li><p>异步复制：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325190234096.png" class="lazyload" data-srcset="image-20210325190234096.png" srcset="data:image/png;base64,666" alt="image-20210325190234096"/></div><span class="image-caption">image-20210325190234096</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325190234096.png" class="lazyload" data-srcset="image-20210325190234096.png" srcset="data:image/png;base64,666" alt="image-20210325190234096"/></div><span class="image-caption">image-20210325190234096</span></div>
 </li>
 <li><p>半同步复制：为了保证主库上的每一个 Binlog 事务都能够被可靠的复制到从库上，主库在每次事务成功提交时，并不及时反馈给前端应用用户，而是等待其中一个从库也接收到 Binlog 事务并成功写入中继日志后，主库才返回Commit操作成功给客户端</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325190248324.png" class="lazyload" data-srcset="image-20210325190248324.png" srcset="data:image/png;base64,666" alt="image-20210325190248324"/></div><span class="image-caption">image-20210325190248324</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325190248324.png" class="lazyload" data-srcset="image-20210325190248324.png" srcset="data:image/png;base64,666" alt="image-20210325190248324"/></div><span class="image-caption">image-20210325190248324</span></div>
 </li>
 </ul>
 <h2 id="第三十二章-MySQL-Cluster"><a href="#第三十二章-MySQL-Cluster" class="headerlink" title="第三十二章 MySQL Cluster"></a>第三十二章 MySQL Cluster</h2><p>MySQL Cluster 架构：节点类型可以分为三类：管理节点，SQL 节点和数据节点。前台应用一定的负载均衡算法将对数据库的访问分散到不同的 SQL 节点上，然后 SQL 节点对数据节点进行数据访问并从数据节点返回结果，最后 SQL 节点将收到的结果返给前台应用。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20210325191905612.png" class="lazyload" data-srcset="image-20210325191905612.png" srcset="data:image/png;base64,666" alt="image-20210325191905612"/></div><span class="image-caption">image-20210325191905612</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325191905612.png" class="lazyload" data-srcset="image-20210325191905612.png" srcset="data:image/png;base64,666" alt="image-20210325191905612"/></div><span class="image-caption">image-20210325191905612</span></div>
+<h2 id="第三十三章-高可用架构"><a href="#第三十三章-高可用架构" class="headerlink" title="第三十三章 高可用架构"></a>第三十三章 高可用架构</h2><p>MMM 架构：MMM（Master-Master replication manager for MySQL）是一套支持双主故障切换和双主日常管理的脚本程序。实现了故障切换的功能，另一方面其内部附加的工具脚本也可以实现多个 slaves 的 read 负载均衡。由于 MMM 无法完全地保证数据一致性，所以 MMM 适用于对数据的一致性要求不是很高，但是又想最大程度的的保证业务可用性的场景对于那些对数据的一致性要求很高的业务，非常不建议采用 MMM 这种高可用性架构。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325193804536.png" class="lazyload" data-srcset="image-20210325193804536.png" srcset="data:image/png;base64,666" alt="image-20210325193804536"/></div><span class="image-caption">image-20210325193804536</span></div>
+<p>MHA 架构：MHA（Master High Availability）目前在 MySQL 高可用方面是一个相对成熟的解决方案，MHA能在最大程度上保证数据的一致性，以达到真正意义上的高可用。工作原理如下：</p>
+<ul>
+<li>从宕机崩溃的 master 保存二进制日志事件</li>
+<li>识别含有最新更新的 slave</li>
+<li>应用差异的中继日志（relay log）到其他 slave</li>
+<li>应用从 master 保存的二进制日志事件</li>
+<li>提升一个 slave 为新 master</li>
+<li>使其他的 slave 连接新的 master 进行复制</li>
+</ul>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210325194616649.png" class="lazyload" data-srcset="image-20210325194616649.png" srcset="data:image/png;base64,666" alt="image-20210325194616649"/></div><span class="image-caption">image-20210325194616649</span></div>
 
   
   
@@ -1703,7 +1715,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-25T19:30:41+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-25T19:51:22+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年3月25日</p>
@@ -1876,7 +1888,7 @@
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-SQL%E5%9F%BA%E7%A1%80"><span class="toc-text">第二章 SQL基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-MySQL%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第三章 MySQL支持的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">第四章 MySQL中的运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">第五章 常用函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第六章 图形化工具的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%EF%BC%88%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%89%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">第七章 存储引擎（表类型）的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第八章 选择合适的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">第九章 字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">第十章 索引的设计和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%A7%86%E5%9B%BE"><span class="toc-text">第十一章 视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">第十二章 存储过程和函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-text">第十三章 触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6%E5%92%8C%E9%94%81%E5%AE%9A%E8%AF%AD%E5%8F%A5"><span class="toc-text">第十四章 事务控制和锁定语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-SQL%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-text">第十五章 SQL中的安全问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-SQL-Mode%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-text">第十六章 SQL Mode及其相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-MySQL%E5%88%86%E5%8C%BA"><span class="toc-text">第十七章 MySQL分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-SQL%E4%BC%98%E5%8C%96"><span class="toc-text">第十八章 SQL优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E4%BC%98%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">第十九章 优化数据库对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0-%E9%94%81%E9%97%AE%E9%A2%98"><span class="toc-text">第二十章 锁问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0-%E4%BC%98%E5%8C%96MySQL-Server"><span class="toc-text">第二十一章 优化MySQL Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0-%E7%A3%81%E7%9B%98IO%E9%97%AE%E9%A2%98"><span class="toc-text">第二十二章 磁盘IO问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E5%BA%94%E7%94%A8%E4%BC%98%E5%8C%96"><span class="toc-text">第二十三章 应用优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-text">第二十五章 MySQL中的常用工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AD%E7%AB%A0-MySQL%E6%97%A5%E5%BF%97"><span class="toc-text">第二十六章 MySQL日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%83%E7%AB%A0-%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">第二十七章 备份与恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AB%E7%AB%A0-MySQL%E6%9D%83%E9%99%90%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-text">第二十八章 MySQL权限与安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E7%AB%A0-MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%92%8C%E5%BA%94%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-text">第三十章 MySQL常见问题和应用技巧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0-MySQL%E5%A4%8D%E5%88%B6"><span class="toc-text">第三十一章 MySQL复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0-MySQL-Cluster"><span class="toc-text">第三十二章 MySQL Cluster</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-SQL%E5%9F%BA%E7%A1%80"><span class="toc-text">第二章 SQL基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-MySQL%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第三章 MySQL支持的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">第四章 MySQL中的运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text">第五章 常用函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">第六章 图形化工具的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%EF%BC%88%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%89%E7%9A%84%E9%80%89%E6%8B%A9"><span class="toc-text">第七章 存储引擎（表类型）的选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">第八章 选择合适的数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-text">第九章 字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">第十章 索引的设计和使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E8%A7%86%E5%9B%BE"><span class="toc-text">第十一章 视图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">第十二章 存储过程和函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="toc-text">第十三章 触发器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6%E5%92%8C%E9%94%81%E5%AE%9A%E8%AF%AD%E5%8F%A5"><span class="toc-text">第十四章 事务控制和锁定语句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-SQL%E4%B8%AD%E7%9A%84%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-text">第十五章 SQL中的安全问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-SQL-Mode%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-text">第十六章 SQL Mode及其相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-MySQL%E5%88%86%E5%8C%BA"><span class="toc-text">第十七章 MySQL分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-SQL%E4%BC%98%E5%8C%96"><span class="toc-text">第十八章 SQL优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E4%BC%98%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">第十九章 优化数据库对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0-%E9%94%81%E9%97%AE%E9%A2%98"><span class="toc-text">第二十章 锁问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0-%E4%BC%98%E5%8C%96MySQL-Server"><span class="toc-text">第二十一章 优化MySQL Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0-%E7%A3%81%E7%9B%98IO%E9%97%AE%E9%A2%98"><span class="toc-text">第二十二章 磁盘IO问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E5%BA%94%E7%94%A8%E4%BC%98%E5%8C%96"><span class="toc-text">第二十三章 应用优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%94%E7%AB%A0-MySQL%E4%B8%AD%E7%9A%84%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-text">第二十五章 MySQL中的常用工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AD%E7%AB%A0-MySQL%E6%97%A5%E5%BF%97"><span class="toc-text">第二十六章 MySQL日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%83%E7%AB%A0-%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">第二十七章 备份与恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%85%AB%E7%AB%A0-MySQL%E6%9D%83%E9%99%90%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-text">第二十八章 MySQL权限与安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E7%AB%A0-MySQL%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%92%8C%E5%BA%94%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-text">第三十章 MySQL常见问题和应用技巧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%80%E7%AB%A0-MySQL%E5%A4%8D%E5%88%B6"><span class="toc-text">第三十一章 MySQL复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%BA%8C%E7%AB%A0-MySQL-Cluster"><span class="toc-text">第三十二章 MySQL Cluster</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E5%8D%81%E4%B8%89%E7%AB%A0-%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84"><span class="toc-text">第三十三章 高可用架构</span></a></li></ol>
     </div>
   </section>
 
