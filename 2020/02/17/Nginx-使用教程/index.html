@@ -406,9 +406,9 @@
 
 <h2 id="Nginx-基本概念"><a href="#Nginx-基本概念" class="headerlink" title="Nginx 基本概念"></a>Nginx 基本概念</h2><h3 id="Nginx简介"><a href="#Nginx简介" class="headerlink" title="Nginx简介"></a>Nginx简介</h3><p>Nginx是以一个高性能的HTTP和反向代理服务器，特点是内存占用小，并发能力强，事实上Nginx的并发能力确实在同类型的网页服务器中表现良好。Nginx专为性能优化而开发，性能是其最重要的考量，实现上非常注重效率，能够经受高负载的考验，有报告表明它能支持高达50000个并发连接数。</p>
 <h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>在介绍反向代理之前，我们先介绍一下<strong>正向代理</strong>。正向代理是一个位于客户端和目标服务器之间的代理服务器(中间服务器)。为了从原始服务器取得内容，客户端向代理服务器发送一个请求，并且指定目标服务器，之后代理向目标服务器转交并且将获得的内容返回给客户端。正向代理的情况下客户端必须要进行一些特别的设置才能使用。正向代理实际上代理的是用户。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581916914941.png" class="lazyload" data-srcset="1581916914941.png" srcset="data:image/png;base64,666" alt="1581916914941"/></div><span class="image-caption">1581916914941</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581916914941.png" class="lazyload" data-srcset="1581916914941.png" srcset="data:image/png;base64,666" alt="1581916914941"/></div><span class="image-caption">1581916914941</span></div>
 <p>反向代理正好相反。对于客户端来说，反向代理就好像目标服务器。并且客户端不需要进行任何设置。客户端向反向代理发送请求，接着反向代理判断请求走向何处，并将请求转交给客户端，使得这些内容就好似他自己一样，一次客户端并不会感知到反向代理后面的服务，也因此不需要客户端做任何设置，只需要把反向代理服务器当成真正的服务器就好了。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581916934765.png" class="lazyload" data-srcset="1581916934765.png" srcset="data:image/png;base64,666" alt="1581916934765"/></div><span class="image-caption">1581916934765</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581916934765.png" class="lazyload" data-srcset="1581916934765.png" srcset="data:image/png;base64,666" alt="1581916934765"/></div><span class="image-caption">1581916934765</span></div>
 <h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>在因特网中，用户对服务器的访问并发量是很高的，通常单个服务器不可能完成对用户的响应。此时我们可以增加服务器的数量，然后将请求分发到各个服务器上，将原来请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器上，这也就是通常所说的负载均衡。</p>
 <h3 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h3><p>动静分离是指在web服务器架构中，将静态页面与动态页面或者静态内容接口和动态内容接口分开不同系统访问的架构设计方法，进而提升整个服务访问性能和可维护性。</p>
 <h2 id="Nginx基本使用"><a href="#Nginx基本使用" class="headerlink" title="Nginx基本使用"></a>Nginx基本使用</h2><h3 id="Nginx安装"><a href="#Nginx安装" class="headerlink" title="Nginx安装"></a>Nginx安装</h3><p>安装Nginx需要先安装该软件的依赖：pcre，openssl，zlib，最后安装Nginx。可通过如下命令安装：</p>
@@ -426,7 +426,7 @@
 <h3 id="Nginx常用命令"><a href="#Nginx常用命令" class="headerlink" title="Nginx常用命令"></a>Nginx常用命令</h3><ul>
 <li><p>启动Nginx：<code>./nginx</code></p>
 <p>如果没有修改Nginx的配置文件，我们现在就可以在内网中通过访问该服务器的地址获得Nginx的主页，如果没有看到Nginx的主页，此时需要配置防火墙开放80端口。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581928110804.png" class="lazyload" data-srcset="1581928110804.png" srcset="data:image/png;base64,666" alt="1581928110804"/></div><span class="image-caption">1581928110804</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581928110804.png" class="lazyload" data-srcset="1581928110804.png" srcset="data:image/png;base64,666" alt="1581928110804"/></div><span class="image-caption">1581928110804</span></div>
 <blockquote>
 <ol>
 <li>查看开放的端口：<code>firewall-cmd --list-all</code></li>
@@ -445,17 +445,17 @@
 <ul>
 <li><p>全局块：配置服务器整体运行的配置指令</p>
 <p>从配置文件开始到events块之间的内容，主要会设置一些影响 nginx 服务器整体运行的配置指令，主要包括配置运行 Nginx 服务器的用户（组）、允许生成的 worker process 数，进程 PID 存放路径、日志存放路径和类型以及配置文件的引入等。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927474071.png" class="lazyload" data-srcset="1581927474071.png" srcset="data:image/png;base64,666" alt="1581927474071"/></div><span class="image-caption">1581927474071</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581927474071.png" class="lazyload" data-srcset="1581927474071.png" srcset="data:image/png;base64,666" alt="1581927474071"/></div><span class="image-caption">1581927474071</span></div>
 <p>上面的第一行配置的就是worker进程的数目，进程数目越大，相应的并发能力也就也强，通常将它的值设置为CPU的核数目。</p>
 </li>
 <li><p>events块：影响 Nginx 服务器与用户的网络连接</p>
 <p>events 块涉及的指令主要影响 Nginx 服务器与用户的网络连接，常用的设置包括是否开启对多 worker进程下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个 worker进程可以同时支持的最大连接数等。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927674793.png" class="lazyload" data-srcset="1581927674793.png" srcset="data:image/png;base64,666" alt="1581927674793"/></div><span class="image-caption">1581927674793</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581927674793.png" class="lazyload" data-srcset="1581927674793.png" srcset="data:image/png;base64,666" alt="1581927674793"/></div><span class="image-caption">1581927674793</span></div>
 <p>上面的例子表示的是一个worker进程支持的最大连接数。</p>
 </li>
 <li><p>http块</p>
 <p>这算是 Nginx 服务器配置中最频繁的部分，代理、缓存和日志定义等绝大多数功能和第三方模块的配置都在这里。需要注意的是http块也可以进一步划分为http全局块核server块。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581927895940.png" class="lazyload" data-srcset="1581927895940.png" srcset="data:image/png;base64,666" alt="1581927895940"/></div><span class="image-caption">1581927895940</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581927895940.png" class="lazyload" data-srcset="1581927895940.png" srcset="data:image/png;base64,666" alt="1581927895940"/></div><span class="image-caption">1581927895940</span></div>
 <ul>
 <li>http全局块：http 全局块配置的指令包括文件引入、MIME-TYPE 定义、日志自定义、连接超时时间、单链接请求数上限等。</li>
 <li>server块：这块和虚拟主机有密切关系，虚拟主机从用户角度看，和一台独立的硬件主机是完全一样的，该技术的产生是为了节省互联网服务器硬件成本。每个 http 块可以包括多个 server 块，而每个 server 块就相当于一个虚拟主机。而每个 server 块也分为全局 server 块，以及可以同时包含多个 locaton 块。<ul>
@@ -486,7 +486,7 @@
 <li><p>打开windows的host文件，添加<code>192.168.85.129 server.test.com</code>。</p>
 </li>
 <li><p>在nginx进行请求转发的配置</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581939678141.png" class="lazyload" data-srcset="1581939678141.png" srcset="data:image/png;base64,666" alt="1581939678141"/></div><span class="image-caption">1581939678141</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581939678141.png" class="lazyload" data-srcset="1581939678141.png" srcset="data:image/png;base64,666" alt="1581939678141"/></div><span class="image-caption">1581939678141</span></div>
 </li>
 <li><p>接着重启以下nginx：<code>./nginx -s reload</code>。然后在浏览器中输入<code>server.test.com</code>，就可以得到tomcat的网页：</p>
 <p><img src="1581939968797.png" class="lazyload" data-srcset="1581939968797.png" srcset="data:image/png;base64,666" alt="1581939968797">  </p>
@@ -506,13 +506,13 @@
 <li><p>具体配置</p>
 <ol>
 <li><p>找到nginx配置文件，进行反向代理配置：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581940620095.png" class="lazyload" data-srcset="1581940620095.png" srcset="data:image/png;base64,666" alt="1581940620095"/></div><span class="image-caption">1581940620095</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581940620095.png" class="lazyload" data-srcset="1581940620095.png" srcset="data:image/png;base64,666" alt="1581940620095"/></div><span class="image-caption">1581940620095</span></div>
 </li>
 <li><p>防火墙对外开放9001，8080和8081端口。</p>
 </li>
 <li><p>测试如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581943507419.png" class="lazyload" data-srcset="1581943507419.png" srcset="data:image/png;base64,666" alt="1581943507419"/></div><span class="image-caption">1581943507419</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581943526797.png" class="lazyload" data-srcset="1581943526797.png" srcset="data:image/png;base64,666" alt="1581943526797"/></div><span class="image-caption">1581943526797</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581943507419.png" class="lazyload" data-srcset="1581943507419.png" srcset="data:image/png;base64,666" alt="1581943507419"/></div><span class="image-caption">1581943507419</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581943526797.png" class="lazyload" data-srcset="1581943526797.png" srcset="data:image/png;base64,666" alt="1581943526797"/></div><span class="image-caption">1581943526797</span></div>
 </li>
 </ol>
 </li>
@@ -529,12 +529,12 @@
 <li><p>具体配置</p>
 <ol>
 <li><p>找到nginx配置文件，进行负载均衡的配置</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581944619600.png" class="lazyload" data-srcset="1581944619600.png" srcset="data:image/png;base64,666" alt="1581944619600"/></div><span class="image-caption">1581944619600</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581944619600.png" class="lazyload" data-srcset="1581944619600.png" srcset="data:image/png;base64,666" alt="1581944619600"/></div><span class="image-caption">1581944619600</span></div>
 </li>
 <li><p>防火墙开放9002端口。</p>
 </li>
 <li><p>测试如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581944727364.png" class="lazyload" data-srcset="1581944727364.png" srcset="data:image/png;base64,666" alt="1581944727364"/></div><span class="image-caption">1581944727364</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581944727364.png" class="lazyload" data-srcset="1581944727364.png" srcset="data:image/png;base64,666" alt="1581944727364"/></div><span class="image-caption">1581944727364</span></div>
 <p><img src="1581944749452.png" class="lazyload" data-srcset="1581944749452.png" srcset="data:image/png;base64,666" alt="1581944749452">   </p>
 </li>
 </ol>
@@ -544,36 +544,36 @@
 <li><p>轮询（默认）：每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器 down 掉，能自动剔除。</p>
 </li>
 <li><p>权重（weight）：weight 代表权重默认为 1,权重越高被分配的客户端越多。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103434709-133983538-1581944951431.png" class="lazyload" data-srcset="1455597-20191029103434709-133983538-1581944951431.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1455597-20191029103434709-133983538-1581944951431.png" class="lazyload" data-srcset="1455597-20191029103434709-133983538-1581944951431.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 </li>
 <li><p>ip_hash：每个请求按访问 ip 的 hash 结果分配，这样每个访客固定访问一个后端服务器。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103440910-1253898902.png" class="lazyload" data-srcset="1455597-20191029103440910-1253898902.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1455597-20191029103440910-1253898902.png" class="lazyload" data-srcset="1455597-20191029103440910-1253898902.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 </li>
 <li><p>fair：按后端服务器的响应时间来分配请求，响应时间短的优先分配。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103448391-1932086344.png" class="lazyload" data-srcset="1455597-20191029103448391-1932086344.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1455597-20191029103448391-1932086344.png" class="lazyload" data-srcset="1455597-20191029103448391-1932086344.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 </li>
 </ol>
 </li>
 </ol>
 <h3 id="动静分离-1"><a href="#动静分离-1" class="headerlink" title="动静分离"></a>动静分离</h3><ol>
 <li><p>动静分离：Nginx 动静分离简单来说就是把动态跟静态请求分开，不能理解成只是单纯的把动态页面和静态页面物理分离。严格意义上说应该是动态请求跟静态请求分开，可以理解成使用 Nginx处理静态页面，Tomcat 处理动态页面。动静分离从目前实现角度来讲大致分为两种，一种是纯粹把静态文件独立成单独的域名，放在独立的服务器上，也是目前主流推崇的方案；另外一种方法就是动态跟静态文件混合在一起发布，通过 nginx 来分开。通过 location 指定不同的后缀名实现不同的请求转发。通过 expires 参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires 定义：是给一个资源设定一个过期时间，也就是说无需去服务端验证，直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。（如果经常更新的文件，不建议使用 Expires 来缓存），我这里设置 3d，表示在这 3 天之内访问这个 URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码 304，如果有修改，则直接从服务器重新下载，返回状态码 200。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1455597-20191029103503613-506507153.png" class="lazyload" data-srcset="1455597-20191029103503613-506507153.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1455597-20191029103503613-506507153.png" class="lazyload" data-srcset="1455597-20191029103503613-506507153.png" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 </li>
 <li><p>准备工作：在CentOS中，创建/static/www，/static/image文件夹，接着放入静态文件。</p>
 </li>
 <li><p>Nginx配置：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946029645.png" class="lazyload" data-srcset="1581946029645.png" srcset="data:image/png;base64,666" alt="1581946029645"/></div><span class="image-caption">1581946029645</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581946029645.png" class="lazyload" data-srcset="1581946029645.png" srcset="data:image/png;base64,666" alt="1581946029645"/></div><span class="image-caption">1581946029645</span></div>
 <blockquote>
 <p><code>autoindex</code>能够为目录下的文件自动创建索引。</p>
 </blockquote>
 </li>
 <li><p>效果：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946053128.png" class="lazyload" data-srcset="1581946053128.png" srcset="data:image/png;base64,666" alt="1581946053128"/></div><span class="image-caption">1581946053128</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581946068998.png" class="lazyload" data-srcset="1581946068998.png" srcset="data:image/png;base64,666" alt="1581946068998"/></div><span class="image-caption">1581946068998</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581946053128.png" class="lazyload" data-srcset="1581946053128.png" srcset="data:image/png;base64,666" alt="1581946053128"/></div><span class="image-caption">1581946053128</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581946068998.png" class="lazyload" data-srcset="1581946068998.png" srcset="data:image/png;base64,666" alt="1581946068998"/></div><span class="image-caption">1581946068998</span></div>
 </li>
 </ol>
 <h3 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h3><p>下面将使用keepalived实现服务器的高可用性。详细的讲解见<strong>Nginx原理</strong>一节。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581947505380.png" class="lazyload" data-srcset="1581947505380.png" srcset="data:image/png;base64,666" alt="1581947505380"/></div><span class="image-caption">1581947505380</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581947505380.png" class="lazyload" data-srcset="1581947505380.png" srcset="data:image/png;base64,666" alt="1581947505380"/></div><span class="image-caption">1581947505380</span></div>
 <ol>
 <li><p>两台Nginx服务器</p>
 <p>准备两台服务器，在此地址是<code>192.168.85.129</code>和<code>192.168.85.130</code>。然后再在两台服务器上安装Nginx软件。</p>
@@ -599,21 +599,21 @@
 <li><p>启动nginx：<code>./nginx</code></p>
 </li>
 <li><p>启动keepalived：<code>systemctl start keepalived.service</code></p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581993867642.png" class="lazyload" data-srcset="1581993867642.png" srcset="data:image/png;base64,666" alt="1581993867642"/></div><span class="image-caption">1581993867642</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581993867642.png" class="lazyload" data-srcset="1581993867642.png" srcset="data:image/png;base64,666" alt="1581993867642"/></div><span class="image-caption">1581993867642</span></div>
 </li>
 <li><p>关闭主服务器上的nginx，再次访问虚拟地址</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1581993920791.png" class="lazyload" data-srcset="1581993920791.png" srcset="data:image/png;base64,666" alt="1581993920791"/></div><span class="image-caption">1581993920791</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="1581993920791.png" class="lazyload" data-srcset="1581993920791.png" srcset="data:image/png;base64,666" alt="1581993920791"/></div><span class="image-caption">1581993920791</span></div>
 </li>
 </ol>
 </li>
 </ol>
 <h2 id="Nginx原理"><a href="#Nginx原理" class="headerlink" title="Nginx原理"></a>Nginx原理</h2><p>Nginx在启动时会以daemon形式在后台运行，采用多进程+异步非阻塞IO事件模型来处理各种连接请求。多进程模型包括一个master进程，多个worker进程，一般worker进程个数是根据服务器CPU核数来决定的。master进程负责管理Nginx本身和其他worker进程。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="6807865-b1413f8b819b7d44.webp" class="lazyload" data-srcset="6807865-b1413f8b819b7d44.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="6807865-b1413f8b819b7d44.webp" class="lazyload" data-srcset="6807865-b1413f8b819b7d44.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 <p>Master进程作用是读取并验证配置文件nginx.conf，管理worker进程；每一个Worker进程都维护一个线程（避免线程切换），处理连接和请求；注意Worker进程的个数由配置文件决定，一般和CPU个数相关（有利于进程切换），配置几个就有几个Worker进程。</p>
 <p>Nginx热部署的方式：修改配置文件nginx.conf后，重新生成新的worker进程，当然会以新的配置进行处理请求，而且新的请求必须都交给新的worker进程，至于老的worker进程，等把那些以前的请求处理完毕后，kill掉即可。</p>
 <p>Nginx的高并发：Nginx采用了Linux的epoll模型，epoll模型基于事件驱动机制，它可以监控多个事件是否准备完毕，如果OK，那么放入epoll队列中，这个过程是异步的。worker只需要从epoll队列循环处理即可。</p>
 <p>Nginx的高可用性：Keepalived是一个高可用解决方案，主要是用来防止服务器单点发生故障，可以通过和Nginx配合来实现Web服务的高可用（其实，Keepalived不仅仅可以和Nginx配合，还可以和很多其他服务配合）。Keepalived+Nginx实现高可用的思路：第一：请求不要直接打到Nginx上，应该先通过Keepalived（这就是所谓虚拟IP，VIP）第二：Keepalived应该能监控Nginx的生命状态（提供一个用户自定义的脚本，定期检查Nginx进程状态，进行权重变化,，从而实现Nginx故障切换）</p>
-<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="6807865-d87387daf7a20f64.webp" class="lazyload" data-srcset="6807865-d87387daf7a20f64.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img" src="6807865-d87387daf7a20f64.webp" class="lazyload" data-srcset="6807865-d87387daf7a20f64.webp" srcset="data:image/png;base64,666" alt="img"/></div><span class="image-caption">img</span></div>
 
   
   
