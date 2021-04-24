@@ -407,7 +407,7 @@
 
 
 <h2 id="第二章-Java内存区域与内存溢出异常"><a href="#第二章-Java内存区域与内存溢出异常" class="headerlink" title="第二章 Java内存区域与内存溢出异常"></a>第二章 Java内存区域与内存溢出异常</h2><p>运行时数据区域：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201112190800951.png" class="lazyload" data-srcset="image-20201112190800951.png" srcset="data:image/png;base64,666" alt="image-20201112190800951"/></div><span class="image-caption">image-20201112190800951</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201112190800951.png" class="lazyload" data-srcset="image-20201112190800951.png" srcset="data:image/png;base64,666" alt="image-20201112190800951"/></div><span class="image-caption">image-20201112190800951</span></div>
 <ul>
 <li>程序计数器：通过改变其值来获取下一条需要执行的字节码指令。</li>
 <li>虚拟机栈：每个方法执行的时候会创建一个栈帧，用于存储局部变量，方法出口等信息。</li>
@@ -429,10 +429,10 @@
 <p>对象的访问定位：主流的方式有两种，使用句柄或者使用直接指针，HotSpot虚拟机使用直接指针方式。</p>
 <ul>
 <li><p>句柄：好处就是reference中存储的是稳定句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变句柄中的实例数据指针，而referrence不用修改</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201112195734391.png" class="lazyload" data-srcset="image-20201112195734391.png" srcset="data:image/png;base64,666" alt="image-20201112195734391"/></div><span class="image-caption">image-20201112195734391</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201112195734391.png" class="lazyload" data-srcset="image-20201112195734391.png" srcset="data:image/png;base64,666" alt="image-20201112195734391"/></div><span class="image-caption">image-20201112195734391</span></div>
 </li>
 <li><p>直接指针：好处就是速度更快，它节省了一次指针定位的时间开销</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201112195807566.png" class="lazyload" data-srcset="image-20201112195807566.png" srcset="data:image/png;base64,666" alt="image-20201112195807566"/></div><span class="image-caption">image-20201112195807566</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201112195807566.png" class="lazyload" data-srcset="image-20201112195807566.png" srcset="data:image/png;base64,666" alt="image-20201112195807566"/></div><span class="image-caption">image-20201112195807566</span></div>
 </li>
 </ul>
 <h2 id="第三章-垃圾收集器与内存分配策略"><a href="#第三章-垃圾收集器与内存分配策略" class="headerlink" title="第三章 垃圾收集器与内存分配策略"></a>第三章 垃圾收集器与内存分配策略</h2><p>引用计数算法：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的。该方法不能检测循环引用。</p>
@@ -459,29 +459,29 @@
 </ol>
 <p>前两个假说表明如果一个区域中大多数对象都是朝生夕灭，难以熬过垃圾收集过程的话，那么把它们集中放在一起，每次回收时只关注如何保留少量存活而不是去标记那些大量将要被回收的对象，就能以较低代价回收到大量的空间；如果剩下的都是难以消亡的对象，那把它们集中放在一块，虚拟机便可以使用较低的频率来回收这个区域，这就同时兼顾了垃圾收集的时间开销和内存的空间有效利用；第三点表明我们就不应再为了少量的跨代引用去扫描整个老年代，也不必浪费空间专门记录每一个对象是否存在及存在哪些跨代引用。</p>
 <p>标记-清除算法：首先标记出所有需要回收的对象，在标记完成后，统一回收掉所有被标记的对象。缺点：第一个是执行效率不稳定，如果Java堆中包含大量对象，而且其中大部分是需要被回收的，这时必须进行大量标记和清除的动作，导致标记和清除两个过程的执行效率都随对象数量增长而降低；第二个是内存空间的碎片化问题，标记、清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致当以后在程序运行过程中需要分配较大对象时无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127191857885.png" class="lazyload" data-srcset="image-20201127191857885.png" srcset="data:image/png;base64,666" alt="image-20201127191857885"/></div><span class="image-caption">image-20201127191857885</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127191857885.png" class="lazyload" data-srcset="image-20201127191857885.png" srcset="data:image/png;base64,666" alt="image-20201127191857885"/></div><span class="image-caption">image-20201127191857885</span></div>
 <p>标记-复制算法：将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。如果内存中多数对象都是存活的，这种算法将会产生大量的内存间复制的开销，但对于多数对象都是可回收的情况，算法需要复制的就是占少数的存活对象，而且每次都是针对整个半区进行内存回收，分配内存时也就不用考虑有空间碎片的复杂情况，只要移动堆顶指针，按顺序分配即可。这样实现简单，运行高效，不过其缺陷也显而易见，这种复制回收算法的代价是将可用内存缩小为了原来的一半，空间浪费未免太多了一点。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127191840578.png" class="lazyload" data-srcset="image-20201127191840578.png" srcset="data:image/png;base64,666" alt="image-20201127191840578"/></div><span class="image-caption">image-20201127191840578</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127191840578.png" class="lazyload" data-srcset="image-20201127191840578.png" srcset="data:image/png;base64,666" alt="image-20201127191840578"/></div><span class="image-caption">image-20201127191840578</span></div>
 <blockquote>
 <p>新生代存在朝生夕灭现象，存活者大概只有 10% 左右，内存空间比可以分为 8 ：1</p>
 </blockquote>
 <p>标记-整理算法：其中的标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向内存空间一端移动，然后直接清理掉边界以外的内存。标记-清除算法与标记-整理算法的本质差异在于前者是一种非移动式的回收算法，而后者是移动式的。是否移动回收后的存活对象是一项优缺点并存的风险决策：在老年代这种每次回收都有大量对象存活区域，移动存活对象并更新所有引用这些对象的地方将会是一种极为负重的操作，而且这种对象移动操作必须全程暂停用户应用程序才能进行；而不移动对象的时候又存在空间碎片化问题。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127192619303.png" class="lazyload" data-srcset="image-20201127192619303.png" srcset="data:image/png;base64,666" alt="image-20201127192619303"/></div><span class="image-caption">image-20201127192619303</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127192619303.png" class="lazyload" data-srcset="image-20201127192619303.png" srcset="data:image/png;base64,666" alt="image-20201127192619303"/></div><span class="image-caption">image-20201127192619303</span></div>
 <p>经典垃圾收集器：</p>
 <ul>
 <li><p>Serial 收集器：是一个单线程工作的收集器，但它的“单线程”的意义并不仅仅是说明它只会使用一个处理器或一条收集线程去完成垃圾收集工作，更重要的是强调在它进行垃圾收集时，必须暂停其他所有工作线程，直到它收集结束。优点是简单，内存消耗低；缺点是需要暂停其他工作线程。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127193322965.png" class="lazyload" data-srcset="image-20201127193322965.png" srcset="data:image/png;base64,666" alt="image-20201127193322965"/></div><span class="image-caption">image-20201127193322965</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127193322965.png" class="lazyload" data-srcset="image-20201127193322965.png" srcset="data:image/png;base64,666" alt="image-20201127193322965"/></div><span class="image-caption">image-20201127193322965</span></div>
 </li>
 <li><p>ParNew 收集器：实质上是Serial收集器的多线程并行版本。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127193714941.png" class="lazyload" data-srcset="image-20201127193714941.png" srcset="data:image/png;base64,666" alt="image-20201127193714941"/></div><span class="image-caption">image-20201127193714941</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127193714941.png" class="lazyload" data-srcset="image-20201127193714941.png" srcset="data:image/png;base64,666" alt="image-20201127193714941"/></div><span class="image-caption">image-20201127193714941</span></div>
 </li>
 <li><p>Parallel Scavenge收集器：也是一款新生代收集器，它同样是基于标记-复制算法实现的收集器，也是能够并行收集的多线程收集器，它的特点在于它的关注点与其他收集器不同，CMS等收集器的关注点是尽可能地缩短垃圾收集时用户线程的停顿时间，而Parallel Scavenge收集器的目标则是达到一个可控制的吞吐量。</p>
 </li>
 <li><p>Serial Old收集器：Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记-整理算法。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127194020758.png" class="lazyload" data-srcset="image-20201127194020758.png" srcset="data:image/png;base64,666" alt="image-20201127194020758"/></div><span class="image-caption">image-20201127194020758</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127194020758.png" class="lazyload" data-srcset="image-20201127194020758.png" srcset="data:image/png;base64,666" alt="image-20201127194020758"/></div><span class="image-caption">image-20201127194020758</span></div>
 </li>
 <li><p>Parallel Old收集器：是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，基于标记-整理算法实现。吞吐量优先收集器。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127194122503.png" class="lazyload" data-srcset="image-20201127194122503.png" srcset="data:image/png;base64,666" alt="image-20201127194122503"/></div><span class="image-caption">image-20201127194122503</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127194122503.png" class="lazyload" data-srcset="image-20201127194122503.png" srcset="data:image/png;base64,666" alt="image-20201127194122503"/></div><span class="image-caption">image-20201127194122503</span></div>
 </li>
 <li><p>CMS（Concurrent Mark Sweep）收集器：是一种以获取最短回收停顿时间为目标的收集器。很大一部分Java应用基于 B/S 实现，这类应用通常都会较为关注服务的响应速度，希望系统停顿时间尽可能短，以给用户带来良好的交互体验。CMS收集器就非常符合这类应用的需求。收集过程如下：</p>
 <ol>
@@ -490,7 +490,7 @@
 <li>重新标记：则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录；Stop the World</li>
 <li>并发清除：清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。</li>
 </ol>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127194644675.png" class="lazyload" data-srcset="image-20201127194644675.png" srcset="data:image/png;base64,666" alt="image-20201127194644675"/></div><span class="image-caption">image-20201127194644675</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127194644675.png" class="lazyload" data-srcset="image-20201127194644675.png" srcset="data:image/png;base64,666" alt="image-20201127194644675"/></div><span class="image-caption">image-20201127194644675</span></div>
 <p>优点：并发收集，低停顿；缺点：对处理器资源敏感（并发阶段会导致应用程序变慢，降低总吞吐量），无法处理“浮动垃圾”（并发清理阶段，用户线程是还在继续运行的，程序在运行自然就还会伴随有新的垃圾对象不断产生），基于标记清除，空间碎片化问题严重。</p>
 </li>
 <li><p>Garbage First收集器：简称 G1 收集器，在G1收集器出现之前的所有其他收集器，包括CMS在内，垃圾收集的目标范围要么是整个新生代（Minor GC），要么就是整个老年代（Major GC），再要么就是整个Java堆（Full GC）。而G1跳出了这个樊笼，它可以面向堆内存任何部分来组成回收集（Collection Set，一般简称CSet）进行回收，衡量标准不再是它属于哪个分代，而是哪块内存中存放的垃圾数量最多，回收收益最大，这就是G1收集器的Mixed GC模式。G1不再坚持固定大小以及固定数量的分代区域划分，而是把连续的Java堆划分为多个大小相等的独立区域（Region），每一个Region都可以根据需要，扮演新生代的Eden空间、Survivor空间，或者老年代空间。收集器能够对扮演不同角色的Region采用不同的策略去处理，从而获取更好的收集效果。G1收集器过程：</p>
@@ -500,18 +500,18 @@
 <li>最终标记：对用户线程做另一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录。</li>
 <li>筛选回收：负责更新Region的统计数据，对各个Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧Region的全部空间。这里的操作涉及存活对象的移动，是必须暂停用户线程，由多条收集器线程并行完成的。</li>
 </ol>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127201915199.png" class="lazyload" data-srcset="image-20201127201915199.png" srcset="data:image/png;base64,666" alt="image-20201127201915199"/></div><span class="image-caption">image-20201127201915199</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127201915199.png" class="lazyload" data-srcset="image-20201127201915199.png" srcset="data:image/png;base64,666" alt="image-20201127201915199"/></div><span class="image-caption">image-20201127201915199</span></div>
 </li>
 </ul>
 <p>低延迟垃圾收集器：HotSpot的垃圾收集器从Serial发展到CMS再到G1，经历了逾二十年时间，经过了数百上千万台服务器上的应用实践，已经被淬炼得相当成熟了，不过它们距离“完美”还是很遥远。衡量垃圾收集器的三项最重要的指标是：内存占用（Footprint）、吞吐量（Throughput）和延迟（Latency），三者共同构成了一个“不可能三角”。图3-14中浅色阶段表示必须挂起用户线程，深色表示收集器线程与用户线程是并发工作的。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127202152302.png" class="lazyload" data-srcset="image-20201127202152302.png" srcset="data:image/png;base64,666" alt="image-20201127202152302"/></div><span class="image-caption">image-20201127202152302</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127202152302.png" class="lazyload" data-srcset="image-20201127202152302.png" srcset="data:image/png;base64,666" alt="image-20201127202152302"/></div><span class="image-caption">image-20201127202152302</span></div>
 <ul>
 <li><p>Shenandoah收集器：Shenandoah作为第一款不由Oracle（包括以前的Sun）公司的虚拟机团队所领导开发的HotSpot垃圾收集器，不可避免地会受到一些来自“官方”的排挤。Shenandoah反而更像是G1的下一代继承者，它们两者有着相似的堆内存布局，在初始标记、并发标记等许多阶段的处理思路上都高度一致，甚至还直接共享了一部分实现代码。虽然Shenandoah也是使用基于Region的堆内存布局，同样有着用于存放大对象的Humongous Region，默认的回收策略也同样是优先处理回收价值最大的Region……但在管理堆内存方面，它与G1至少有三个明显的不同之处，最重要的当然是支持并发的整理算法，G1的回收阶段是可以多线程并行的，但却不能与用户线程并发；其次，Shenandoah（目前）是默认不使用分代收集的；Shenandoah摒弃了在G1中耗费大量内存和计算资源去维护的记忆集，改用名为“连接矩阵”（Connection Matrix）的全局数据结构来记录跨Region的引用关系，降低了处理跨代指针时的记忆集维护消耗。大致上可以分为九个阶段：初始标记，并发标记，最终标记，并发清理，并发回收，初始引用更新，最终引用更新，并发清理。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127203047510.png" class="lazyload" data-srcset="image-20201127203047510.png" srcset="data:image/png;base64,666" alt="image-20201127203047510"/></div><span class="image-caption">image-20201127203047510</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127203047510.png" class="lazyload" data-srcset="image-20201127203047510.png" srcset="data:image/png;base64,666" alt="image-20201127203047510"/></div><span class="image-caption">image-20201127203047510</span></div>
 <p>最重要三个阶段是并发标记、并发回收、并发引用更新。</p>
 </li>
 <li><p>ZCG收集器：Z Garbage Collector，是由Oracle公司研发的。ZGC和Shenandoah的目标是高度相似的，都希望在尽可能对吞吐量影响不太大的前提下[2]，实现在任意堆内存大小下都可以把垃圾收集的停顿时间限制在十毫秒以内的低延迟。ZGC也采用基于Region的堆内存布局，但与它们不同的是，ZGC的Region（在一些官方资料中将它称为Page或者ZPage，本章为行文一致继续称为Region）具有动态性——动态创建和销毁，以及动态的区域容量大小。Shenandoah使用转发指针和读屏障来实现并发整理，ZGC虽然同样用到了读屏障，但用的却是一条与Shenandoah完全不同，更加复杂精巧的解题思路：染色指针技术。分为四个阶段：并发标记，并发预备重分配，并发重分配，并发重映射。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201127203846223.png" class="lazyload" data-srcset="image-20201127203846223.png" srcset="data:image/png;base64,666" alt="image-20201127203846223"/></div><span class="image-caption">image-20201127203846223</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201127203846223.png" class="lazyload" data-srcset="image-20201127203846223.png" srcset="data:image/png;base64,666" alt="image-20201127203846223"/></div><span class="image-caption">image-20201127203846223</span></div>
 </li>
 </ul>
 <p>Epsilon收集器：这是一款以不能够进行垃圾收集为“卖点”的垃圾收集器，要负责堆的管理与布局、对象的分配、与解释器的协作、与编译器的协作、与监控子系统协作等职责，其中至少堆的管理和对象的分配这部分功能是Java虚拟机能够正常运作的必要支持，是一个最小化功能的垃圾收集器也必须实现的内容。对弈比较小的应用有用武之地。</p>
@@ -532,7 +532,7 @@
 <li>JMC（Java Mission Control）：可持续在线的监控工具</li>
 </ul>
 <h2 id="第六章-类文件结构"><a href="#第六章-类文件结构" class="headerlink" title="第六章 类文件结构"></a>第六章 类文件结构</h2><p>平台无关性：字节码(Byte Code)文件是构成平台无关性的基石，Java 虚拟机只接受字节码文件，而不管这些文件是怎么的得到的，这就为其他语言可以运行在 Java 虚拟机上提供了基础。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201128225527804.png" class="lazyload" data-srcset="image-20201128225527804.png" srcset="data:image/png;base64,666" alt="image-20201128225527804"/></div><span class="image-caption">image-20201128225527804</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201128225527804.png" class="lazyload" data-srcset="image-20201128225527804.png" srcset="data:image/png;base64,666" alt="image-20201128225527804"/></div><span class="image-caption">image-20201128225527804</span></div>
 <p>Class类文件的结构：</p>
 <ul>
 <li><p>Class文件是一组以8个字节为基础单位的二进制流，并且按照 Big-Endian 来排列位数较大的数。</p>
@@ -542,7 +542,7 @@
 <li><p>无符号数属于基本的数据类型，以u1、u2、u4、u8来分别代表1个字节、2个字节、4个字节和8个<br>字节的无符号数，无符号数可以用来描述数字、索引引用、数量值或者按照UTF-8编码构成字符串<br>值。</p>
 </li>
 <li><p>表是由多个无符号数或者其他表作为数据项构成的复合数据类型，为了便于区分，所有表的命名<br>都习惯性地以“_info”结尾。整个Class文件本质上也可以视作是一张表：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201128230232765.png" class="lazyload" data-srcset="image-20201128230232765.png" srcset="data:image/png;base64,666" alt="image-20201128230232765"/></div><span class="image-caption">image-20201128230232765</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201128230232765.png" class="lazyload" data-srcset="image-20201128230232765.png" srcset="data:image/png;base64,666" alt="image-20201128230232765"/></div><span class="image-caption">image-20201128230232765</span></div>
 <p>无论是无符号数还是表，当需要描述同一类型但数量不定的多个数据时，经常会使用一个前置的容量计数器加若干个连续的数据项的形式，这时候称这一系列连续的某一类型的数据为某一类型的“集合”。</p>
 </li>
 </ul>
@@ -552,25 +552,25 @@
 <li><p>Class 文件的版本：第5和第6个字节是次版本号（Minor Version），第7和第8个字节是主版本号（Major Version）。</p>
 </li>
 <li><p>常量池：常量池可以比喻为Class文件里的资源仓库，它是Class文件结构中与其他项目关联最多的数据，通常也是占用Class文件空间最大的数据项目之一。由于常量池中常量的数量是不固定的，所以在常量池的入口需要放置一项u2类型的数据，代表常量池容量计数值（constant_pool_count）。与Java中语言习惯不同，这个容量计数是从1而不是0开始的。这样做的目的在于，如果后面某些指向常量池的索引值的数据在特定情况下需要表达“不引用任何一个常量池项目”的含义，可以把索引值设置为0来表示。常量池中主要存放两大类常量：字面量（Literal）和符号引用（Symbolic References）。常量池中每一项常量都是一个表，截至JDK13，常量表中分别有17种不同类型的常量。这17类表都有一个共同的特点，表结构起始的第一位是个u1类型的标志位（tag，取值见表6-3中标志列），代表着当前常量属于哪种常量类型。17种常量类型：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201128235404018.png" class="lazyload" data-srcset="image-20201128235404018.png" srcset="data:image/png;base64,666" alt="image-20201128235404018"/></div><span class="image-caption">image-20201128235404018</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201128235404018.png" class="lazyload" data-srcset="image-20201128235404018.png" srcset="data:image/png;base64,666" alt="image-20201128235404018"/></div><span class="image-caption">image-20201128235404018</span></div>
 </li>
 <li><p>访问标志：用于识别一些类或者接口层次的访问信息，包括：这个Class是类还是接口；是否定义为public类型；是否定义为abstract类型；如果是类的话，是否被声明为final；</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129000121788.png" class="lazyload" data-srcset="image-20201129000121788.png" srcset="data:image/png;base64,666" alt="image-20201129000121788"/></div><span class="image-caption">image-20201129000121788</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129000121788.png" class="lazyload" data-srcset="image-20201129000121788.png" srcset="data:image/png;base64,666" alt="image-20201129000121788"/></div><span class="image-caption">image-20201129000121788</span></div>
 </li>
 <li><p>类索引、父类索引与接口索引集合：类索引（this_class）和父类索引（super_class）都是一个u2类型的数据，而接口索引集合（interfaces）是一组u2类型的数据的集合，Class文件中由这三项数据来确定该类型的继承关系。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129091647440.png" class="lazyload" data-srcset="image-20201129091647440.png" srcset="data:image/png;base64,666" alt="image-20201129091647440"/></div><span class="image-caption">image-20201129091647440</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129091647440.png" class="lazyload" data-srcset="image-20201129091647440.png" srcset="data:image/png;base64,666" alt="image-20201129091647440"/></div><span class="image-caption">image-20201129091647440</span></div>
 </li>
 <li><p>字段表集合：字段表（field_info）用于描述接口或者类中声明的变量。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129091933843.png" class="lazyload" data-srcset="image-20201129091933843.png" srcset="data:image/png;base64,666" alt="image-20201129091933843"/></div><span class="image-caption">image-20201129091933843</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129091933843.png" class="lazyload" data-srcset="image-20201129091933843.png" srcset="data:image/png;base64,666" alt="image-20201129091933843"/></div><span class="image-caption">image-20201129091933843</span></div>
 <p>字段修饰符放在access_flags项目中，跟随access_flags标志的是两项索引值：name_index descriptor_index。它们都是对常量池项的引用，分别代表着字段的简单名称以及字段和方法的描述符。</p>
 </li>
 <li><p>方法表集合：Class文件存储格式中对方法的描述与对字段的描述采用了几乎完全一致的方式，方法表的结构如同字段表一样，依次包括访问标志（access_flags）、名称索引（name_index）、描述符索引（descriptor_index）、属性表集合（attributes）几项，如表6-11所示。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129092210757.png" class="lazyload" data-srcset="image-20201129092210757.png" srcset="data:image/png;base64,666" alt="image-20201129092210757"/></div><span class="image-caption">image-20201129092210757</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129092210757.png" class="lazyload" data-srcset="image-20201129092210757.png" srcset="data:image/png;base64,666" alt="image-20201129092210757"/></div><span class="image-caption">image-20201129092210757</span></div>
 </li>
 <li><p>属性表集合：属性表（attribute_info）在前面的讲解之中已经出现过数次，Class文件、字段表、方法表都可以携带自己的属性表集合，以描述某些场景专有的信息。部分属性表如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129092437699.png" class="lazyload" data-srcset="image-20201129092437699.png" srcset="data:image/png;base64,666" alt="image-20201129092437699"/></div><span class="image-caption">image-20201129092437699</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129092437699.png" class="lazyload" data-srcset="image-20201129092437699.png" srcset="data:image/png;base64,666" alt="image-20201129092437699"/></div><span class="image-caption">image-20201129092437699</span></div>
 <p>对于每一个属性，它的名称都要从常量池中引用一个CONSTANT_Utf8_info类型的常量来表示，而属性值的结构则是完全自定义的，只需要通过一个u4的长度属性去说明属性值所占用的位数即可。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129092513520.png" class="lazyload" data-srcset="image-20201129092513520.png" srcset="data:image/png;base64,666" alt="image-20201129092513520"/></div><span class="image-caption">image-20201129092513520</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129092513520.png" class="lazyload" data-srcset="image-20201129092513520.png" srcset="data:image/png;base64,666" alt="image-20201129092513520"/></div><span class="image-caption">image-20201129092513520</span></div>
 </li>
 </ul>
 <p>字节码指令简介：由于Java虚拟机采用面向操作数栈而不是面向寄存器的架构，所以大多数指令都不包含操作数，只有一个操作码（一个字节），指令参数都存放在操作数栈中。由于Class文件格式放弃了编译后代码的操作数长度对齐，这就意味着虚拟机在处理那些超过一个字节的数据时，不得不在运行时从字节中重建出具体数据的结构；放弃了操作数长度对齐，就意味着可以省略掉大量的填充和间隔符号；用一个字节来代表操作码，也是为了尽可能获得短小精干的编译代码。</p>
@@ -610,7 +610,7 @@
 <p>Class文件结构的发展：相对于语言、API以及Java技术体系中其他方面的变化，Class文件结构一直处于一个相对比较稳定的状态，Class文件的主体结构、字节码指令的语义和数量几乎没有出现过变动，所有对Class文件格式的改进，都集中在访问标志、属性表这些设计上原本就是可扩展的数据结构中添加新内容。</p>
 <h2 id="第七章-虚拟机类加载机制"><a href="#第七章-虚拟机类加载机制" class="headerlink" title="第七章 虚拟机类加载机制"></a>第七章 虚拟机类加载机制</h2><p>概述：Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。与那些在编译时需要进行连接的语言不同，在Java语言里面，类型的加载、连接和初始化过程都是在程序运行期间完成的，这种策略让Java语言进行提前编译会面临额外的困难，也会让类加载时稍微增加一些性能开销，但是却为Java应用提供了极高的扩展性和灵活性。</p>
 <p>类加载的时机：一个类的整个生命周期如下：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129102422665.png" class="lazyload" data-srcset="image-20201129102422665.png" srcset="data:image/png;base64,666" alt="image-20201129102422665"/></div><span class="image-caption">image-20201129102422665</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129102422665.png" class="lazyload" data-srcset="image-20201129102422665.png" srcset="data:image/png;base64,666" alt="image-20201129102422665"/></div><span class="image-caption">image-20201129102422665</span></div>
 <p>加载、验证、准备、初始化和卸载这五个阶段的顺序是确定的，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始，这是为了支持Java语言的运行时绑定特性（也称为动态绑定或晚期绑定）。但是对于初始化阶段，《Java虚拟机规范》则是严格规定了有且只有六种情况必须立即对类进行“初始化”（而加载、验证、准备自然需要在此之前开始）：</p>
 <ol>
 <li>遇到new、getstatic、putstatic或invokestatic这四条字节码指令时，如果类型没有进行过初始化，则需要先触发其初始化阶段。如使用new关键字，读取或设置一个类的静态字段，调用一个类的静态方法。</li>
@@ -658,7 +658,7 @@
 <li>应用程序类加载器：由于应用程序类加载器是ClassLoader类中的getSystemClassLoader()方法的返回值，所以有些场合中也称它为“系统类加载器”。它负责加载用户类路径（ClassPath）上所有的类库，开发者同样可以直接在代码中使用这个类加载器。</li>
 </ul>
 <p>JDK 9之前的Java应用都是由这三种类加载器互相配合来完成加载的，如果用户认为有必要，还可<br>以加入自定义的类加载器来进行拓展：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129130856054.png" class="lazyload" data-srcset="image-20201129130856054.png" srcset="data:image/png;base64,666" alt="image-20201129130856054"/></div><span class="image-caption">image-20201129130856054</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129130856054.png" class="lazyload" data-srcset="image-20201129130856054.png" srcset="data:image/png;base64,666" alt="image-20201129130856054"/></div><span class="image-caption">image-20201129130856054</span></div>
 </li>
 <li><p>双亲委派模型：如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类）时，子加载器才会尝试自己去完成加载。好处是Java中的类随着它的类加载器一起具备了一种带有优先级的层次关系。</p>
 </li>
@@ -680,17 +680,17 @@
 <li>平台类加载器和应用程序类加载器都不再派生自java.net.URLClassLoader，现在启动类加载器、平台类加载器、应用程序类加载器全都继承于jdk.internal.loader.BuiltinClassLoader，在BuiltinClassLoader中实现了新的模块化架构下类如从模块中加载的逻辑，以及模块中资源可访问性的处理</li>
 <li>JDK 9中虽然仍然维持着三层类加载器和双亲委派的架构，但类加载的委派关系也发生了变动。当平台及应用程序类加载器收到类加载请求，在委派给父加载器加载前，要先判断该类是否能够归属到某一个系统模块中，如果可以找到这样的归属关系，就要优先委派给负责那个模块的加载器完成加载</li>
 </ul>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201129132525034.png" class="lazyload" data-srcset="image-20201129132525034.png" srcset="data:image/png;base64,666" alt="image-20201129132525034"/></div><span class="image-caption">image-20201129132525034</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201129132525034.png" class="lazyload" data-srcset="image-20201129132525034.png" srcset="data:image/png;base64,666" alt="image-20201129132525034"/></div><span class="image-caption">image-20201129132525034</span></div>
 </li>
 </ul>
 <h2 id="第八章-虚拟机字节码执行引擎"><a href="#第八章-虚拟机字节码执行引擎" class="headerlink" title="第八章 虚拟机字节码执行引擎"></a>第八章 虚拟机字节码执行引擎</h2><p>运行时栈帧结构：下图是 JVM 的栈和栈帧的总体结构：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201201211749470.png" class="lazyload" data-srcset="image-20201201211749470.png" srcset="data:image/png;base64,666" alt="image-20201201211749470"/></div><span class="image-caption">image-20201201211749470</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201201211749470.png" class="lazyload" data-srcset="image-20201201211749470.png" srcset="data:image/png;base64,666" alt="image-20201201211749470"/></div><span class="image-caption">image-20201201211749470</span></div>
 <p>每个栈帧里面包含有局部变量表、操作数栈、动态连接、方法返回地址和一些额外的附加信息。</p>
 <ul>
 <li><p>局部变量表：是一组变量值的存储空间，用于存放方法参数和方法内部定义的局部变量。变量槽空间一般是 32 位，对于long类型的变量，需要两个槽来保存。当方法被调用的时候，首先存储相关的实参，然后再存储方法内部的局部变量。比如，对于实例方法，局部变量表第0位代表的就是方法所属对象的引用，方法中通过 this 隐式访问到。另外，局部变量表中的变量槽可以被重用，这可能会带来副作用，如 gc 过程。最后，局部变量没有所谓的“准备阶段”，因此，对局部变量引用前需要先赋值。</p>
 </li>
 <li><p>操作数栈：用于保存相应的操作数。在进行运算的时候需要检查指令和对应的数据类型是否匹配。在概念模型上，两个不同的栈帧是完全相互独立的，但是在实际过程中，可能存在重合，这样做的好处是节约空间，同时无需进行额外的实参-形参转换。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201201213604264.png" class="lazyload" data-srcset="image-20201201213604264.png" srcset="data:image/png;base64,666" alt="image-20201201213604264"/></div><span class="image-caption">image-20201201213604264</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201201213604264.png" class="lazyload" data-srcset="image-20201201213604264.png" srcset="data:image/png;base64,666" alt="image-20201201213604264"/></div><span class="image-caption">image-20201201213604264</span></div>
 </li>
 <li><p>动态链接：每个栈帧都包含一个指向运行时常量池[1]中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接（Dynamic Linking）。</p>
 </li>
@@ -717,7 +717,7 @@
 </ul>
 </li>
 <li><p>虚拟机动态分派的实现：通常虚拟机会创建一个虚方法表（vtable，对应的还有接口方法表itable），使用虚方法表索引来代替元数据查找以提高性能。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201201230836050.png" class="lazyload" data-srcset="image-20201201230836050.png" srcset="data:image/png;base64,666" alt="image-20201201230836050"/></div><span class="image-caption">image-20201201230836050</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201201230836050.png" class="lazyload" data-srcset="image-20201201230836050.png" srcset="data:image/png;base64,666" alt="image-20201201230836050"/></div><span class="image-caption">image-20201201230836050</span></div>
 </li>
 </ul>
 <p>动态类型语言支持：</p>
@@ -744,7 +744,7 @@
 <p>基于栈的字节码解释执行引擎：</p>
 <ul>
 <li><p>解释执行：Java语言被定为解释执行的语言，这在JDK1.0时代算是准确的，但是之后Java也发展出了可以生成本地代码的编译器，这个时候说Java是解释执行的语言就不再准确了。下图中间分支指代解释执行过程，最下面分支指代编译执行过程：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201202095616929.png" class="lazyload" data-srcset="image-20201202095616929.png" srcset="data:image/png;base64,666" alt="image-20201202095616929"/></div><span class="image-caption">image-20201202095616929</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201202095616929.png" class="lazyload" data-srcset="image-20201202095616929.png" srcset="data:image/png;base64,666" alt="image-20201202095616929"/></div><span class="image-caption">image-20201202095616929</span></div>
 </li>
 <li><p>基于栈的指令集与基于寄存器的指令集：Java指令基于栈结构，x86指令基于寄存器，使用栈结构带来的好处是可移植性更强，缺点是运行速度慢。</p>
 </li>
@@ -759,7 +759,7 @@
 <li>放置在/WebApp/WEB-INF目录中。类库仅仅可以被该Web应用程序使用，对Tomcat和其他Web应用程序都不可见。</li>
 </ol>
 <p>为了支持这套目录，并且对目录里面的类库进行加载和隔离，Tomcat实现了自定义的类加载器，按照双亲委派模型：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201203105110135.png" class="lazyload" data-srcset="image-20201203105110135.png" srcset="data:image/png;base64,666" alt="image-20201203105110135"/></div><span class="image-caption">image-20201203105110135</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201203105110135.png" class="lazyload" data-srcset="image-20201203105110135.png" srcset="data:image/png;base64,666" alt="image-20201203105110135"/></div><span class="image-caption">image-20201203105110135</span></div>
 <p>在Tomcat6之后，只有指定了tomcat/conf/catalina.properties配置文件的server.loader和share.loader项后才会真正建立Catalina类加载器和Shared类加载器的实例，否则会用到这两个类加载器的地方都会用Common类加载器的实例代替。同时前文提到的前三个目录也会被改为一个/lib目录。</p>
 </li>
 <li><p>OSGi：是OSGi联盟（OSGi Alliance）制订的一个基于Java语言的动态模块化规范。OSGi中的每个模块（Bundle）可以声明它所依赖的Package（通过Import-Package描述），也可以声明它允许导出发布的Package（通过Export-Package描述）。这和后来出现的Java模块化功能重合了。由于模块之间相依依赖的原因，加载器之间的关系不再是双亲委派模型的树形结构，而是已经进一步发展成一种更为复杂的、运行时才能确定的网状结构。在模块中相互依赖会造成死锁。</p>
@@ -774,8 +774,8 @@
 <li>插入式注解处理器的注解处理过程：插入式注解处理器的执行阶段</li>
 <li>分析与字节码生成过程：标注检查，解语法糖，字节码生成</li>
 </ol>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205124231612.png" class="lazyload" data-srcset="image-20201205124231612.png" srcset="data:image/png;base64,666" alt="image-20201205124231612"/></div><span class="image-caption">image-20201205124231612</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205124301591.png" class="lazyload" data-srcset="image-20201205124301591.png" srcset="data:image/png;base64,666" alt="image-20201205124301591"/></div><span class="image-caption">image-20201205124301591</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205124231612.png" class="lazyload" data-srcset="image-20201205124231612.png" srcset="data:image/png;base64,666" alt="image-20201205124231612"/></div><span class="image-caption">image-20201205124231612</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205124301591.png" class="lazyload" data-srcset="image-20201205124301591.png" srcset="data:image/png;base64,666" alt="image-20201205124301591"/></div><span class="image-caption">image-20201205124301591</span></div>
 <p>解析与填充符号表：</p>
 <ol>
 <li>词法语法分析：词法分析用于生成标记（token）集合的过程，语法分析则是根据标记序列构造抽象语法树的过程。</li>
@@ -795,17 +795,17 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TypeErasureGenerics</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(Object item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (item <span class="keyword">instanceof</span> E) &#123; <span class="comment">// 不合法，无法对泛型进行实例判断</span></span><br><span class="line">        	...</span><br><span class="line">        &#125;</span><br><span class="line">        E newItem = <span class="keyword">new</span> E(); <span class="comment">// 不合法，无法使用泛型创建对象</span></span><br><span class="line">        E[] itemArray = <span class="keyword">new</span> E[<span class="number">10</span>]; <span class="comment">// 不合法，无法使用泛型创建数组</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>java中的泛型只在程序源码中存在，在编译后的字节码文件中，全部泛型都被替换为原来的裸类型（Raw Type）了，并且在相应的地方插入了强制转型代码，因此对于运行期的Java语言来说，<code>ArrayList&lt;int&gt;</code>与<code>ArrayList&lt;String&gt;</code>其实是同一个类型。当初Java选择这种方式实现泛型的历史原因在于Java语言的向后兼容性。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205130631950.png" class="lazyload" data-srcset="image-20201205130631950.png" srcset="data:image/png;base64,666" alt="image-20201205130631950"/></div><span class="image-caption">image-20201205130631950</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205130631950.png" class="lazyload" data-srcset="image-20201205130631950.png" srcset="data:image/png;base64,666" alt="image-20201205130631950"/></div><span class="image-caption">image-20201205130631950</span></div>
 <p>将这段Java代码编译成Class文件，然后再使用反编译工具：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205130714474.png" class="lazyload" data-srcset="image-20201205130714474.png" srcset="data:image/png;base64,666" alt="image-20201205130714474"/></div><span class="image-caption">image-20201205130714474</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205130714474.png" class="lazyload" data-srcset="image-20201205130714474.png" srcset="data:image/png;base64,666" alt="image-20201205130714474"/></div><span class="image-caption">image-20201205130714474</span></div>
 <p>由于类型擦除，导致的问题有：不支持原始类型的泛型，运行期无法取到泛型类型信息。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205131020421.png" class="lazyload" data-srcset="image-20201205131020421.png" srcset="data:image/png;base64,666" alt="image-20201205131020421"/></div><span class="image-caption">image-20201205131020421</span></div>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205131111259.png" class="lazyload" data-srcset="image-20201205131111259.png" srcset="data:image/png;base64,666" alt="image-20201205131111259"/></div><span class="image-caption">image-20201205131111259</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205131020421.png" class="lazyload" data-srcset="image-20201205131020421.png" srcset="data:image/png;base64,666" alt="image-20201205131020421"/></div><span class="image-caption">image-20201205131020421</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205131111259.png" class="lazyload" data-srcset="image-20201205131111259.png" srcset="data:image/png;base64,666" alt="image-20201205131111259"/></div><span class="image-caption">image-20201205131111259</span></div>
 <p>上述代码不能被编译，相反下列代码可以被编译，因为方法签名不同：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205131152443.png" class="lazyload" data-srcset="image-20201205131152443.png" srcset="data:image/png;base64,666" alt="image-20201205131152443"/></div><span class="image-caption">image-20201205131152443</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205131152443.png" class="lazyload" data-srcset="image-20201205131152443.png" srcset="data:image/png;base64,666" alt="image-20201205131152443"/></div><span class="image-caption">image-20201205131152443</span></div>
 </li>
 <li><p>自动装箱，拆箱与遍历循环：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205131228596.png" class="lazyload" data-srcset="image-20201205131228596.png" srcset="data:image/png;base64,666" alt="image-20201205131228596"/></div><span class="image-caption">image-20201205131228596</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205131228596.png" class="lazyload" data-srcset="image-20201205131228596.png" srcset="data:image/png;base64,666" alt="image-20201205131228596"/></div><span class="image-caption">image-20201205131228596</span></div>
 <p>遍历循环的类需要实现Iterable接口的原因从上图可以看出。</p>
 </li>
 <li><p>条件编译：java语言没有预处理器，但是可以实现条件编译，使用<code>if(true)</code>等。</p>
@@ -814,14 +814,14 @@
 <h2 id="第十一章-后端编译和优化"><a href="#第十一章-后端编译和优化" class="headerlink" title="第十一章 后端编译和优化"></a>第十一章 后端编译和优化</h2><p>即时（JIT）编译器：在运行时，虚拟机将会把热点代码编译成本地机器码，并以各种手段尽可能地进行代码优化，运行时完成这个任务的后端编译器被称为即时编译器。</p>
 <ul>
 <li><p>解释器和编译器：解释器与编译器两者各有优势：当程序需要迅速启动和执行的时候，解释器可以首先发挥作用，省去编译的时间，立即运行。当程序启动后，随着时间的推移，编译器逐渐发挥作用，把越来越多的代码编译成本地代码，这样可以减少解释器的中间损耗，获得更高的执行效率。在Java中，解释器和编译器是相互协作的：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205155102424.png" class="lazyload" data-srcset="image-20201205155102424.png" srcset="data:image/png;base64,666" alt="image-20201205155102424"/></div><span class="image-caption">image-20201205155102424</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205155102424.png" class="lazyload" data-srcset="image-20201205155102424.png" srcset="data:image/png;base64,666" alt="image-20201205155102424"/></div><span class="image-caption">image-20201205155102424</span></div>
 <p>为了使程序启动响应速度与运行效率之间达到最佳平衡，HotSpot虚拟机在编译子系统中加入了分层编译的功能。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205155331944.png" class="lazyload" data-srcset="image-20201205155331944.png" srcset="data:image/png;base64,666" alt="image-20201205155331944"/></div><span class="image-caption">image-20201205155331944</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205155331944.png" class="lazyload" data-srcset="image-20201205155331944.png" srcset="data:image/png;base64,666" alt="image-20201205155331944"/></div><span class="image-caption">image-20201205155331944</span></div>
 </li>
 <li><p>编译对象与触发条件：热点代码指的是被多次调用的方法，或者是多次执行的循环体。发现对应的热点代码后，编译的目标对象都是整个方法体。为了判断某段代码是不是热点代码，可以使用基于采样的热点探测和基于计数器的热点探测。HotSpot使用的是后者，为了实现热点计数，需要两类计数器：方法调用计数器和回边计数器。一旦超过阈值，就会触发即时编译。</p>
 </li>
 <li><p>编译过程：在编译请求产生时，虚拟机在编译器还未完成编译之前，都仍然将按照解释方式继续执行代码，而编译动作则在后台的编译线程中进行。下图是编译器的全过程示意图：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205155947036.png" class="lazyload" data-srcset="image-20201205155947036.png" srcset="data:image/png;base64,666" alt="image-20201205155947036"/></div><span class="image-caption">image-20201205155947036</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205155947036.png" class="lazyload" data-srcset="image-20201205155947036.png" srcset="data:image/png;base64,666" alt="image-20201205155947036"/></div><span class="image-caption">image-20201205155947036</span></div>
 </li>
 </ul>
 <p>提前编译器：目前提前编译有两条路径：一条分支是做与传统C、C++编译器类似的，在程序运行之前把程序代码编译成机器码的静态翻译工作；另外一条分支是把原本即时编译器在运行时要做的编译工作提前做好并保存下来，下次运行到这些代码（譬如公共库代码在被同一台机器其他Java进程使用）时直接把它加载进来使用。第一条路径直指Java中的即时编译的最大弱点：即时编译需要占用程序的运行时间和运算资源。第二条路径本质上是给即时编译器做缓存加速，可以成为动态提前编译（Dynamic AOT）。即时编译器的优点在：性能分析制导优化，激进预测性优化和链接时优化。Java中的提前编译器有Jaotc。</p>
@@ -833,11 +833,11 @@
 <li>数组边界检查消除</li>
 </ul>
 <h2 id="第十二章-Java内存模型与线程"><a href="#第十二章-Java内存模型与线程" class="headerlink" title="第十二章 Java内存模型与线程"></a>第十二章 Java内存模型与线程</h2><p>硬件的效率与一致性：由于处理器的运行速度远高于IO的速度，为此引入了高速缓存，但是引入高速缓存又造成了缓存一致性的问题。由此产生一致性协议：MSI，MESI，MOSI等。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205185105826.png" class="lazyload" data-srcset="image-20201205185105826.png" srcset="data:image/png;base64,666" alt="image-20201205185105826"/></div><span class="image-caption">image-20201205185105826</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205185105826.png" class="lazyload" data-srcset="image-20201205185105826.png" srcset="data:image/png;base64,666" alt="image-20201205185105826"/></div><span class="image-caption">image-20201205185105826</span></div>
 <p>Java内存模型：</p>
 <ul>
 <li><p>主内存与工作内存：规定了所有的变量都存储在主内存（Main Memory）中，每条线程还有自己的工作内存（Working Memory，可与前面讲的处理器高速缓存类比），线程的工作内存中保存了被该线程使用的变量的主内存副本，线程对变量的所有操作（读取、赋值等）都必须在工作内存中进行，而不能直接读写主内存中的数据。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205185323393.png" class="lazyload" data-srcset="image-20201205185323393.png" srcset="data:image/png;base64,666" alt="image-20201205185323393"/></div><span class="image-caption">image-20201205185323393</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205185323393.png" class="lazyload" data-srcset="image-20201205185323393.png" srcset="data:image/png;base64,666" alt="image-20201205185323393"/></div><span class="image-caption">image-20201205185323393</span></div>
 </li>
 <li><p>内存间交互操作：lock，unlock，read，load，store，write，use，assign。伤处操作都是原子的，不可再分的。</p>
 </li>
@@ -876,7 +876,7 @@
 <p>Java线程调度是由系统自动完成的，但是可以为不同的线程分配不同的优先级，来建议操作系统多分配一些时间在优先级高的线程上。</p>
 </li>
 <li><p>状态转换：Java中定义了6种线程状态：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201205194306856.png" class="lazyload" data-srcset="image-20201205194306856.png" srcset="data:image/png;base64,666" alt="image-20201205194306856"/></div><span class="image-caption">image-20201205194306856</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201205194306856.png" class="lazyload" data-srcset="image-20201205194306856.png" srcset="data:image/png;base64,666" alt="image-20201205194306856"/></div><span class="image-caption">image-20201205194306856</span></div>
 </li>
 </ul>
 <p>Java与协程：</p>
@@ -911,14 +911,14 @@
 <li><p>锁粗化：原则上，总是推荐将同步块的作用范围限制得尽量小，这样是为了使得需要同步的操作数量尽可能变少，即使存在锁竞争，等待锁的线程也能尽可能快地拿到锁。但是如果一系列的连续操作都对同一个对象反复加锁和解锁，甚至加锁操作是出现在循环体之中的，那即使没有线程竞争，频繁地进行互斥同步操作也会导致不必要的性能损耗。因此可以进行锁粗化操作。</p>
 </li>
 <li><p>轻量级锁：HotSpot虚拟机对象头布局：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201206125352406.png" class="lazyload" data-srcset="image-20201206125352406.png" srcset="data:image/png;base64,666" alt="image-20201206125352406"/></div><span class="image-caption">image-20201206125352406</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201206125352406.png" class="lazyload" data-srcset="image-20201206125352406.png" srcset="data:image/png;base64,666" alt="image-20201206125352406"/></div><span class="image-caption">image-20201206125352406</span></div>
 <p>在代码即将进入同步块的时候，如果此同步对象没有被锁定（锁标志位为“01”状态），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝：</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201206125505870.png" class="lazyload" data-srcset="image-20201206125505870.png" srcset="data:image/png;base64,666" alt="image-20201206125505870"/></div><span class="image-caption">image-20201206125505870</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201206125505870.png" class="lazyload" data-srcset="image-20201206125505870.png" srcset="data:image/png;base64,666" alt="image-20201206125505870"/></div><span class="image-caption">image-20201206125505870</span></div>
 <p>然后，虚拟机将使用CAS操作尝试把对象的Mark Word更新为指向Lock Record的指针。如果这个更新动作成功了，即代表该线程拥有了这个对象的锁，并且对象Mark Word的锁标志位将转变为“00”，表示此对象处于轻量级锁定状态。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201206125621073.png" class="lazyload" data-srcset="image-20201206125621073.png" srcset="data:image/png;base64,666" alt="image-20201206125621073"/></div><span class="image-caption">image-20201206125621073</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201206125621073.png" class="lazyload" data-srcset="image-20201206125621073.png" srcset="data:image/png;base64,666" alt="image-20201206125621073"/></div><span class="image-caption">image-20201206125621073</span></div>
 </li>
 <li><p>偏向锁：它的目的是消除数据在无竞争情况下的同步原语，进一步提高程序的运行性能。如果说轻量级锁是在无竞争的情况下使用CAS操作去消除同步使用的互斥量，那偏向锁就是在无竞争的情况下把整个同步都消除掉，连CAS操作都不去做了。偏向锁会偏向于第一个获得它的线程，如果在接下来的执行过程中，该锁一直没有被其他的线程获取，则持有偏向锁的线程将永远不需要再进行同步。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="image-20201206125818939.png" class="lazyload" data-srcset="image-20201206125818939.png" srcset="data:image/png;base64,666" alt="image-20201206125818939"/></div><span class="image-caption">image-20201206125818939</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20201206125818939.png" class="lazyload" data-srcset="image-20201206125818939.png" srcset="data:image/png;base64,666" alt="image-20201206125818939"/></div><span class="image-caption">image-20201206125818939</span></div>
 <p>在Java语言里面一个对象如果计算过哈希码，就应该一直保持该值不变，否则很多依赖对象哈希码的API都可能存<br>在出错风险。因此，当一个对象已经计算过一致性哈希码后，它就再也无法进入偏向锁状态了；而当一个对象当前正处于偏向锁状态，又收到需要计算其一致性哈希码请求时，它的偏向状态会被立即撤销，并且锁会膨胀为重量级锁。</p>
 </li>
 </ul>

@@ -412,7 +412,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm <span class="comment">#根据版本选择</span></span><br><span class="line">rpm -ivh mysql-community-release-el7-5.noarch.rpm</span><br><span class="line">yum install mysql-server <span class="comment"># 安装</span></span><br></pre></td></tr></table></figure>
 
 <p>但是由于网络原因，资源下载速率很慢，这个时候我们可以根据输出信息来决定下载的包。可以在<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql80-community-el7/">清华镜像源</a>中下载相应的包，然后按照依赖的关系依次安装。</p>
-<div class="img-wrap"><div class="img-bg"><img class="img" src="1582026273567.png" class="lazyload" data-srcset="1582026273567.png" srcset="data:image/png;base64,666" alt="1582026273567"/></div><span class="image-caption">1582026273567</span></div>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="1582026273567.png" class="lazyload" data-srcset="1582026273567.png" srcset="data:image/png;base64,666" alt="1582026273567"/></div><span class="image-caption">1582026273567</span></div>
 <p>成功安装完成后，我们使用<code>systemctl start mysqld.service</code>来启动MySQL，然后通过下面命令登录：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p	<span class="comment"># 无密码登录，输入密码行回车就行</span></span><br></pre></td></tr></table></figure>
 
