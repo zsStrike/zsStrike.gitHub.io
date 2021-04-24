@@ -41,14 +41,14 @@
   --color-card: #fff;
   --color-text: #444;
   --color-block: #f6f6f6;
-  --color-inlinecode: #c74f00;
+  --color-inlinecode: #d56d28;
   --color-codeblock: #fff7ea;
-  --color-h1: #3a3a3a;
-  --color-h2: #3a3a3a;
-  --color-h3: #333;
+  --color-h1: #444;
+  --color-h2: #444;
+  --color-h3: #444;
   --color-h4: #444;
-  --color-h5: #555;
-  --color-h6: #666;
+  --color-h5: #444;
+  --color-h6: #444;
   --color-p: #444;
   --color-list: #666;
   --color-list-hl: #36ac91;
@@ -2641,7 +2641,7 @@ div.fancybox .image-caption:empty {
     --color-site-bg: #222;
     --color-site-inner: #eee;
     --color-site-footer: #aaa;
-    --color-card: #333;
+    --color-card: #444;
     --color-text: #eee;
     --color-block: #3a3a3a;
     --color-codeblock: #343a3c;
@@ -2775,7 +2775,7 @@ div.fancybox .image-caption:empty {
   --color-site-bg: #222;
   --color-site-inner: #eee;
   --color-site-footer: #aaa;
-  --color-card: #333;
+  --color-card: #444;
   --color-text: #eee;
   --color-block: #3a3a3a;
   --color-codeblock: #343a3c;
