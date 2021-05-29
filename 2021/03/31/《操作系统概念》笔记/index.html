@@ -386,13 +386,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：455字</p>
+      <p>字数：821字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：1分钟</p>
+      <p>时长：2分钟</p>
     </a>
   </div>
 
@@ -457,6 +457,19 @@
 </li>
 </ul>
 <p>操作系统的引导：加载内核以启动计算机的过程，称为系统引导。大多数的操作系统都有一个引导程序，改程序能够定位内核，并将其加载到内存以开始执行。当 CPU 收到一个重置事件时，指令寄存器会加载某个预先定义的内存位置，并从该位置执行，该位置实际上就是引导程序所在位置。</p>
+<h2 id="第三章-进程"><a href="#第三章-进程" class="headerlink" title="第三章 进程"></a>第三章 进程</h2><p>进程概念：进程是执行的程序，包括代码段，数据段，程序计数器的值，堆和栈等。程序是被动实体，而进程是活动实体。</p>
+<p>进程状态：就绪，运行，等待，新建，终止。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210529144702669.png" class="lazyload" data-srcset="image-20210529144702669.png" srcset="data:image/png;base64,666" alt="image-20210529144702669"/></div><span class="image-caption">image-20210529144702669</span></div>
+<p>进程控制块（PCB）：包含有和进程相关的信息，如进程状态，进程 id，程序计数器，内存管理信息等。</p>
+<p>调度队列：进程在进入系统的时候，会被加入到进程队列，该队列包含有所有进程。驻留在内存中，就绪的进程则保存在就绪队列上。通常采用双向链表实现，链表指向不同进程的 PCB。</p>
+<p>上下文切换：切换 CPU 到另外一个进程需要保存当期进程的状态和恢复另外一个进程的状态。</p>
+<p>进程间通信（IPC）：提供进程间通信的好处有信息共享，计算加速和模块化。有两种基本模型：共享内存和消息传递。</p>
+<p>客户机-服务器通信：</p>
+<ul>
+<li>套接字：常用且高效，但是输入分布式进程间一种低级形式的通信</li>
+<li>远程服务调用（RPC）：和 IPC 的消息不同，RPC 通信交换的信息具有明确的结构，不再仅仅是数据包。</li>
+<li>管道：分为单向和双向（半双工和全双工），是否允许非父子关系的进程之间相互通信。</li>
+</ul>
 
   
   
@@ -491,10 +504,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-03-31T22:26:49+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-29T15:17:42+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年3月31日</p>
+    <p>更新于：2021年5月29日</p>
   </a>
 </div>
 
@@ -665,7 +678,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li></ol>
     </div>
   </section>
 
