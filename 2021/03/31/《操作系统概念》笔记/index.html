@@ -366,7 +366,7 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：2.1k字</p>
+      <p>字数：2.2k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
@@ -505,6 +505,18 @@
 <p>信号量（semaphore）：信号量 S 是一个整形变量，通过 wait 和 signal 操作。二进制信号量类似于互斥锁。</p>
 <p>死锁与饥饿：死锁指的是多个进程间相互等待资源，饥饿则是无限等待信号量。</p>
 <p>经典同步问题：有界缓冲问题，读者作者问题，哲学家就餐问题。</p>
+<h2 id="第七章-死锁"><a href="#第七章-死锁" class="headerlink" title="第七章 死锁"></a>第七章 死锁</h2><p>死锁产生的必要条件：</p>
+<ul>
+<li>互斥</li>
+<li>占有并等待：一个进程占有一个资源并且等待另外的资源</li>
+<li>非抢占：资源只能被进程完成任务后自愿释放</li>
+<li>循环等待</li>
+</ul>
+<p>处理死锁问题：</p>
+<ul>
+<li>死锁预防和死锁避免：死锁预防指通过破坏死锁产生的必要条件来预防死锁，如一个进程同时获取所有它所需要的所有资源，按照顺序获取资源等。思索避免算法有银行家算法。</li>
+<li>死锁检测和恢复：通过从资源分配图中判断是否存在环，恢复的时候可以通过进程终止和资源抢占。</li>
+</ul>
 
   
   
@@ -539,7 +551,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T14:36:53+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T16:04:32+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月30日</p>
@@ -713,7 +725,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li></ol>
     </div>
   </section>
 
