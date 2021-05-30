@@ -366,13 +366,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：2.8k字</p>
+      <p>字数：3.2k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：9分钟</p>
+      <p>时长：11分钟</p>
     </a>
   </div>
 
@@ -539,6 +539,26 @@
 <div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530192411921.png" class="lazyload" data-srcset="image-20210530192411921.png" srcset="data:image/png;base64,666" alt="image-20210530192411921"/></div><span class="image-caption">image-20210530192411921</span></div>
 </li>
 </ul>
+<h2 id="第九章-虚拟内存管理"><a href="#第九章-虚拟内存管理" class="headerlink" title="第九章 虚拟内存管理"></a>第九章 虚拟内存管理</h2><p>请求调页（demand paging）：当程序被加载到内存中的时候，仅加载需要的页面。为了区分哪些页面已经加载到内存，需要提供标志位，当无效的页面被访问的时候，就会产生缺页错误。下图中 <code>i</code> 表示该页无效。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530203158272.png" class="lazyload" data-srcset="image-20210530203158272.png" srcset="data:image/png;base64,666" alt="image-20210530203158272"/></div><span class="image-caption">image-20210530203158272</span></div>
+<p>写时复制：比如采用了 fork 创建了一个子进程，两者会共享相同的物理内存页。在子进程修改相关数据时，才来进行复制。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530211127339.png" class="lazyload" data-srcset="image-20210530211127339.png" srcset="data:image/png;base64,666" alt="image-20210530211127339"/></div><span class="image-caption">image-20210530211127339</span></div>
+<p>页面置换：当所有的内存都已经分配完毕后，再次请求帧分配的时候，操作系统发现此时没有空闲帧，从而触发页面置换。采用脏位可以在牺牲页面没有被修改的情况下减少一次页面传输。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530213200671.png" class="lazyload" data-srcset="image-20210530213200671.png" srcset="data:image/png;base64,666" alt="image-20210530213200671"/></div><span class="image-caption">image-20210530213200671</span></div>
+<ul>
+<li><p>FIFO 页面置换：引用串表示依次访问的页面编号。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530213822102.png" class="lazyload" data-srcset="image-20210530213822102.png" srcset="data:image/png;base64,666" alt="image-20210530213822102"/></div><span class="image-caption">image-20210530213822102</span></div>
+</li>
+<li><p>最优页面置换：置换最长时间不会被用到的页面。该算法难以实现，因为需要用到引用串的未来知识，主要用于比较研究。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530215451306.png" class="lazyload" data-srcset="image-20210530215451306.png" srcset="data:image/png;base64,666" alt="image-20210530215451306"/></div><span class="image-caption">image-20210530215451306</span></div>
+</li>
+<li><p>最近最少使用（LRU）页面置换：当需要置换页面的时候，LRU 选择最长时间没有使用的页面。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530215642569.png" class="lazyload" data-srcset="image-20210530215642569.png" srcset="data:image/png;base64,666" alt="image-20210530215642569"/></div><span class="image-caption">image-20210530215642569</span></div>
+</li>
+<li><p>基于计数的页面置换：最不经常使用和最经常使用页面置换算法。</p>
+</li>
+</ul>
+<p>内存映射文件：如果采用<code>open,read,write</code>来读取写入磁盘文件，每个文件访问都会经过系统调用和磁盘访问。采用虚拟内存技术，可以将文件 IO 作为常规内存进行访问。该方法会提升性能。</p>
 
   
   
@@ -573,7 +593,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T19:26:15+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T22:03:46+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月30日</p>
@@ -747,7 +767,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">第八章 内存管理策略</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">第八章 内存管理策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text">第九章 虚拟内存管理</span></a></li></ol>
     </div>
   </section>
 
