@@ -366,13 +366,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：1.7k字</p>
+      <p>字数：2.1k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：5分钟</p>
+      <p>时长：7分钟</p>
     </a>
   </div>
 
@@ -494,6 +494,17 @@
 <div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530112241461.png" class="lazyload" data-srcset="image-20210530112241461.png" srcset="data:image/png;base64,666" alt="image-20210530112241461"/></div><span class="image-caption">image-20210530112241461</span></div>
 </li>
 </ul>
+<h2 id="第六章-同步"><a href="#第六章-同步" class="headerlink" title="第六章 同步"></a>第六章 同步</h2><p>生产者消费者问题：两个不同的进程对 counter=4 分别进行加一和减一。如果这两个进程并发执行，得到的结果可能是 3,4,5。语句执行方式为 load，add/sub，store。像这样得到不正确的状态的过程称为竞争。</p>
+<p>临界区问题：进程在临界区内可能会修改公共变量，更新文件内容等。临界区问题的解决方案应该满足如下要求：</p>
+<ul>
+<li>互斥：只允许单个进程在临界区内运行</li>
+<li>进步：如果没有进程在临界区，那么可以选择某个进程进入</li>
+<li>有限等待</li>
+</ul>
+<p>互斥锁（mutex lock）：在进入临界区应该得到锁，在退出的时候释放锁。accquire 和 release 两个操作都是原子执行的。如果在获取的时候忙等待，那么这样的锁也被称为自旋锁。不过自旋锁也有一个优点，当进程在等待锁的时候，没有上下文的切换。当使用锁的时间较短的时候，自旋锁还是可用的。</p>
+<p>信号量（semaphore）：信号量 S 是一个整形变量，通过 wait 和 signal 操作。二进制信号量类似于互斥锁。</p>
+<p>死锁与饥饿：死锁指的是多个进程间相互等待资源，饥饿则是无限等待信号量。</p>
+<p>经典同步问题：有界缓冲问题，读者作者问题，哲学家就餐问题。</p>
 
   
   
@@ -528,7 +539,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T11:23:54+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T14:36:53+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月30日</p>
@@ -702,7 +713,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li></ol>
     </div>
   </section>
 
