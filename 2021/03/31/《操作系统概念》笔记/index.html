@@ -386,13 +386,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：821字</p>
+      <p>字数：1.3k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：2分钟</p>
+      <p>时长：4分钟</p>
     </a>
   </div>
 
@@ -470,6 +470,23 @@
 <li>远程服务调用（RPC）：和 IPC 的消息不同，RPC 通信交换的信息具有明确的结构，不再仅仅是数据包。</li>
 <li>管道：分为单向和双向（半双工和全双工），是否允许非父子关系的进程之间相互通信。</li>
 </ul>
+<h2 id="第四章-多线程编程"><a href="#第四章-多线程编程" class="headerlink" title="第四章 多线程编程"></a>第四章 多线程编程</h2><p>线程：是 CPU 调度的基本单位，包含有 ID，程序计数器，寄存器组等，和同一进程下的其他线程共享代码段，数据段和其他资源。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530095726061.png" class="lazyload" data-srcset="image-20210530095726061.png" srcset="data:image/png;base64,666" alt="image-20210530095726061"/></div><span class="image-caption">image-20210530095726061</span></div>
+<p>多线程编程的优点：响应性，资源共享，经济和可伸缩性。</p>
+<p>并发和并行：某个时间段内多个任务交替执行，叫做并发；同一时间点，有不同的任务运行，叫做并行。</p>
+<p>多线程模型：有用户线程和内核线程，用户线程位于内核之上，管理无需内核支持，内核线程由操作系统支持和管理，常见的有三种模型：</p>
+<ul>
+<li><p>多对一模型：一个线程执行阻塞调用，整个进程都会阻塞，另外，由于任一时间只有一个线程可以访问内核，不能很好地在多处理核系统上运行。</p>
+</li>
+<li><p>一对一模型：优点是可以在多个核上运行，缺点是每次创建一个用户线程都需要创建一个内核线程，不能创建太多的线程。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530101216129.png" class="lazyload" data-srcset="image-20210530101216129.png" srcset="data:image/png;base64,666" alt="image-20210530101216129"/></div><span class="image-caption">image-20210530101216129</span></div>
+</li>
+<li><p>多对多模型：解决了多对一模型和一对一模型中的缺点。多路复用多个用户线程到相同数量或者更少的内核线程，但也允许绑定某个用户线程到一个内核线程，该变种有时称为双层模型。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530101724125.png" class="lazyload" data-srcset="image-20210530101724125.png" srcset="data:image/png;base64,666" alt="image-20210530101724125"/></div><span class="image-caption">image-20210530101724125</span></div>
+</li>
+</ul>
+<p>轻量级进程（LWP）：在多对多模型或者双层模型之间的一个数据结构，对于用户级线程，LWP 表现为虚拟处理器，每个 LWP 和一个内核线程相连，只有内核线程才能通过系统调度以便运行于物理处理器。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530102005673.png" class="lazyload" data-srcset="image-20210530102005673.png" srcset="data:image/png;base64,666" alt="image-20210530102005673"/></div><span class="image-caption">image-20210530102005673</span></div>
 
   
   
@@ -504,10 +521,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-29T15:17:42+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T10:20:06+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年5月29日</p>
+    <p>更新于：2021年5月30日</p>
   </a>
 </div>
 
@@ -678,7 +695,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li></ol>
     </div>
   </section>
 
