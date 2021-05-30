@@ -366,13 +366,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：2.2k字</p>
+      <p>字数：2.8k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：7分钟</p>
+      <p>时长：9分钟</p>
     </a>
   </div>
 
@@ -517,6 +517,28 @@
 <li>死锁预防和死锁避免：死锁预防指通过破坏死锁产生的必要条件来预防死锁，如一个进程同时获取所有它所需要的所有资源，按照顺序获取资源等。思索避免算法有银行家算法。</li>
 <li>死锁检测和恢复：通过从资源分配图中判断是否存在环，恢复的时候可以通过进程终止和资源抢占。</li>
 </ul>
+<h2 id="第八章-内存管理策略"><a href="#第八章-内存管理策略" class="headerlink" title="第八章 内存管理策略"></a>第八章 内存管理策略</h2><p>逻辑地址和物理地址：CPU 生成的地址通常称为逻辑地址，而内存单元看到的地址通常称为物理地址。</p>
+<p>交换：进程必须在内存中以便执行，不过，进程可以暂时从内存换出到磁盘中，之后再次换入。</p>
+<p>碎片：外部碎片指的是尚未分配的内存因为已经分配的内存而产生，内部碎片指的是分配大于进程所需的多余的内存。外部碎片问题的解决方案之一就是紧缩，指在内存中移动程序，并且不影响程序的运行。</p>
+<p>分段：逻辑地址空间由一组段构成，逻辑地址通过<code>&lt;段号，偏移&gt;</code>组成。地址转换是通过段表实现的。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530185553217.png" class="lazyload" data-srcset="image-20210530185553217.png" srcset="data:image/png;base64,666" alt="image-20210530185553217"/></div><span class="image-caption">image-20210530185553217</span></div>
+<p>分页：分段允许进程的物理空间是非连续的，分页同样支持该功能，不过，分页避免了外部碎片，而分段则不能避免。分页的基本方法是将物理内存分为大小固定的块，称为帧（frame），同样，其将逻辑内存也分为大小相同的块，称为页（page）。通过页表实现地址转换。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530190114835.png" class="lazyload" data-srcset="image-20210530190114835.png" srcset="data:image/png;base64,666" alt="image-20210530190114835"/></div><span class="image-caption">image-20210530190114835</span></div>
+<p>转换表缓冲区（TLB）：大多数计算机允许页表非常大，通常需要将页表存放在内存中，并且将页表基地址寄存器指向页表。这样带来的问题是访问一个字节的数据需要两次内存访问。为此，可以设置 TLB，其实际上是一个高速缓存。TLB 和 页表协同工作：</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530190750214.png" class="lazyload" data-srcset="image-20210530190750214.png" srcset="data:image/png;base64,666" alt="image-20210530190750214"/></div><span class="image-caption">image-20210530190750214</span></div>
+<p>共享页：不同进程之间可以共享公共代码，这也是分页的优点之一。</p>
+<p>页表结构：</p>
+<ul>
+<li><p>分层分页：为了解决单页表在大内存系统下的内存浪费问题。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530191519019.png" class="lazyload" data-srcset="image-20210530191519019.png" srcset="data:image/png;base64,666" alt="image-20210530191519019"/></div><span class="image-caption">image-20210530191519019</span></div>
+</li>
+<li><p>哈希页表：采用哈希函数对虚拟地址页码进行哈希，并且在链表中比较页码。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530191826303.png" class="lazyload" data-srcset="image-20210530191826303.png" srcset="data:image/png;base64,666" alt="image-20210530191826303"/></div><span class="image-caption">image-20210530191826303</span></div>
+</li>
+<li><p>倒置页表：通过查找<code>&lt;pid, p&gt;</code>条目，从而确定物理地址<code>&lt;i, d&gt;</code>，从而确定物理地址。该方法是根据虚拟地址查找的，可能需要花费大量时间。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530192411921.png" class="lazyload" data-srcset="image-20210530192411921.png" srcset="data:image/png;base64,666" alt="image-20210530192411921"/></div><span class="image-caption">image-20210530192411921</span></div>
+</li>
+</ul>
 
   
   
@@ -551,7 +573,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T16:04:32+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T19:26:15+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月30日</p>
@@ -725,7 +747,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">第八章 内存管理策略</span></a></li></ol>
     </div>
   </section>
 
