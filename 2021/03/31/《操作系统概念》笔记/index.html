@@ -366,13 +366,13 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：1.3k字</p>
+      <p>字数：1.7k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
     <a class='notlink'>
       <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
-      <p>时长：4分钟</p>
+      <p>时长：5分钟</p>
     </a>
   </div>
 
@@ -467,6 +467,33 @@
 </ul>
 <p>轻量级进程（LWP）：在多对多模型或者双层模型之间的一个数据结构，对于用户级线程，LWP 表现为虚拟处理器，每个 LWP 和一个内核线程相连，只有内核线程才能通过系统调度以便运行于物理处理器。</p>
 <div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530102005673.png" class="lazyload" data-srcset="image-20210530102005673.png" srcset="data:image/png;base64,666" alt="image-20210530102005673"/></div><span class="image-caption">image-20210530102005673</span></div>
+<h2 id="第五章-进程调度"><a href="#第五章-进程调度" class="headerlink" title="第五章 进程调度"></a>第五章 进程调度</h2><p>基本概念：进程的执行包括有 CPU 执行和 IO 等待过程，IO 密集型程序表现为大量短 CPU 执行，CPU 密集型程序只有少量长 CPU 执行。每当 CPU 空闲的时候，操作系统就会从就绪队列中选择一个进程来执行。在此过程中，调度程序需要完成上下文切换，切换到用户模式等。</p>
+<p>调度方案：抢占式和非抢占式的。非抢占式调度下，一旦某个进程分配到 CPU，就会一直使用 CPU，知道它变为终止或者等待状态。</p>
+<p>调度准则：</p>
+<ul>
+<li>CPU 使用率</li>
+<li>吞吐量</li>
+<li>周转时间：从进程提交到进程完成的时间段</li>
+<li>等待时间：在就绪队列中等待的时间</li>
+<li>响应时间：从提交请求到第一次响应的时间</li>
+</ul>
+<p>调度算法：如何从就绪队列中选择进程以便为其分配 CPU</p>
+<ul>
+<li><p>先到先服务调度（FCFS）</p>
+</li>
+<li><p>最短作业优先调度（SJF）</p>
+</li>
+<li><p>优先级调度（PS）：低优先级无穷等待解决方案之一是老化，即逐渐增加在系统中等待时间长的进程的优先级</p>
+</li>
+<li><p>轮转调度（RR）：性能很大程度上取决于时间片的大小</p>
+</li>
+<li><p>多级队列调度：将就绪队列分成多个单独队列，每个队列可以采用不同的调度算法</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530112104285.png" class="lazyload" data-srcset="image-20210530112104285.png" srcset="data:image/png;base64,666" alt="image-20210530112104285"/></div><span class="image-caption">image-20210530112104285</span></div>
+</li>
+<li><p>多级反馈队列调度：在多级队列调度的时候，进程只会在某个队列中，队列之间不允许迁移，而多级反馈队列允许进程在队列之间切换。</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210530112241461.png" class="lazyload" data-srcset="image-20210530112241461.png" srcset="data:image/png;base64,666" alt="image-20210530112241461"/></div><span class="image-caption">image-20210530112241461</span></div>
+</li>
+</ul>
 
   
   
@@ -501,7 +528,7 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T10:20:06+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T11:23:54+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
     <p>更新于：2021年5月30日</p>
@@ -675,7 +702,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li></ol>
     </div>
   </section>
 
