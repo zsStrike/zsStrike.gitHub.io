@@ -366,7 +366,7 @@
   <div class="new-meta-item wordcount">
     <a class='notlink'>
       <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
-      <p>字数：3.2k字</p>
+      <p>字数：3.4k字</p>
     </a>
   </div>
   <div class="new-meta-item readtime">
@@ -559,6 +559,23 @@
 </li>
 </ul>
 <p>内存映射文件：如果采用<code>open,read,write</code>来读取写入磁盘文件，每个文件访问都会经过系统调用和磁盘访问。采用虚拟内存技术，可以将文件 IO 作为常规内存进行访问。该方法会提升性能。</p>
+<h2 id="第十章-文件系统"><a href="#第十章-文件系统" class="headerlink" title="第十章 文件系统"></a>第十章 文件系统</h2><p>文件：操作系统对存储设备的物理属性加以抽象，定义出的逻辑存储单位。</p>
+<p>文件操作：创建，读，写，文件定位，删除，截断。</p>
+<p>访问方法：顺序访问，直接访问。</p>
+<p>目录结构：</p>
+<ul>
+<li><p>单级目录</p>
+</li>
+<li><p>两级目录</p>
+</li>
+<li><p>树形目录</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210531105554723.png" class="lazyload" data-srcset="image-20210531105554723.png" srcset="data:image/png;base64,666" alt="image-20210531105554723"/></div><span class="image-caption">image-20210531105554723</span></div>
+</li>
+<li><p>无环图目录：树结构禁止共享文件或者目录，图目录允许共享</p>
+<div class="img-wrap"><div class="img-bg"><img class="img lazyload" src="image-20210531105611682.png" class="lazyload" data-srcset="image-20210531105611682.png" srcset="data:image/png;base64,666" alt="image-20210531105611682"/></div><span class="image-caption">image-20210531105611682</span></div>
+</li>
+</ul>
+<p>文件系统安装（mount）：操作系统需要直到设备的名称和安装点（附加文件系统在原来文件结构中的位置）。</p>
 
   
   
@@ -593,10 +610,10 @@
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-30T22:03:46+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-05-31T10:57:44+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2021年5月30日</p>
+    <p>更新于：2021年5月31日</p>
   </a>
 </div>
 
@@ -767,7 +784,7 @@ DDL：数据定义语言，对数据库内部的对象进...</p>
 
 
     <div class='content'>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">第八章 内存管理策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text">第九章 虚拟内存管理</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text">第二章 操作系统结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%9B%E7%A8%8B"><span class="toc-text">第三章 进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B"><span class="toc-text">第四章 多线程编程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="toc-text">第五章 进程调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%90%8C%E6%AD%A5"><span class="toc-text">第六章 同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%AD%BB%E9%94%81"><span class="toc-text">第七章 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">第八章 内存管理策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-text">第九章 虚拟内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">第十章 文件系统</span></a></li></ol>
     </div>
   </section>
 
