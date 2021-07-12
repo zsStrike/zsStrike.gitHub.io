@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>LeetCode Rush</title>
+      <link href="2021/07/12/LeetCode-Rush/"/>
+      <url>2021/07/12/LeetCode-Rush/</url>
+      
+        <content type="html"><![CDATA[<p>本文用于记录在算法题目中使用的技巧或者方法，以备查阅。</p><a id="more"></a><h2 id="链表问题"><a href="#链表问题" class="headerlink" title="链表问题"></a>链表问题</h2><p>在遇到链表问题的时候，一般存在着以下技巧：</p><ul><li>尝试设置 <code>dummyHead</code> 节点，用于处理特殊情况</li><li>头插法和尾插法的不同点，可以使用头插法实现链表的反转</li><li>链表反转问题：全部反转和部分反转</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Algorithm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>《操作系统概念》笔记</title>
       <link href="2021/03/31/%E3%80%8A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E3%80%8B%E7%AC%94%E8%AE%B0/"/>
       <url>2021/03/31/%E3%80%8A%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5%E3%80%8B%E7%AC%94%E8%AE%B0/</url>
